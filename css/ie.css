@@ -1,3 +1,12 @@
 /*
 	IE stylesheet
 */
+/*
+	Do not delete
+*/
+*html #overlay {
+	position: absolute;
+}
+*html .popup_content {
+	position: absolute;
+}

@@ -1,36 +1,4 @@
-﻿<!-- 
-
-# Container divs ID can be anything but must have class="slide"
-# Navigation links must have titles equal to div ID minus # (see example)
-# Required files: reset.css, global.css, html5.js, jquery, iscroll.js, base.js
-
-Basic site structure:
-
-<nav>
-	<a href="#home" title="home">Home</a>
-	<a href="#page_one" title="page_one">Page 1</a>
-	<a href="#page_two" title="page_one">Page 2</a>
-</nav>
-
-<div id="container">
-	<div id="home" class="slide">[ CONTENT ]</div>
-	<div id="page_one" class="slide">[ CONTENT ]</div>
-	<div id="page_two" class="slide">[ CONTENT ]</div>
-</div>
-
-Create collapsible blocks:
-
-<div class="collapsible">
-	<h2>[ BLOCK TITLE ]</h2>
-	<div>[ CONTENT ]</div>
-	<h2>[ BLOCK TITLE ]</h2>
-	<div>[ CONTENT ]</div>
-	<h2>[ BLOCK TITLE ]</h2>
-	<div>[ CONTENT ]</div>
-</div>
-
--->
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="no-js">
 <head>
 	<meta charset="utf-8">
@@ -47,6 +15,9 @@ Create collapsible blocks:
 	<![endif]-->
 </head>
 <body>
+	<header>
+		<h1>Site title</h1>
+	</header>
 	<nav id="menu">
 		<a href="#one" title="one">One</a>
 		<a href="#two" title="two">Two</a>
@@ -118,6 +89,15 @@ Create collapsible blocks:
 			   <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
 			   <li>Aliquam tincidunt mauris eu risus.</li>
 			</ul>
+			
+			<div class="hovereffect">
+				<img src="http://dummyimage.com/600x400/999/fff" alt="" />
+				<div><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p></div>
+			</div>
+			<div class="hovereffect">
+				<img src="http://dummyimage.com/400x200/999/fff" alt="" />
+				<div><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p></div>
+			</div>
 
 		</div><!--#two-->
 		
@@ -151,6 +131,26 @@ Create collapsible blocks:
 		
 		<div id="four" class="slide">
 			<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+			<p><a href="#" data-lightbox-width="500" data-lightbox-name="hello" class="lightbox">Pop me up</a></p>
+			<div id="hello" class="lightbox_content">
+				<h2>Turtle Power</h2>
+				<p>I &lt;3 Turtles.</p>
+			</div>
+			<p><a href="#" data-lightbox-width="900" data-lightbox-name="world" class="lightbox">Pop me up</a></p>
+			<div id="world" class="lightbox_content">
+				<h2>Lalala</h2>
+				<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+			</div>
+			<p><a href="#" data-lightbox-width="100" data-lightbox-name="bonjour" class="lightbox">Pop me up</a></p>
+			<div id="bonjour" class="lightbox_content">
+				<h2>Turtle Power</h2>
+				<p>Aliquam tincidunt mauris eu risus.</p>
+			</div>
+			<p><a href="#" data-lightbox-width="300" data-lightbox-name="salut" class="lightbox">Pop me up</a></p>
+			<div id="salut" class="lightbox_content">
+				<h2>Turtle Power</h2>
+				<p>Hello Asiance</p>
+			</div>
 		</div><!--#four-->
 		
 		<div id="five" class="slide">
