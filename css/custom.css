@@ -1,0 +1,36 @@
+/*
+	CUSTOM STYLES HERE
+*/
+#menu {
+	background: url(../images/overlay.png) repeat;
+}
+#menu a {
+	color: #ddd;
+}
+#menu .active {
+	color: #fff;
+	background: #e02d45;
+}
+#magic {
+	background: #e02d45;
+	opacity: 0.3;
+	-moz-opacity: 0.3;
+	-webkit-opacity: 0.3;
+	filter: alpha(opacity=30);
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+}
+#one {
+	background: #ccc;
+}
+#two {
+	background: #ddd;
+}
+#three {
+	background: #eee;
+}
+#four {
+	background: #bbb;
+}
+#five {
+	background: #aaa;
+}

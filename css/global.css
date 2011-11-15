@@ -1,0 +1,34 @@
+/* HORIZONTAL FRAMEWORK */
+html>/**/body {
+	overflow: hidden; /* for everyone except IE7... */
+}
+.slide {
+	float: left;
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+}
+#menu {
+	position: fixed;
+	width: 100%;
+	left: 0;
+	z-index: 1;
+	white-space: nowrap;
+	font-size: 0;
+}
+#menu a {
+	text-decoration: none;
+	display: inline-block;
+	position: relative;
+	z-index: 2;
+	font-size: 14px;
+}
+#magic {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 0;
+	height: 0;
+	z-index: 1;
+}
