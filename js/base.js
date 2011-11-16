@@ -1,14 +1,16 @@
+// TODO debug hover effect
+// TODO iphone ipod hide url bar
 // site options
 var siteOptions = {
 	showHeader: true, // [true, false]
-	headerPosition: 'top', // [top, bottom] header position
-	menuPosition: 'top', // [top, bottom] menu position
+	headerPosition: 'bottom', // [top, bottom] header position
+	menuPosition: 'bottom', // [top, bottom] menu position
 	menuHeight: 50, // [integer]
 	menuAlign: 'center', // [left, center, right]
 	menuStyle: 'auto', // [fill, auto]
 	menuSpacing: 10, // [integer] for menu style auto, spacing between links
 	sidePadding: 30, // [integer] slides padding-left and padding-right
-	verticalScrolling: false, // [true, false] allow vertical scrolling in the slides
+	verticalScrolling: true, // [true, false] allow vertical scrolling in the slides
 	menuAnimation: true, // [true, false]
 	useCollapsible: true // [true, false] generate collapsible blocks
 };
@@ -92,8 +94,7 @@ function styles () {
 			.css(siteOptions.headerPosition, '0px')
 			.css('height', siteOptions.menuHeight + 'px')
 			.children()
-			.css('line-height', siteOptions.menuHeight + 'px')
-			;
+			.css('line-height', siteOptions.menuHeight + 'px');
 		
 		$header.bind('click', function () {
 			$menu.find('a').filter(':first').click();
@@ -112,7 +113,7 @@ function sizes () {
 	} else {
 		paddingTB = windowH - siteOptions.menuHeight*2 - siteOptions.sidePadding*2;
 	}
-	$container.width((windowW * total_slides));
+	$container.width((windowW * total_slides)).height(windowH);
 	
 	if ((navigator.appVersion.indexOf("MSIE 7.") != -1) && (resized === 0)) {
 		$slides
@@ -131,12 +132,15 @@ function sizes () {
 	}
 
 	if (siteOptions.verticalScrolling === true) {
-		$('.verticalscroller').height((windowH - siteOptions.menuHeight - siteOptions.sidePadding));
+		$('.verticalscroller').height(paddingTB);
 	}
 	
 	if (siteOptions.menuAnimation === true) {
 		menuAnimation();
 	}
+	setTimeout(function () {
+		window.scrollTo(0,1);
+	}, 100);
 }
 
 // for browsers
@@ -240,7 +244,9 @@ function verticalScroll () {
 // animate menu
 function menuAnimation () {
 	var $el, leftPos, newWidth;
-	$menu.append('<span id="magic"></span>');
+	if(!$('#magic').length) {
+		$menu.append('<span id="magic"></span>');
+	}
 	var $magicLine = $('#magic');
 	$magicLine
 		.width($('.active').outerWidth(true))
@@ -311,13 +317,13 @@ function lightbox () {
 	    var lightboxID = $(this).attr('data-lightbox-name');
 	    var lightboxWidth = $(this).attr('data-lightbox-width');
 	    
-	    $(this).after('<div id="overlay" onclick=""></div>');
+	    $body.append('<div id="overlay" onclick=""></div>');
 	    
-	    $('#overlay').css({'filter' : 'alpha(opacity=80)'}).fadeIn();
+	    $('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': $container.width()}).fadeIn();
 	    
 	    $(document).off('keydown', keyboardNavigation);
 	    
-	    $('#' + lightboxID).fadeIn().css({ 'width': Number( lightboxWidth ) }).prepend('<a href="#" class="close"><span>Close<span></a>');
+	    $('#' + lightboxID).insertAfter('#overlay').fadeIn().css({ 'width': Number( lightboxWidth ) }).prepend('<a href="#" class="close"><span>Close<span></a>');
 	    
 	    var lightboxMargTop = ($('#' + lightboxID).height()) / 2;
 	    var lightboxMargLeft = ($('#' + lightboxID).width()) / 2;
@@ -390,10 +396,8 @@ $(document).ready(function () {
 	if (mobile) {
 		if (tablet) {
 			$body.addClass('tablet');
-			alert('tablet');
 		} else {
 			$body.addClass('mobile');
-			alert('mobile');
 		}
 		detectOrientation();
 		$container.wrap('<div id="scroller" />');
@@ -428,7 +432,32 @@ $(document).ready(function () {
 		sizes();
 		skeleton();
 		if (siteOptions.verticalScrolling === true) {
-			$slides.css('overflow','auto');
+			//$slides.css('overflow','auto');
+			$slides.wrapInner('<div class="scroll">');
+			$('.scroll').jScrollPane({
+				showArrows: false,
+				verticalGutter: 30
+			});
+			$('.scroll').each(function(){
+				$(this).jScrollPane({
+					showArrows: $(this).is('.arrow')
+				});
+				var api = $(this).data('jsp');
+				var throttleTimeout;
+				$window.bind('resize', function() {
+					if ($.browser.msie) {
+						if (!throttleTimeout) {
+							throttleTimeout = setTimeout(function() {
+								api.reinitialise();
+								throttleTimeout = null;
+							}, 50);
+						}
+					} else {
+						api.reinitialise();
+					}
+				});
+			});
+
 		}
 		$window.bind('resize', function() {
 			sizes();

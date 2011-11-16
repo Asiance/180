@@ -50,3 +50,5 @@
 # Third-party script:
 - iScroll 4 : http://cubiq.org/iscroll-4/
 	"position:fixed" for mobiles
+- jScrollpane :
+	beautiful scrollbars

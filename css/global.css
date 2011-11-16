@@ -3,12 +3,23 @@ html>/**/body {
 	overflow: hidden; /* for everyone except IE7... */
 }
 /*
+	CUSTOM SCROLLBAR
+*/
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #ccc; -webkit-border-radius: 3px; border-radius: 3px; }
+::-webkit-scrollbar-thumb { -webkit-border-radius: 3px; border-radius: 3px; background: #999; }
+::-webkit-scrollbar-thumb:window-inactive { background: #999; }
+
+/*
 	HEADER
 */
 header {
 	position: fixed;
 	width: auto;
 	z-index: 2;
+}
+:focus {
+	outline: none;
 }
 /*
 	SLIDES
@@ -18,6 +29,9 @@ header {
 	position: relative;
 	overflow: hidden;
 	width: 100%;
+	height: 100%;
+}
+.scroll {
 	height: 100%;
 }
 /*
@@ -88,7 +102,7 @@ header {
 	background: #fff;
 	padding: 20px;
 	float: left;
-	position: absolute;
+	position: fixed;
 	top: 50%;
 	left: 50%;
 	z-index: 1000;
@@ -96,8 +110,46 @@ header {
 	-webkit-box-shadow: 0px 0px 20px #000;
 	-moz-box-shadow: 0px 0px 20px #000;
 	box-shadow: 0px 0px 20px #000;
+	-webkit-transform: transform3d(0, 0, 0);
 }
 .close {
 	float: right;
 	margin: -55px -55px 0 0;
+}
+/*
+	MOBILES
+*/
+@media screen and (max-device-width: 480px) {
+	body.mobile { -webkit-text-size-adjust: 85%; }
+	.mobile #menu {
+		height: 5px !important;
+		background: none transparent;
+		margin: 0 auto 5px auto;
+		bottom: 0px !important;
+		text-align: center !important;
+	}
+	.mobile #menu a {
+		text-indent: -999999px;
+		width: 6px !important;
+		height: 6px !important;
+		background: #fff;
+		margin: auto 3px;
+		padding: 0px !important;
+		-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		border-radius: 3px;
+	}
+	.mobile #menu .active {
+		color: #fff;
+		background: #999;
+	}
+	.mobile #magic {
+		display: none !important;
+	}
+	.mobile .slide img {
+		width: 99% !important;
+	}
+	.mobile .lightbox_content {
+		width: 99% !important;
+	}
 }

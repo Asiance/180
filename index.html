@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="./css/reset.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="./css/global.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="./css/custom.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="./css/jquery.jscrollpane.css" type="text/css" media="screen" />
 	<!--[if lte IE 8]>
 	<script src="./js/html5.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="./css/ie.css" type="text/css" media="screen" />
@@ -18,6 +19,17 @@
 	<header>
 		<h1>Site title</h1>
 	</header>
+	<div id="social">
+		<ul>
+			<li class="facebook"><a href="http://www.facebook.com"><span>Facebook</span></a></li>
+			<li class="twitter"><a href="http://www.twitter.com"><span>Twitter</span></a></li>
+			<li class="flickr"><a href="http://www.flickr.com"><span>Flickr</span></a></li>
+			<li class="linkedin"><a href="http://www.linkedin.com"><span>Linkedin</span></a></li>
+			<li class="tumblr"><a href="http://www.tumblr.com"><span>Tumblr</span></a></li>
+			<li class="vimeo"><a href="http://www.vimeo.com"><span>Vimeo</span></a></li>
+			<li class="youtube"><a href="http://www.youtube.com"><span>Youtube</span></a></li>
+		</ul>
+	</div>
 	<nav id="menu">
 		<a href="#one" title="one">One</a>
 		<a href="#two" title="two">Two</a>
@@ -25,7 +37,6 @@
 		<a href="#four" title="four">Four</a>
 		<a href="#five" title="five">Five</a>
 	</nav><!--#menu-->
-	
 	<div id="container">
 	
 		<div id="one" class="slide">
@@ -198,7 +209,15 @@
 	</div><!--#container-->
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-	<script type="text/javascript" src="./js/iscroll.js"></script>
+	<script type="text/javascript">
+		var mobile = (/iphone|ipod|ipad|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
+		if (mobile) {
+			document.write('<script type=\"text/javascript\" src=\"./js/iscroll.js\"><\/script>');
+		} else {
+			document.write('<script type=\"text/javascript\" src=\"./js/jquery.jscrollpane.min.js\"><\/script>');
+			document.write('<script type=\"text/javascript\" src=\"./js/jquery.mousewheel.js\"><\/script>');
+		}
+	</script>
 	<script type="text/javascript" src="./js/base.js"></script>
 </body>
 </html>

@@ -5,6 +5,63 @@ header {
 	background: url(../images/overlay.png) repeat;
 	color: #fff;
 }
+/*
+	SOCIAL
+*/
+#social {
+	overflow: hidden;
+	position: fixed;
+	z-index: 2;
+	right: 0;
+	top: 0;
+}
+#social li {
+	float: left;
+}
+#social a span {
+	visibility: hidden;
+}
+#social a {
+	display: block;
+	width: 40px;
+	height: 40px;
+	opacity: 0.3;
+	-moz-opacity: 0.3;
+	-webkit-opacity: 0.3;
+	filter: alpha(opacity=30);
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+}
+#social a:hover {
+	opacity: 0.7;
+	-moz-opacity: 0.7;
+	-webkit-opacity: 0.7;
+	filter: alpha(opacity=70);
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+}
+.facebook a {
+	background: url(../images/Facebook.png) no-repeat;
+}
+.twitter a {
+	background: url(../images/Twitter.png) no-repeat;
+}
+.flickr a {
+	background: url(../images/Flickr.png) no-repeat;
+}
+.linkedin a {
+	background: url(../images/Linked-In.png) no-repeat;
+}
+.tumblr a {
+	background: url(../images/Tumblr.png) no-repeat;
+}
+.vimeo a {
+	background: url(../images/Vimeo.png) no-repeat;
+}
+.youtube a {
+	background: url(../images/YouTube.png) no-repeat;
+}
+/*
+	MENU
+*/
 #menu {
 	background: url(../images/overlay.png) repeat;
 }
@@ -15,6 +72,7 @@ header {
 	color: #fff;
 	background: #e02d45;
 }
+/* MENU ANIMATION */
 #magic {
 	background: #e02d45;
 	opacity: 0.3;
@@ -23,6 +81,9 @@ header {
 	filter: alpha(opacity=30);
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
 }
+/*
+	PANES
+*/
 #one {
 	background: #ccc;
 }
