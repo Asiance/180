@@ -1,6 +1,9 @@
 /*
 	CUSTOM STYLES HERE
 */
+p {
+	margin-bottom: 20px;
+}
 header {
 	background: url(../images/overlay.png) repeat;
 	color: #fff;
@@ -67,14 +70,15 @@ header {
 }
 #menu a {
 	color: #ddd;
+	font-size: 14px;
 }
 #menu .active {
-	color: #fff;
-	background: #e02d45;
+	color: #000;
+	background: #CCC;
 }
 /* MENU ANIMATION */
 #magic {
-	background: #e02d45;
+	background: #CCC;
 	opacity: 0.3;
 	-moz-opacity: 0.3;
 	-webkit-opacity: 0.3;

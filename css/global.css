@@ -34,6 +34,9 @@ header {
 .scroll {
 	height: 100%;
 }
+.nopadding {
+	padding: 0 !important;
+}
 /*
 	MENU
 */
@@ -50,7 +53,6 @@ header {
 	display: inline-block;
 	position: relative;
 	z-index: 2;
-	font-size: 14px;
 }
 /*
 	MENU ANIMATION
@@ -62,6 +64,16 @@ header {
 	width: 0;
 	height: 0;
 	z-index: 1;
+}
+/*
+	COLLAPSIBLE
+*/
+.collapsible h2.opened {
+	background: url(../images/minus.png) left center no-repeat;
+}
+.collapsible h2 {
+	background: url(../images/plus.png) left center no-repeat;
+	padding-left: 40px;
 }
 /*
 	IMAGE CAPTION HOVER EFFECT
@@ -81,6 +93,7 @@ header {
 	background: url(../images/overlay.png) repeat;
 	width: 100%;
 	height: 100%;
+	color: #fff;
 }
 .hovereffect div p {
 	padding: 20px;
@@ -114,7 +127,14 @@ header {
 }
 .close {
 	float: right;
-	margin: -55px -55px 0 0;
+	margin: -55px -20px 0 0;
+	background: url(../images/close.png) no-repeat;
+	display: block;
+	width: 16px;
+	height: 16px;
+}
+.close span {
+	visibility: hidden;
 }
 /*
 	MOBILES

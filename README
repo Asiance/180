@@ -1,7 +1,7 @@
 # Container divs ID can be anything but must have class="slide"
 # Navigation links must have titles equal to div ID minus # (see example)
 # Required files: reset.css, global.css, html5.js, jquery, iscroll.js, base.js
-
+# Make sure to set font-size on #menu a
 # Basic site structure:
 
 <nav>
@@ -16,6 +16,9 @@
 	<div id="page_two" class="slide">[ CONTENT ]</div>
 </div>
 
+# Create a slide without padding:
+- Add class nopadding to slide
+
 # Create collapsible blocks:
 
 <div class="collapsible">
@@ -28,9 +31,10 @@
 </div>
 
 # Create a hover effect on image:
+- Make sure to add width and height !
 
 <div class="hovereffect">
-	<img src="[ IMAGE ]" />
+	<img src="[ IMAGE ]" width="" height="" alt="" />
 	<div>[ CONTENT ]</div>
 </div>
 
