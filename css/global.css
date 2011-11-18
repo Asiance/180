@@ -74,6 +74,26 @@ header {
 .collapsible h2 {
 	background: url(../images/plus.png) left center no-repeat;
 	padding-left: 40px;
+	clear: both;
+}
+/*
+	SLIDESHOW
+*/
+.slider {
+	overflow: hidden;
+	clear: both;
+	position: relative;
+}
+.slider ul {
+	overflow: hidden;
+	position: relative;
+}
+.slider ul li {
+	display: block;
+	float: left;
+}
+.slider #buttons {
+	clear: both;
 }
 /*
 	IMAGE CAPTION HOVER EFFECT
@@ -109,6 +129,9 @@ header {
 	width: 100%;
 	height: 100%;
 	z-index: 999;
+}
+.lightbox {
+	cursor: pointer;
 }
 .lightbox_content {
 	display: none;

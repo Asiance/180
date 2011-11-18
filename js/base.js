@@ -262,7 +262,7 @@ function mobileSkeleton () {
 
 // slide to anchor
 function scrollSlide (page) {
-	$(scrollElement).animate({scrollLeft: $(page).offset().left}, 1000, function() {document.location.hash = page;});
+	$(scrollElement).stop(true, true).animate({scrollLeft: $(page).offset().left}, 1000, function() {document.location.hash = page;});
 }
 
 // vertical iScroll for mobiles
@@ -285,6 +285,17 @@ function verticalScroll () {
 
 // pretty scrollbars for browsers
 function prettyScroll () {
+	$('.scrollarea').each(function () {
+		var area_width = $(this).attr('data-area-width');
+		var area_height = $(this).attr('data-area-height');
+		$(this)
+			.width(area_width)
+			.height(area_height)
+			.jScrollPane({
+				showArrows: false
+			});	
+	});
+
 	$('.scroll').each(function(){
 		$(this).jScrollPane({
 			showArrows: false
@@ -321,6 +332,10 @@ function menuAnimation () {
 			.data('origLeft', $magicLine.position().left)
 			.data('origWidth', $magicLine.width());
 	});
+	$magicLine
+		.css('left', $('.active').position().left)
+		.data('origLeft', $magicLine.position().left)
+		.data('origWidth', $magicLine.width());
 	$menu.find('a').hover(function() {
 		$el = $(this);
 		leftPos = $el.position().left;
@@ -351,12 +366,12 @@ function keyboardNavigation (event) {
 
 // accordion
 function collapsibleBlocks () {
-	$('.collapsible div').hide();
-	$('.collapsible h2:first').addClass('opened').next().show();
+	$('.collapsible').children('div').hide();
 	$('.collapsible h2').css('cursor','pointer');
+	$('.collapsible').each(function() { $(this).find('h2:first').addClass('opened').next().show(); });
 	$('.collapsible h2').click(function(){
 		if( $(this).next().is(':hidden') ) {
-			$('.collapsible h2').removeClass('opened').next().slideUp();
+			$(this).parent('.collapsible').find('h2').removeClass('opened').next().slideUp();
 			$(this).toggleClass('opened').next().slideDown();
 		}
 		else if ( $(this).hasClass('opened') && $(this).next().is(':visible') ) {
@@ -391,6 +406,7 @@ function lightbox () {
 	    $('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': $container.width()}).fadeIn();
 	    
 	    $(document).off('keydown', keyboardNavigation);
+	    $(document).on('keydown', function(e) {e.preventDefault(); });
 	    
 	    $('#' + lightboxID).insertAfter('#overlay').fadeIn().css({ 'width': Number( lightboxWidth ) }).prepend('<a href="#" class="close"><span>Close<span></a>');
 	    
@@ -410,9 +426,46 @@ function lightbox () {
 	        $('#overlay, .close').remove();
 	    });
 	    $(document).on('keydown', keyboardNavigation);
+	    $(document).off('keydown', function(e) {e.preventDefault(); });
 	    return false;
 	});
 }
+
+// content rotator
+function slideshow () {
+	$('.slider').each(function() {
+		var $slider = $(this);
+		var slider_width = $slider.attr('data-slider-width');
+		var slider_height = $slider.attr('data-slider-height');
+		var inner_width = slider_width * $slider.find('li').length;
+		var move_left = slider_width * (-1);
+		
+		$slider.append('<div class="buttons"><a href="#" class="prev">Prev</a><a href="#" class="next">Next</a></div>');
+		$slider.find('li:first').before($slider.find('li:last'));
+		$slider.width(slider_width);
+		$slider.find('ul').css({'left' : move_left, 'height' : slider_height, 'width' : inner_width});
+		$slider.find('li').width(slider_width);
+		
+		$slider.find('.prev').click(function() {
+			var $this = $(this);
+			$this.parents('.slider').find('ul').animate({'left' : '+=' + slider_width + 'px'}, 600, function(){
+				$slider.find('li:first').before( $slider.find('li:last'));
+				$slider.find('ul').css({'left' : move_left});
+			});
+			return false;
+		});
+		
+		$slider.find('.next').click(function() {
+			var $this = $(this);
+			$this.parents('.slider').find('ul').animate({'left' : '-=' + slider_width + 'px'}, 600, function () {
+				$slider.find('li:last').after($slider.find('li:first'));
+				$slider.find('ul').css({'left' : move_left});
+			});
+			return false;
+		});
+	});
+}
+
 
 // detect devices orientation
 function detectOrientation () {
@@ -454,6 +507,7 @@ $(document).ready(function () {
 		collapsibleBlocks();
 	}
 	hoverEffect();
+	slideshow();
 	lightbox();
 	// init for all
 	trackPage();

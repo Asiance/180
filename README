@@ -44,6 +44,33 @@
 - Create the lightbox content:
 	<div id="[ POPUP NAME ]" class="lightbox_content">[ LIGHTBOX CONTENT ]</div>
 
+# Create a slideshow:
+<div class="slider" data-slider-width="[ WIDTH ]" data-slider-height="[ HEIGHT ]">
+	<ul>
+		<li>
+			[ CONTENT ]
+		</li>
+		<li>
+			[ CONTENT ]
+		</li>
+		<li>
+			[ CONTENT ]
+		</li>
+		<li>
+			[ CONTENT ]
+		</li>
+		<li>
+			[ CONTENT ]
+		</li>
+	</ul>
+</div>
+
+# Create a scrollable area:
+<div class="scrollarea" data-area-width="[ WIDTH ]" data-area-height="[ HEIGHT ]">
+	[ CONTENT ]
+</div>
+
+
 # Body classes:
 
 - mobile
