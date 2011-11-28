@@ -1,4 +1,9 @@
-/* HORIZONTAL FRAMEWORK */
+/*
+############################################################################################
+#######################################    180°   ##########################################
+					Basic styles for the framework to function properly
+############################################################################################
+*/
 html>/**/body {
 	overflow: hidden; /* for everyone except IE7... */
 }
@@ -34,6 +39,11 @@ header {
 .scroll {
 	height: 100%;
 }
+.verticalscroller,
+.scrollable {
+	-webkit-font-smoothing: antialiased;
+	-webkit-transform: translate3d(0,0,0);
+}
 .nopadding {
 	padding: 0 !important;
 }
@@ -62,7 +72,7 @@ header {
 	bottom: 0;
 	left: 0;
 	width: 0;
-	height: 0;
+	height: 100%;
 	z-index: 1;
 }
 /*
@@ -87,12 +97,15 @@ header {
 .slider ul {
 	overflow: hidden;
 	position: relative;
+	height: 100%;
+	-webkit-transform: translate3d(0,0,0);
 }
 .slider ul li {
 	display: block;
 	float: left;
+	-webkit-transform: translate3d(0,0,0);
 }
-.slider #buttons {
+.buttons {
 	clear: both;
 }
 /*
@@ -105,7 +118,7 @@ header {
 .hovereffect img {
 	position: absolute;
 }
-.hovereffect div {
+.hovereffect .hovertext {
 	display: none;
 	position: absolute;
 	top: 0;
@@ -115,8 +128,19 @@ header {
 	height: 100%;
 	color: #fff;
 }
-.hovereffect div p {
+.hovereffect .hovertext p {
 	padding: 20px;
+}
+/*
+	CAPTIONS
+*/
+.caption {
+	background: url(../images/overlay.png) repeat;
+	bottom: 0;
+	color: #FFFFFF;
+	left: 0;
+	padding: 10px;
+	position: absolute;
 }
 /*
 	LIGHTBOX
@@ -137,7 +161,6 @@ header {
 	display: none;
 	background: #fff;
 	padding: 20px;
-	float: left;
 	position: fixed;
 	top: 50%;
 	left: 50%;

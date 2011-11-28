@@ -1,4 +1,11 @@
-// site options
+/*
+############################################################################################
+#######################################    180°   ##########################################
+							The framework basic functions
+############################################################################################
+*/
+//TODO fix hoverEffect, caption and scrollarea in lightboxes
+// Edit this
 var siteOptions = {
 	showHeader: true, // [true, false]
 	headerPosition: 'top', // [top, bottom] header position
@@ -9,9 +16,9 @@ var siteOptions = {
 	menuSpacing: 10, // [integer] for menu style auto, spacing between links
 	sidePadding: 30, // [integer] slides padding-left and padding-right
 	verticalScrolling: true, // [true, false] allow vertical scrolling in the slides
-	menuAnimation: true, // [true, false]
-	useCollapsible: true // [true, false] generate collapsible blocks
+	menuAnimation: true // [true, false]
 };
+// No further editing required
 if (siteOptions.showHeader === true && siteOptions.menuStyle === 'fill' && siteOptions.headerPosition === siteOptions.menuPosition) {
 	if (siteOptions.headerPosition === 'top') {
 		siteOptions.menuPosition = 'bottom';
@@ -135,15 +142,15 @@ function sizes () {
 	$container.width((windowW * total_slides)).height(windowH);
 	// IE7 fix
 	if ((navigator.appVersion.indexOf("MSIE 7.") != -1) && (resized === 0)) {
+		$container.height(windowH-18);
 		$slides.not('.nopadding')
 			.width((windowW - siteOptions.sidePadding*2)).height((paddingTB - 18));
 		if (siteOptions.headerPosition === siteOptions.menuPosition) {
 			$('.nopadding')
-				.attr('style', 'height:' + nopaddingTB-18 + 'px; width:' + windowW + 'px; padding-' + siteOptions.menuPosition + ':' + siteOptions.menuHeight + 'px !important');
+				.attr('style', 'height:' + (nopaddingTB-18) + 'px; width:' + windowW + 'px; padding-' + siteOptions.menuPosition + ':' + siteOptions.menuHeight + 'px !important');
 		} else {
 			$('.nopadding')
-				.attr('style', 'height:' + nopaddingTB-18 + 'px; width:' + windowW + 'px; padding-' + siteOptions.menuPosition + ':' + siteOptions.menuHeight + 'px !important; padding-' + siteOptions.headerPosition + ':' + siteOptions.menuHeight + 'px !important;');
-			
+				.attr('style', 'height:' + (nopaddingTB-18) + 'px; width:' + windowW + 'px; padding-' + siteOptions.menuPosition + ':' + siteOptions.menuHeight + 'px !important; padding-' + siteOptions.headerPosition + ':' + siteOptions.menuHeight + 'px !important;');
 		}
 		resized = 1;
 	} else if (mobile) {
@@ -166,7 +173,6 @@ function sizes () {
 		} else {
 			$('.nopadding')
 				.attr('style', 'height:' + nopaddingTB + 'px; width:' + windowW + 'px; padding-' + siteOptions.menuPosition + ':' + siteOptions.menuHeight + 'px !important; padding-' + siteOptions.headerPosition + ':' + siteOptions.menuHeight + 'px !important;');
-			
 		}
 		if (tablet) {
 			$slides.not('.nopadding').find('.verticalscroller').height(paddingTB);
@@ -213,7 +219,13 @@ function skeleton () {
 		}
 		return false;
 	});
-	
+	$('a:not(#menu a)').filter('[href^="#"]').bind('click', function(event) {
+		var anchor = $(this).attr('href');
+		if($menu.find('a[href="'+ anchor +'"]').length) {
+			event.preventDefault();
+			$menu.find('a[href="'+ anchor +'"]').click();
+		}
+	});	
 }
 
 //for mobiles
@@ -369,28 +381,47 @@ function collapsibleBlocks () {
 	$('.collapsible').children('div').hide();
 	$('.collapsible h2').css('cursor','pointer');
 	$('.collapsible').each(function() { $(this).find('h2:first').addClass('opened').next().show(); });
-	$('.collapsible h2').click(function(){
-		if( $(this).next().is(':hidden') ) {
-			$(this).parent('.collapsible').find('h2').removeClass('opened').next().slideUp();
-			$(this).toggleClass('opened').next().slideDown();
-		}
-		else if ( $(this).hasClass('opened') && $(this).next().is(':visible') ) {
-			$('.collapsible h2').removeClass('opened').next().slideUp();
-		}
-		return false;
-	});
+	if (mobile || tablet) {
+		$('.collapsible h2').bind('touchstart', function(){
+			if( $(this).next().is(':hidden') ) {
+				$(this).parent('.collapsible').find('h2').removeClass('opened').next().slideUp();
+				$(this).toggleClass('opened').next().slideDown();
+			}
+			else if ( $(this).hasClass('opened') && $(this).next().is(':visible') ) {
+				$(this).removeClass('opened').next().slideUp();
+			}
+			return false;
+		});
+	} else {
+		$('.collapsible h2').bind('click', function(){
+			if( $(this).next().is(':hidden') ) {
+				$(this).parent('.collapsible').find('h2').removeClass('opened').next().slideUp();
+				$(this).toggleClass('opened').next().slideDown();
+			}
+			else if ( $(this).hasClass('opened') && $(this).next().is(':visible') ) {
+				$(this).removeClass('opened').next().slideUp();
+			}
+			return false;
+		});
+	}
 }
 
 // adds image hover effect
 function hoverEffect () {
 	$('.hovereffect').each(function () {
-		$(this).css({'width': $(this).children('img').width(), 'height': $(this).children('img').height()});
+		$(this).css({'width': $(this).find('img').width(), 'height': $(this).find('img').height()});
 		$(this).hover(function () {
-			$(this).children('div').stop(true,true).fadeIn('slow');
-			$(this).children('img').stop(false,true).animate({'width':$(this).width()*1.2, 'height':$(this).height()*1.2, 'top':'-'+$(this).width()*0.1, 'left':'-'+$(this).height()*0.1}, {duration:200});
+			$(this).find('.hovertext').stop(true,true).fadeIn('slow');
+			if ($(this).find('.caption').length) {
+				$(this).find('.caption').stop().hide();
+			}
+			//$(this).find('img').stop(false,true).animate({'width':$(this).width()*1.2, 'height':$(this).height()*1.2, 'top':'-'+$(this).width()*0.1, 'left':'-'+$(this).height()*0.1}, {duration:200});
 		}, function () {
-			$(this).children('div').hide();
-			$(this).find('img').stop(false,true).animate({'width':$(this).width(), 'height':$(this).height(), 'top':'0', 'left':'0'}, {duration:100});
+			$(this).find('.hovertext').hide();
+			if ($(this).find('.caption').length) {
+				$(this).find('.caption').stop().show();
+			}
+			//$(this).find('img').stop(false,true).animate({'width':$(this).width(), 'height':$(this).height(), 'top':'0', 'left':'0'}, {duration:100});
 		});
 	});
 }
@@ -399,17 +430,16 @@ function hoverEffect () {
 function lightbox () {
 	$('.lightbox').click(function() {
 	    var lightboxID = $(this).attr('data-lightbox-name');
-	    var lightboxWidth = $(this).attr('data-lightbox-width');
+	    var lightboxWidth = parseInt($(this).attr('data-lightbox-width'));
 	    
 	    $body.append('<div id="overlay" onclick=""></div>');
 	    
-	    $('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': $container.width()}).fadeIn();
+	    $('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': $container.width()}).stop().fadeIn();
 	    
 	    $(document).off('keydown', keyboardNavigation);
 	    $(document).on('keydown', function(e) {e.preventDefault(); });
 	    
-	    $('#' + lightboxID).insertAfter('#overlay').fadeIn().css({ 'width': Number( lightboxWidth ) }).prepend('<a href="#" class="close"><span>Close<span></a>');
-	    
+	    $('#' + lightboxID).insertAfter('#overlay').stop().fadeIn().css({ 'width': Number( lightboxWidth ) }).prepend('<a href="#" class="close"><span><span></a>');
 	    var lightboxMargTop = ($('#' + lightboxID).height()) / 2;
 	    var lightboxMargLeft = ($('#' + lightboxID).width()) / 2;
 	    
@@ -422,7 +452,7 @@ function lightbox () {
 	});
 	
 	$('a.close, #overlay').live('click', function() {
-	    $('#overlay , .lightbox_content').fadeOut(function() {
+	    $('#overlay , .lightbox_content').stop(true,true).fadeOut(function() {
 	        $('#overlay, .close').remove();
 	    });
 	    $(document).on('keydown', keyboardNavigation);
@@ -437,35 +467,54 @@ function slideshow () {
 		var $slider = $(this);
 		var slider_width = $slider.attr('data-slider-width');
 		var slider_height = $slider.attr('data-slider-height');
-		var inner_width = slider_width * $slider.find('li').length;
-		var move_left = slider_width * (-1);
+		var slider_width_value = parseInt(slider_width);
+		var slider_width_unit = slider_width.slice(-1);
+		var inner_width = slider_width_value * $slider.find('li').length;
+		var move_left = slider_width_value * (-1);
 		
-		$slider.append('<div class="buttons"><a href="#" class="prev">Prev</a><a href="#" class="next">Next</a></div>');
-		$slider.find('li:first').before($slider.find('li:last'));
-		$slider.width(slider_width);
-		$slider.find('ul').css({'left' : move_left, 'height' : slider_height, 'width' : inner_width});
-		$slider.find('li').width(slider_width);
+		if (slider_width_unit === '%') {
+			slider_item = slider_width_value / $slider.find('li').length + slider_width_unit;
+		} else {
+			slider_item = slider_width_value;
+			slider_width_unit = 'px';
+		}
 		
-		$slider.find('.prev').click(function() {
+		$('<div class="buttons"><a href="#" class="prev"><span>Prev</span></a><a href="#" class="next"><span>Next</span></a></div>').insertAfter($slider);
+		$slider.find('li:first').before( $slider.find('li:last'));
+		$slider.css({'width' : slider_width, 'height' : slider_height});
+		$slider.find('ul').css({'left' : move_left + slider_width_unit, 'width' : inner_width + slider_width_unit});
+		$slider.find('li').css({'width' : slider_item});
+		
+		$slider.next().find('.prev').click(function() {
 			var $this = $(this);
-			$this.parents('.slider').find('ul').animate({'left' : '+=' + slider_width + 'px'}, 600, function(){
-				$slider.find('li:first').before( $slider.find('li:last'));
-				$slider.find('ul').css({'left' : move_left});
+			$this.parent('.buttons').prev().find('ul').animate({'left' : '+=' + slider_width}, 600, function(){
+				$slider.find('li:first').before($slider.find('li:last'));
+				$slider.find('ul').css({'left' : move_left  + slider_width_unit});
 			});
 			return false;
 		});
 		
-		$slider.find('.next').click(function() {
+		$slider.next().find('.next').click(function() {
 			var $this = $(this);
-			$this.parents('.slider').find('ul').animate({'left' : '-=' + slider_width + 'px'}, 600, function () {
+			$this.parent('.buttons').prev().find('ul').animate({'left' : '-=' + slider_width}, 600, function () {
 				$slider.find('li:last').after($slider.find('li:first'));
-				$slider.find('ul').css({'left' : move_left});
+				$slider.find('ul').css({'left' : move_left + slider_width_unit});
 			});
 			return false;
 		});
 	});
 }
 
+// create captions
+function captions () {
+	$('.caption').each(function() {
+		var $caption = $(this);
+		var image = $caption.prev('img');
+		var imagealign = image.css('float');
+		$caption.prev('img').andSelf().wrapAll('<div>');
+		$caption.parent('div').css({'width': image.outerWidth(true), 'height': image.outerHeight(true), 'float': imagealign, 'position': 'relative', 'overflow': 'hidden'});
+	});
+}
 
 // detect devices orientation
 function detectOrientation () {
@@ -485,7 +534,7 @@ function detectOrientation () {
 function trackPage () {
 	// test if it works
 	console.log(activePage);
-	// for google analytics
+	// for google analytics, decomment the following line
 	//_gaq.push(['_trackPageview', '/' + activePage]);
 }
 
@@ -503,12 +552,13 @@ $(document).ready(function () {
 	
 	
 	// site options
-	if (siteOptions.useCollapsible === true) {
+	$window.bind('load', function() {
+		captions();
+		hoverEffect();
+		slideshow();
 		collapsibleBlocks();
-	}
-	hoverEffect();
-	slideshow();
-	lightbox();
+		lightbox();
+	});
 	// init for all
 	trackPage();
 	styles();
@@ -523,7 +573,7 @@ $(document).ready(function () {
 		detectOrientation();
 		$container.wrap('<div id="scroller" />');
 		if (siteOptions.verticalScrolling === true) {
-			$slides.wrapInner('<div class="scrollable">').wrapInner('<div class="verticalscroller">');
+			$slides.not('.noscroll').wrapInner('<div class="scrollable">').wrapInner('<div class="verticalscroller">');
 		}
 		$window.bind('load', function() {
 			sizes();
@@ -552,11 +602,25 @@ $(document).ready(function () {
 	else {
 		sizes();
 		skeleton();
-		if (siteOptions.verticalScrolling === true) {
-			//$slides.css('overflow','auto');
-			$slides.wrapInner('<div class="scroll">');
-			prettyScroll();
-		}
+		$window.bind('load', function() {
+			if (siteOptions.verticalScrolling === true) {
+				//$slides.css('overflow','auto');
+				$slides.not('.noscroll').wrapInner('<div class="scroll">');
+				prettyScroll();
+			} else {
+				$(scrollElement)
+					.bind('mousewheel', function(event, delta) {
+						if (delta > 0) {
+							event.preventDefault();
+							$('.active').prev().click();
+						} else {
+							event.preventDefault();
+							$('.active').next().click();
+						}
+							return false;
+					});
+			}
+		});
 		$window.bind('resize', function() {
 			sizes();
 		});
