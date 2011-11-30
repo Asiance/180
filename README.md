@@ -8,6 +8,7 @@
 
 ## Basic site structure
 
+	```html
 	<nav>
 		<a href="#home" title="home">Home</a>
 		<a href="#page_one" title="page_one">Page 1</a>
@@ -18,7 +19,7 @@
 		<div id="home" class="slide">[ CONTENT ]</div>
 		<div id="page_one" class="slide">[ CONTENT ]</div>
 		<div id="page_two" class="slide">[ CONTENT ]</div>
-	</div>
+	</div>```
 
 ## Functions
 
@@ -32,6 +33,7 @@
 
 ### Create collapsible blocks
 
+	```html
 	<div class="collapsible">
 		<h2>[ BLOCK TITLE ]</h2>
 		<div>[ CONTENT ]</div>
@@ -39,28 +41,30 @@
 		<div>[ CONTENT ]</div>
 		<h2>[ BLOCK TITLE ]</h2>
 		<div>[ CONTENT ]</div>
-	</div>
+	</div>```
 
 ### Create a hover effect on image
 
 - Make sure to add width and height !
 
+	```html
 	<div class="hovereffect">
 		<img src="[ IMAGE ]" width="" height="" alt="" />
 		<div class="hovertext">[ CONTENT ]</div>
-	</div>
+	</div>```
 
 ### Create lightbox
 
 1. Add this to any element: `data-lightbox-width="[ WIDTH ]" data-lightbox-name="[ LIGHTBOX NAME ]" class="lightbox"`
 2. Create the lightbox content:
 
-	<div id="[ POPUP NAME ]" class="lightbox_content">[ LIGHTBOX CONTENT ]</div>
+	```<div id="[ POPUP NAME ]" class="lightbox_content">[ LIGHTBOX CONTENT ]</div>```
 
 ### Create a slideshow
 
 - Width and Height can be in percentage
 
+	```html
 	<div class="slider" data-slider-width="[ WIDTH ]" data-slider-height="[ HEIGHT ]">
 		<ul>
 			<li>
@@ -79,22 +83,24 @@
 				[ CONTENT ]
 			</li>
 		</ul>
-	</div>
+	</div>```
 
 ### Automatic image captions
 
 - Add a span with `class="caption"` right after the image
 
+	```html
 	<img src="[ IMAGE ]" alt="" />
-	<span class="caption">[ CAPTION ]</span>
+	<span class="caption">[ CAPTION ]</span>```
 
 ### Create a scrollable area
 
 - Width and Height can be in percentage
 
+	```html
 	<div class="scrollarea" data-area-width="[ WIDTH ]" data-area-height="[ HEIGHT ]">
 		[ CONTENT ]
-	</div>
+	</div>```
 
 ## Notes
 
