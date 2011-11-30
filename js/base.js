@@ -297,17 +297,6 @@ function verticalScroll () {
 
 // pretty scrollbars for browsers
 function prettyScroll () {
-	$('.scrollarea').each(function () {
-		var area_width = $(this).attr('data-area-width');
-		var area_height = $(this).attr('data-area-height');
-		$(this)
-			.width(area_width)
-			.height(area_height)
-			.jScrollPane({
-				showArrows: false
-			});	
-	});
-
 	$('.scroll').each(function(){
 		$(this).jScrollPane({
 			showArrows: false
@@ -326,6 +315,19 @@ function prettyScroll () {
 				api.reinitialise();
 			}
 		});
+	});
+}
+
+// make scrollable areas
+function scrollarea () {
+	$('.scrollarea').each(function () {
+		var area_width = $(this).attr('data-area-width');
+		var area_height = $(this).attr('data-area-height');
+		$(this)
+			.css({'width': area_width, 'height': area_height})
+			.jScrollPane({
+				showArrows: false
+			});	
 	});
 }
 
@@ -451,14 +453,23 @@ function lightbox () {
 	    return false;
 	});
 	
-	$('a.close, #overlay').live('click', function() {
-	    $('#overlay , .lightbox_content').stop(true,true).fadeOut(function() {
-	        $('#overlay, .close').remove();
-	    });
-	    $(document).on('keydown', keyboardNavigation);
-	    $(document).off('keydown', function(e) {e.preventDefault(); });
-	    return false;
-	});
+	if(mobile) {
+		$('a.close, #overlay').live('touchstart', function() {
+		    $('#overlay , .lightbox_content').stop(true, true).fadeOut();
+		    $('#overlay, .close').remove();
+		    $(document).on('keydown', keyboardNavigation);
+		    $(document).off('keydown', function(e) {e.preventDefault(); });
+		    return false;
+		});		
+	} else {
+		$('a.close, #overlay').live('click', function() {
+		    $('#overlay , .lightbox_content').stop(true, true).fadeOut();
+			$('#overlay, .close').remove();
+		    $(document).on('keydown', keyboardNavigation);
+		    $(document).off('keydown', function(e) {e.preventDefault(); });
+		    return false;
+		});
+	}
 }
 
 // content rotator
@@ -558,6 +569,7 @@ $(document).ready(function () {
 		slideshow();
 		collapsibleBlocks();
 		lightbox();
+		scrollarea();
 	});
 	// init for all
 	trackPage();

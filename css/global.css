@@ -183,6 +183,17 @@ header {
 	visibility: hidden;
 }
 /*
+	ALIGNMENTS
+*/
+.alignleft {
+	float: left;
+	margin-right: 10px;
+}
+.alignright {
+	float: right;
+	margin-left: 10px;
+}
+/*
 	MOBILES
 */
 @media screen and (max-device-width: 480px) {
