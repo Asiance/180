@@ -24,11 +24,11 @@
 
 ### Create a slide without padding
 
-- Add class nopadding to slide
+- Add `class="nopadding"` to slide
 
 ### No scrolling for some slides
 
-- Add class noscroll to slide
+- Add `class="noscroll"` to slide
 
 ### Create collapsible blocks
 
@@ -54,9 +54,11 @@
 
 1. Add this to any element: `data-lightbox-width="[ WIDTH ]" data-lightbox-name="[ LIGHTBOX NAME ]" class="lightbox"`
 2. Create the lightbox content:
+
 	<div id="[ POPUP NAME ]" class="lightbox_content">[ LIGHTBOX CONTENT ]</div>
 
 ### Create a slideshow
+
 - Width and Height can be in percentage
 
 	<div class="slider" data-slider-width="[ WIDTH ]" data-slider-height="[ HEIGHT ]">
@@ -80,12 +82,14 @@
 	</div>
 
 ### Automatic image captions
-- Add a span with class caption right after the image
+
+- Add a span with `class="caption"` right after the image
 
 	<img src="[ IMAGE ]" alt="" />
 	<span class="caption">[ CAPTION ]</span>
 
 ### Create a scrollable area
+
 - Width and Height can be in percentage
 
 	<div class="scrollarea" data-area-width="[ WIDTH ]" data-area-height="[ HEIGHT ]">
@@ -95,6 +99,7 @@
 ## Notes
 
 ### Youtube video
+
 - Add `wmode=transparent` to the URL
 
 ## Body classes
