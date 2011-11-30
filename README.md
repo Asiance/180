@@ -8,18 +8,18 @@
 
 ## Basic site structure
 
-	```html
-	<nav>
-		<a href="#home" title="home">Home</a>
-		<a href="#page_one" title="page_one">Page 1</a>
-		<a href="#page_two" title="page_one">Page 2</a>
-	</nav>
-	
-	<div id="container">
-		<div id="home" class="slide">[ CONTENT ]</div>
-		<div id="page_one" class="slide">[ CONTENT ]</div>
-		<div id="page_two" class="slide">[ CONTENT ]</div>
-	</div>```
+```html
+<nav>
+	<a href="#home" title="home">Home</a>
+	<a href="#page_one" title="page_one">Page 1</a>
+	<a href="#page_two" title="page_one">Page 2</a>
+</nav>
+
+<div id="container">
+	<div id="home" class="slide">[ CONTENT ]</div>
+	<div id="page_one" class="slide">[ CONTENT ]</div>
+	<div id="page_two" class="slide">[ CONTENT ]</div>
+</div>```
 
 ## Functions
 
@@ -33,15 +33,15 @@
 
 ### Create collapsible blocks
 
-	```html
-	<div class="collapsible">
-		<h2>[ BLOCK TITLE ]</h2>
-		<div>[ CONTENT ]</div>
-		<h2>[ BLOCK TITLE ]</h2>
-		<div>[ CONTENT ]</div>
-		<h2>[ BLOCK TITLE ]</h2>
-		<div>[ CONTENT ]</div>
-	</div>```
+```html
+<div class="collapsible">
+	<h2>[ BLOCK TITLE ]</h2>
+	<div>[ CONTENT ]</div>
+	<h2>[ BLOCK TITLE ]</h2>
+	<div>[ CONTENT ]</div>
+	<h2>[ BLOCK TITLE ]</h2>
+	<div>[ CONTENT ]</div>
+</div>```
 
 ### Create a hover effect on image
 
@@ -58,7 +58,8 @@
 1. Add this to any element: `data-lightbox-width="[ WIDTH ]" data-lightbox-name="[ LIGHTBOX NAME ]" class="lightbox"`
 2. Create the lightbox content:
 
-	```<div id="[ POPUP NAME ]" class="lightbox_content">[ LIGHTBOX CONTENT ]</div>```
+	```html
+	<div id="[ POPUP NAME ]" class="lightbox_content">[ LIGHTBOX CONTENT ]</div>```
 
 ### Create a slideshow
 
