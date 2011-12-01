@@ -4,7 +4,7 @@
 + Navigation links must have titles equal to div ID minus # (see example)
 + **/!\** Make sure to set font-size on `#menu a`
 
-**Required files:** reset.css, global.css, html5.js, jquery, iscroll.js, base.js
+**Required files:** reset.css, global.css, html5.js, jquery.js, iscroll.js, jquery.180.js
 
 ## Basic site structure
 
@@ -51,6 +51,11 @@ Read about the options in the next section
 + **verticalScrolling:** [default: true] set this to false to disable vertical scrolling on all the slides (to disable on a single slide, use `class="noscroll"`)
 + **menuAnimation:** [default: true] set this to false to disable the menu hover animation effect
 + **mouseScroll:** [default: false] can be true only if verticalScrolling is disabled, it allows mousewheel navigation
++ **mobiles:** [array] use this to add mobile devices
++ **tablets:** [array] use this to add tablet devices
++ **tracker:** [default: Google Analytics] function to track page views, can be customized, use variable `activePage` to fetch the active page
++ **before180:** [function] use this to do something before the framework is initialized
++ **onComplete:** [function] use this to do something after the framework has loaded
 
 ## Features
 

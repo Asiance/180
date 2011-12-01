@@ -1,35 +1,36 @@
 /*
-############################################################################################
-#######################################    180°   ##########################################
-							The framework basic functions
-############################################################################################
-*/
-//TODO fix hoverEffect, caption and scrollarea in lightboxes
-
-// Cache variables
-var $window = $(window),
-	$body = $('body'),
-	$menu = $('#menu'),
-	$header,
-	$container = $('#container'),
-	$slides = $('.slide');
-
-var myScroll,
-	snaptoPage = 0;
-
-var timer_trackPage;
-
-// Detect browser
-if ($.browser.webkit) {
-	scrollElement = 'body';
-} else {
-	scrollElement = 'html';
-}
-var mobile = (/iphone|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
-var tablet = (/ipad/i.test(navigator.userAgent.toLowerCase()));
-
+ * 180° framework
+ * 
+ */
 (function( $ ){
+	// Cache variables
+	var $window = $(window),
+		$body = $('body'),
+		$menu = $('#menu'),
+		$header,
+		$container = $('#container'),
+		$slides = $('.slide');
+
+	var myScroll,
+		snaptoPage = 0;
+
+	var timer_trackPage;
+
+	// Detect browser
+	if ($.browser.webkit) {
+		scrollElement = 'body';
+	} else {
+		scrollElement = 'html';
+	}
+	var currentBrowser = navigator.userAgent.toLowerCase();
 	
+	//TODO
+	var mobiles = 'iphone|ipod|android|blackberry|mini|windows\sce|palm';
+	var tablets = 'ipad|playbook|hp-tablet';
+	
+	var isMobile = (/iphone|ipod|android|blackberry|mini|windows\sce|palm/i.test(currentBrowser));
+	var isTablet = (/ipad|playbook|hp-tablet/i.test(currentBrowser));
+
 	// Is there a header ?
 	if ($('header').length) {
 		$header = $('header');
@@ -41,6 +42,159 @@ var tablet = (/ipad/i.test(navigator.userAgent.toLowerCase()));
 	// To determine container width
 	var total_slides = $slides.length;
 	
+	// Utilities
+	var utilities = {
+		collapsibleBlocks : function () {
+			$('.collapsible').children('div').hide();
+			$('.collapsible h2').css('cursor','pointer');
+			$('.collapsible').each(function() { $(this).find('h2:first').addClass('opened').next().show(); });
+			if (isMobile || isTablet) {
+				$('.collapsible h2').bind('touchstart', function(){
+					if( $(this).next().is(':hidden') ) {
+						$(this).parent('.collapsible').find('h2').removeClass('opened').next().slideUp();
+						$(this).toggleClass('opened').next().slideDown();
+					}
+					else if ( $(this).hasClass('opened') && $(this).next().is(':visible') ) {
+						$(this).removeClass('opened').next().slideUp();
+					}
+					return false;
+				});
+			} else {
+				$('.collapsible h2').bind('click', function(){
+					if( $(this).next().is(':hidden') ) {
+						$(this).parent('.collapsible').find('h2').removeClass('opened').next().slideUp();
+						$(this).toggleClass('opened').next().slideDown();
+					}
+					else if ( $(this).hasClass('opened') && $(this).next().is(':visible') ) {
+						$(this).removeClass('opened').next().slideUp();
+					}
+					return false;
+				});
+			}
+		},
+		hoverEffect : function () {
+			$('.hovereffect').each(function () {
+				$(this).css({'width': $(this).find('img').width(), 'height': $(this).find('img').height()});
+				$(this).hover(function () {
+					$(this).find('.hovertext').stop(true,true).fadeIn('slow');
+					if ($(this).find('.caption').length) {
+						$(this).find('.caption').stop().hide();
+					}
+					//$(this).find('img').stop(false,true).animate({'width':$(this).width()*1.2, 'height':$(this).height()*1.2, 'top':'-'+$(this).width()*0.1, 'left':'-'+$(this).height()*0.1}, {duration:200});
+				}, function () {
+					$(this).find('.hovertext').hide();
+					if ($(this).find('.caption').length) {
+						$(this).find('.caption').stop().show();
+					}
+					//$(this).find('img').stop(false,true).animate({'width':$(this).width(), 'height':$(this).height(), 'top':'0', 'left':'0'}, {duration:100});
+				});
+			});
+		},
+		lightbox : function () {
+			$('.lightbox').click(function() {
+			    var lightboxID = $(this).attr('data-lightbox-name');
+			    var lightboxWidth = parseInt($(this).attr('data-lightbox-width'));
+			    
+			    $body.append('<div id="overlay" onclick=""></div>');
+			    
+			    $('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': $container.width()}).stop().fadeIn();
+			    
+			    $(document).off('keydown', methods.keyboardNavigation);
+			    $(document).on('keydown', function(e) {e.preventDefault(); });
+			    
+			    $('#' + lightboxID).insertAfter('#overlay').stop().fadeIn().css({ 'width': Number( lightboxWidth ) }).prepend('<a href="#" class="close"><span><span></a>');
+			    var lightboxMargTop = ($('#' + lightboxID).height()) / 2;
+			    var lightboxMargLeft = ($('#' + lightboxID).width()) / 2;
+			    
+			    $('#' + lightboxID).css({
+			        'margin-top' : -lightboxMargTop,
+			        'margin-left' : -lightboxMargLeft
+			    });
+			    
+			    return false;
+			});
+			
+			if(isMobile) {
+				$('a.close, #overlay').live('touchstart', function() {
+				    $('#overlay , .lightbox_content').stop(true, true).fadeOut();
+				    $('#overlay, .close').remove();
+				    $(document).on('keydown', methods.keyboardNavigation);
+				    $(document).off('keydown', function(e) {e.preventDefault(); });
+				    return false;
+				});		
+			} else {
+				$('a.close, #overlay').live('click', function() {
+				    $('#overlay , .lightbox_content').stop(true, true).fadeOut();
+					$('#overlay, .close').remove();
+				    $(document).on('keydown', methods.keyboardNavigation);
+				    $(document).off('keydown', function(e) {e.preventDefault(); });
+				    return false;
+				});
+			}
+		},
+		slideshow : function () {
+			$('.slider').each(function() {
+				var $slider = $(this);
+				var slider_width = $slider.attr('data-slider-width');
+				var slider_height = $slider.attr('data-slider-height');
+				var slider_width_value = parseInt(slider_width);
+				var slider_width_unit = slider_width.slice(-1);
+				var inner_width = slider_width_value * $slider.find('li').length;
+				var move_left = slider_width_value * (-1);
+				
+				if (slider_width_unit === '%') {
+					slider_item = slider_width_value / $slider.find('li').length + slider_width_unit;
+				} else {
+					slider_item = slider_width_value;
+					slider_width_unit = 'px';
+				}
+				
+				$('<div class="buttons"><a href="#" class="prev"><span>Prev</span></a><a href="#" class="next"><span>Next</span></a></div>').insertAfter($slider);
+				$slider.find('li:first').before( $slider.find('li:last'));
+				$slider.css({'width' : slider_width, 'height' : slider_height});
+				$slider.find('ul').css({'left' : move_left + slider_width_unit, 'width' : inner_width + slider_width_unit});
+				$slider.find('li').css({'width' : slider_item});
+				
+				$slider.next().find('.prev').click(function() {
+					var $this = $(this);
+					$this.parent('.buttons').prev().find('ul').animate({'left' : '+=' + slider_width}, 600, function(){
+						$slider.find('li:first').before($slider.find('li:last'));
+						$slider.find('ul').css({'left' : move_left  + slider_width_unit});
+					});
+					return false;
+				});
+				
+				$slider.next().find('.next').click(function() {
+					var $this = $(this);
+					$this.parent('.buttons').prev().find('ul').animate({'left' : '-=' + slider_width}, 600, function () {
+						$slider.find('li:last').after($slider.find('li:first'));
+						$slider.find('ul').css({'left' : move_left + slider_width_unit});
+					});
+					return false;
+				});
+			});
+		},
+		caption : function () {
+			$('.caption').each(function() {
+				var $caption = $(this);
+				var image = $caption.prev('img');
+				var imagealign = image.css('float');
+				$caption.prev('img').andSelf().wrapAll('<div>');
+				$caption.parent('div').css({'width': image.outerWidth(true), 'height': image.outerHeight(true), 'float': imagealign, 'position': 'relative', 'overflow': 'hidden'});
+			});
+		},
+		scrollarea : function () {
+			$('.scrollarea').each(function () {
+				var area_width = $(this).attr('data-area-width');
+				var area_height = $(this).attr('data-area-height');
+				$(this)
+					.css({'width': area_width, 'height': area_height})
+					.jScrollPane({
+						showArrows: false
+					});
+			});
+		}
+	};	
 	// Some actions
 	var methods = {
 		// Start
@@ -57,9 +211,24 @@ var tablet = (/ipad/i.test(navigator.userAgent.toLowerCase()));
 				sidePadding: 30,
 				verticalScrolling: true,
 				menuAnimation: true,
-				mouseScroll: false
+				mouseScroll: false,
+				mobiles: [],
+				tablets: [],
+				tracker: function() {
+					_gaq.push(['_trackPageview', '/' + activePage]);
+				},
+				before180: $.noop,
+				onComplete: $.noop
 			}, options);
-			
+			if ($.isFunction(siteOptions.before180)) {
+				siteOptions.before180.call();
+			}
+			if (siteOptions.mobiles.length) {
+				mobiles = $.merge(siteOptions.mobiles, mobiles);
+			}
+			if (siteOptions.tablets.length) {
+				tablets = $.merge(siteOptions.tablets, tablets);
+			}
 			// Avoid overlap if menu is set to fill and header is in the same position
 			if (siteOptions.showHeader === true && siteOptions.menuStyle === 'fill' && siteOptions.headerPosition === siteOptions.menuPosition) {
 				if (siteOptions.headerPosition === 'top') {
@@ -68,9 +237,6 @@ var tablet = (/ipad/i.test(navigator.userAgent.toLowerCase()));
 					siteOptions.menuPosition = 'top';
 				}
 			}
-			
-			// If it can read this, JS is enabled
-			$('html').removeClass('no-js');
 			
 			// Obviously by default the first slide is the one active
 			$menu.find('a').filter(':first').addClass('active');
@@ -81,31 +247,22 @@ var tablet = (/ipad/i.test(navigator.userAgent.toLowerCase()));
 			} else {
 				activePage = $menu.find('a').filter(':first').attr('title');
 			}
-			trackPage();
+			siteOptions.tracker.apply();
 			methods.reposition.apply();
-
-			// Framework features
-			$window.bind('load._180', function() {
-				captions();
-				hoverEffect();
-				slideshow();
-				collapsibleBlocks();
-				lightbox();
-				scrollarea();
-			});
 			
 			// For mobile and tablet
-			if (mobile || tablet) {
+			if (isMobile || isTablet) {
 				methods.mobileStyle.apply();
-				
-				if (tablet) {
+				if (isTablet) {
 					$body.addClass('tablet');
+					alert('tablet');
 				} else {
 					$body.addClass('mobile');
+					alert('mobile');
 				}
 				
 				// Orientation ?
-				detectOrientation();
+				methods.detectOrientation.apply();
 				
 				// To use iScroll
 				$container.wrap('<div id="scroller" />');
@@ -118,16 +275,16 @@ var tablet = (/ipad/i.test(navigator.userAgent.toLowerCase()));
 				// Actions on load
 				$window.bind('load._180', function() {
 					methods.mobileSizes.apply();
-					mobileSkeleton();
+					methods.mobileBase.apply();
 					if (siteOptions.verticalScrolling === true) {
-						verticalScroll();
+						methods.mobileVertScroll.apply();
 					}
 		
 				});
 				
 				// Actions on resize or orientation change
 				$window.bind('resize._180', function() {
-					detectOrientation();
+					methods.detectOrientation.apply();
 					methods.mobileSizes.apply();
 					myScroll.refresh();
 					// Reposition iScroll
@@ -155,7 +312,7 @@ var tablet = (/ipad/i.test(navigator.userAgent.toLowerCase()));
 					if (siteOptions.verticalScrolling === true) {
 						//$slides.css('overflow','auto');
 						$slides.not('.noscroll').wrapInner('<div class="scroll">');
-						prettyScroll();
+						methods.prettyScroll.apply();
 					} else {
 						if (siteOptions.mouseScroll === true) {
 							$(scrollElement)
@@ -186,8 +343,22 @@ var tablet = (/ipad/i.test(navigator.userAgent.toLowerCase()));
 				});
 				
 				// Keyboard nav
-				$(document).on('keydown._180', keyboardNavigation);
+				$(document).on('keydown._180', methods.keyboardNavigation);
 			}
+			// Framework features for all
+			$window.bind('load._180', function() {
+				utilities.caption.apply();
+				utilities.hoverEffect.apply();
+				utilities.slideshow.apply();
+				utilities.collapsibleBlocks.apply();
+				utilities.lightbox.apply();
+				utilities.scrollarea.apply();
+				// If it can read this, JS is enabled
+				$('html').removeClass('no-js').addClass('js');
+				if ($.isFunction(siteOptions.onComplete)) {
+					siteOptions.onComplete.call();
+				}
+			});
 		},
 		// Apply style options to browser
 		style : function () {
@@ -332,7 +503,7 @@ var tablet = (/ipad/i.test(navigator.userAgent.toLowerCase()));
 			}, 100);
 			
 			// For tablets
-			if (tablet) {
+			if (isTablet) {
 				$slides.not('.nopadding').find('.verticalscroller').height(paddingTB);
 				$('.nopadding').find('.verticalscroller').height(nopaddingTB);			
 			}
@@ -340,7 +511,7 @@ var tablet = (/ipad/i.test(navigator.userAgent.toLowerCase()));
 		// Reposition if hash is used in URL (Browsers only)
 		reposition : function () {
 			if (document.location.hash != "") {
-				scrollSlide(document.location.hash);
+				methods.scrollSlide(document.location.hash);
 				$('.active').removeClass('active');
 				$menu.find('a').filter('[href=' + document.location.hash + ']').addClass('active');
 			}
@@ -351,13 +522,13 @@ var tablet = (/ipad/i.test(navigator.userAgent.toLowerCase()));
 				event.preventDefault();
 				var $this = $(this);
 				// Scroll and make active
-				scrollSlide($this.attr('href'));
+				methods.scrollSlide($this.attr('href'));
 				$(".active").removeClass("active");
 				$this.addClass('active');
 				activePage = $(this).attr("title");
 				// Track pageview
 				clearTimeout(timer_trackPage);
-				timer_trackPage = setTimeout(trackPage, 2500);
+				timer_trackPage = setTimeout(siteOptions.tracker, 2500);
 				// Animate menu if needed
 				if (siteOptions.menuAnimation === true) {
 					var $magicLine = $('#magic');
@@ -418,6 +589,98 @@ var tablet = (/ipad/i.test(navigator.userAgent.toLowerCase()));
 					width: $magicLine.data('origWidth')
 				});
 			});
+		},
+		// Use pretty scrollbars for non-webkit browsers
+		prettyScroll : function () {
+			$('.scroll').each(function(){
+				$(this).jScrollPane({
+					showArrows: false
+				});
+				var api = $(this).data('jsp');
+				var throttleTimeout;
+				$window.bind('resize._180', function() {
+					if ($.browser.msie) {
+						if (!throttleTimeout) {
+							throttleTimeout = setTimeout(function() {
+								api.reinitialise();
+								throttleTimeout = null;
+							}, 50);
+						}
+					} else {
+						api.reinitialise();
+					}
+				});
+			});
+		},
+		// Detect devices orientation
+		detectOrientation : function () {
+			if ( orientation == 0 ) {
+				$body.addClass('portrait').removeClass('landscape');
+			} else if ( orientation == 90 ) {
+		        $body.removeClass('portrait').addClass('landscape');
+			} else if ( orientation == -90 ) {
+		        $body.removeClass('portrait').addClass('landscape');
+			} else if ( orientation == 180 ) {
+		        $body.addClass('portrait').removeClass('landscape');
+			}
+		},
+		// Navigation by LR arrows
+		keyboardNavigation : function (event) {
+			if (event.which === 37) {
+				event.preventDefault();
+				$('.active').prev().click();
+			} else if (event.which === 39) {
+				event.preventDefault();
+				$('.active').next().click();
+			}
+		},
+		// Animate scrolling
+		scrollSlide : function (page) {
+			$(scrollElement).stop(true, true).animate({scrollLeft: $(page).offset().left}, 1000, function() {document.location.hash = page;});
+		},
+		mobileBase : function () {
+			// init iScroll
+			myScroll = new iScroll("scroller", {
+				hScrollbar: false,
+				vScrollbar: false,
+				vScroll: false,
+				snap: ".slide",
+				snapThreshold: 80,
+				momentum: false,
+				bounce: false,
+				lockDirection: true,
+				useTransition: true,
+				onScrollEnd: function() {
+					$(".active").removeClass("active");
+					activePage = $("#menu a:nth-child(" + (this.currPageX + 1) + ")").attr("title");
+					$("#menu a:nth-child(" + (this.currPageX + 1) + ")").addClass("active");
+					snaptoPage = (this.currPageX);
+					// Track pageview
+					clearTimeout(timer_trackPage);
+					timer_trackPage = setTimeout(siteOptions.tracker, 2000);	
+				}
+			});
+			$menu.find('a').bind('click', function(event){				
+				event.preventDefault();
+				var pagenumber = $(this).index();
+				myScroll.scrollToPage(pagenumber, 0, 1000);
+			});
+		},
+		mobileVertScroll : function () {
+			var myScrolls = [];
+			var wrappers = $('.verticalscroller');
+			
+			for (var i=0; i<wrappers.length; i++) {
+				myScrolls[myScrolls.length] = new iScroll(wrappers[i], {
+					checkDOMChanges: true,
+					hScrollbar: false,
+					vScrollbar: true,
+					hScroll: false,
+					bounce: false,
+					lockDirection: true,
+					hideScrollbar: false
+				});
+			}
 		}
 	};
 	
@@ -433,278 +696,3 @@ var tablet = (/ipad/i.test(navigator.userAgent.toLowerCase()));
 		}
 	};
 })( jQuery );
-
-// Public functions
-
-function mobileSkeleton () {
-	// init iScroll
-	myScroll = new iScroll("scroller", {
-		hScrollbar: false,
-		vScrollbar: false,
-		vScroll: false,
-		snap: ".slide",
-		snapThreshold: 80,
-		momentum: false,
-		bounce: false,
-		lockDirection: true,
-		useTransition: true,
-		onScrollEnd: function() {
-			$(".active").removeClass("active");
-			activePage = $("#menu a:nth-child(" + (this.currPageX + 1) + ")").attr("title");
-			$("#menu a:nth-child(" + (this.currPageX + 1) + ")").addClass("active");
-			snaptoPage = (this.currPageX);
-			// Track pageview
-			clearTimeout(timer_trackPage);
-			timer_trackPage = setTimeout("trackPage()", 2000);	
-		}
-	});
-	$menu.find('a').bind('click', function(event){				
-		event.preventDefault();
-		var pagenumber = $(this).index();
-		myScroll.scrollToPage(pagenumber, 0, 1000);
-	});
-}
-
-
-// vertical iScroll for mobiles
-function verticalScroll () {
-	var myScrolls = [];
-	var wrappers = $('.verticalscroller');
-	
-	for (var i=0; i<wrappers.length; i++) {
-		myScrolls[myScrolls.length] = new iScroll(wrappers[i], {
-			checkDOMChanges: true,
-			hScrollbar: false,
-			vScrollbar: true,
-			hScroll: false,
-			bounce: false,
-			lockDirection: true,
-			hideScrollbar: false
-		});
-	}
-}
-
-// slide to anchor
-function scrollSlide (page) {
-	$(scrollElement).stop(true, true).animate({scrollLeft: $(page).offset().left}, 1000, function() {document.location.hash = page;});
-}
-
-// pretty scrollbars for browsers
-function prettyScroll () {
-	$('.scroll').each(function(){
-		$(this).jScrollPane({
-			showArrows: false
-		});
-		var api = $(this).data('jsp');
-		var throttleTimeout;
-		$window.bind('resize', function() {
-			if ($.browser.msie) {
-				if (!throttleTimeout) {
-					throttleTimeout = setTimeout(function() {
-						api.reinitialise();
-						throttleTimeout = null;
-					}, 50);
-				}
-			} else {
-				api.reinitialise();
-			}
-		});
-	});
-}
-
-// make scrollable areas
-function scrollarea () {
-	$('.scrollarea').each(function () {
-		var area_width = $(this).attr('data-area-width');
-		var area_height = $(this).attr('data-area-height');
-		$(this)
-			.css({'width': area_width, 'height': area_height})
-			.jScrollPane({
-				showArrows: false
-			});	
-	});
-}
-
-
-
-// keyboard navigation
-function keyboardNavigation (event) {
-	if (event.which === 37) {
-		event.preventDefault();
-		$('.active').prev().click();
-	} else if (event.which === 39) {
-		event.preventDefault();
-		$('.active').next().click();
-	}
-}
-
-// accordion
-function collapsibleBlocks () {
-	$('.collapsible').children('div').hide();
-	$('.collapsible h2').css('cursor','pointer');
-	$('.collapsible').each(function() { $(this).find('h2:first').addClass('opened').next().show(); });
-	if (mobile || tablet) {
-		$('.collapsible h2').bind('touchstart', function(){
-			if( $(this).next().is(':hidden') ) {
-				$(this).parent('.collapsible').find('h2').removeClass('opened').next().slideUp();
-				$(this).toggleClass('opened').next().slideDown();
-			}
-			else if ( $(this).hasClass('opened') && $(this).next().is(':visible') ) {
-				$(this).removeClass('opened').next().slideUp();
-			}
-			return false;
-		});
-	} else {
-		$('.collapsible h2').bind('click', function(){
-			if( $(this).next().is(':hidden') ) {
-				$(this).parent('.collapsible').find('h2').removeClass('opened').next().slideUp();
-				$(this).toggleClass('opened').next().slideDown();
-			}
-			else if ( $(this).hasClass('opened') && $(this).next().is(':visible') ) {
-				$(this).removeClass('opened').next().slideUp();
-			}
-			return false;
-		});
-	}
-}
-
-// adds image hover effect
-function hoverEffect () {
-	$('.hovereffect').each(function () {
-		$(this).css({'width': $(this).find('img').width(), 'height': $(this).find('img').height()});
-		$(this).hover(function () {
-			$(this).find('.hovertext').stop(true,true).fadeIn('slow');
-			if ($(this).find('.caption').length) {
-				$(this).find('.caption').stop().hide();
-			}
-			//$(this).find('img').stop(false,true).animate({'width':$(this).width()*1.2, 'height':$(this).height()*1.2, 'top':'-'+$(this).width()*0.1, 'left':'-'+$(this).height()*0.1}, {duration:200});
-		}, function () {
-			$(this).find('.hovertext').hide();
-			if ($(this).find('.caption').length) {
-				$(this).find('.caption').stop().show();
-			}
-			//$(this).find('img').stop(false,true).animate({'width':$(this).width(), 'height':$(this).height(), 'top':'0', 'left':'0'}, {duration:100});
-		});
-	});
-}
-
-// lightbox
-function lightbox () {
-	$('.lightbox').click(function() {
-	    var lightboxID = $(this).attr('data-lightbox-name');
-	    var lightboxWidth = parseInt($(this).attr('data-lightbox-width'));
-	    
-	    $body.append('<div id="overlay" onclick=""></div>');
-	    
-	    $('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': $container.width()}).stop().fadeIn();
-	    
-	    $(document).off('keydown', keyboardNavigation);
-	    $(document).on('keydown', function(e) {e.preventDefault(); });
-	    
-	    $('#' + lightboxID).insertAfter('#overlay').stop().fadeIn().css({ 'width': Number( lightboxWidth ) }).prepend('<a href="#" class="close"><span><span></a>');
-	    var lightboxMargTop = ($('#' + lightboxID).height()) / 2;
-	    var lightboxMargLeft = ($('#' + lightboxID).width()) / 2;
-	    
-	    $('#' + lightboxID).css({
-	        'margin-top' : -lightboxMargTop,
-	        'margin-left' : -lightboxMargLeft
-	    });
-	    
-	    return false;
-	});
-	
-	if(mobile) {
-		$('a.close, #overlay').live('touchstart', function() {
-		    $('#overlay , .lightbox_content').stop(true, true).fadeOut();
-		    $('#overlay, .close').remove();
-		    $(document).on('keydown', keyboardNavigation);
-		    $(document).off('keydown', function(e) {e.preventDefault(); });
-		    return false;
-		});		
-	} else {
-		$('a.close, #overlay').live('click', function() {
-		    $('#overlay , .lightbox_content').stop(true, true).fadeOut();
-			$('#overlay, .close').remove();
-		    $(document).on('keydown', keyboardNavigation);
-		    $(document).off('keydown', function(e) {e.preventDefault(); });
-		    return false;
-		});
-	}
-}
-
-// content rotator
-function slideshow () {
-	$('.slider').each(function() {
-		var $slider = $(this);
-		var slider_width = $slider.attr('data-slider-width');
-		var slider_height = $slider.attr('data-slider-height');
-		var slider_width_value = parseInt(slider_width);
-		var slider_width_unit = slider_width.slice(-1);
-		var inner_width = slider_width_value * $slider.find('li').length;
-		var move_left = slider_width_value * (-1);
-		
-		if (slider_width_unit === '%') {
-			slider_item = slider_width_value / $slider.find('li').length + slider_width_unit;
-		} else {
-			slider_item = slider_width_value;
-			slider_width_unit = 'px';
-		}
-		
-		$('<div class="buttons"><a href="#" class="prev"><span>Prev</span></a><a href="#" class="next"><span>Next</span></a></div>').insertAfter($slider);
-		$slider.find('li:first').before( $slider.find('li:last'));
-		$slider.css({'width' : slider_width, 'height' : slider_height});
-		$slider.find('ul').css({'left' : move_left + slider_width_unit, 'width' : inner_width + slider_width_unit});
-		$slider.find('li').css({'width' : slider_item});
-		
-		$slider.next().find('.prev').click(function() {
-			var $this = $(this);
-			$this.parent('.buttons').prev().find('ul').animate({'left' : '+=' + slider_width}, 600, function(){
-				$slider.find('li:first').before($slider.find('li:last'));
-				$slider.find('ul').css({'left' : move_left  + slider_width_unit});
-			});
-			return false;
-		});
-		
-		$slider.next().find('.next').click(function() {
-			var $this = $(this);
-			$this.parent('.buttons').prev().find('ul').animate({'left' : '-=' + slider_width}, 600, function () {
-				$slider.find('li:last').after($slider.find('li:first'));
-				$slider.find('ul').css({'left' : move_left + slider_width_unit});
-			});
-			return false;
-		});
-	});
-}
-
-// create captions
-function captions () {
-	$('.caption').each(function() {
-		var $caption = $(this);
-		var image = $caption.prev('img');
-		var imagealign = image.css('float');
-		$caption.prev('img').andSelf().wrapAll('<div>');
-		$caption.parent('div').css({'width': image.outerWidth(true), 'height': image.outerHeight(true), 'float': imagealign, 'position': 'relative', 'overflow': 'hidden'});
-	});
-}
-
-// detect devices orientation
-function detectOrientation () {
-	if ( orientation == 0 ) {
-		$body.addClass('portrait').removeClass('landscape');
-	} else if ( orientation == 90 ) {
-        $body.removeClass('portrait').addClass('landscape');
-	} else if ( orientation == -90 ) {
-        $body.removeClass('portrait').addClass('landscape');
-	} else if ( orientation == 180 ) {
-        $body.addClass('portrait').removeClass('landscape');
-	}
-}
-
-
-// track page views
-function trackPage () {
-	// test if it works
-	console.log(activePage);
-	// for google analytics, decomment the following line
-	//_gaq.push(['_trackPageview', '/' + activePage]);
-}

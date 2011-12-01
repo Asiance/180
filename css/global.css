@@ -111,14 +111,14 @@ header {
 /*
 	IMAGE CAPTION HOVER EFFECT
 */
-.hovereffect {
+.js .hovereffect {
 	position: relative;
 	overflow: hidden;
 }
-.hovereffect img {
+.js .hovereffect img {
 	position: absolute;
 }
-.hovereffect .hovertext {
+.js .hovereffect .hovertext {
 	display: none;
 	position: absolute;
 	top: 0;
@@ -128,13 +128,13 @@ header {
 	height: 100%;
 	color: #fff;
 }
-.hovereffect .hovertext p {
+.js .hovereffect .hovertext p {
 	padding: 20px;
 }
 /*
 	CAPTIONS
 */
-.caption {
+.js .caption {
 	background: url(../images/overlay.png) repeat;
 	bottom: 0;
 	color: #FFFFFF;
@@ -145,7 +145,7 @@ header {
 /*
 	LIGHTBOX
 */
-#overlay {
+.js #overlay {
 	position: absolute;
 	background: url(../images/overlay.png) repeat;
 	top: 0;
@@ -154,10 +154,10 @@ header {
 	height: 100%;
 	z-index: 999;
 }
-.lightbox {
+.js .lightbox {
 	cursor: pointer;
 }
-.lightbox_content {
+.js .lightbox_content {
 	display: none;
 	background: #fff;
 	padding: 20px;
@@ -171,7 +171,7 @@ header {
 	box-shadow: 0px 0px 20px #000;
 	-webkit-transform: transform3d(0, 0, 0);
 }
-.close {
+.js .close {
 	float: right;
 	margin: -55px -20px 0 0;
 	background: url(../images/close.png) no-repeat;
@@ -179,7 +179,7 @@ header {
 	width: 16px;
 	height: 16px;
 }
-.close span {
+.js .close span {
 	visibility: hidden;
 }
 /*
