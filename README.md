@@ -153,9 +153,9 @@ Read about the options in the next section
 
 - Add `wmode=transparent` to the URL
 
-# Credits
+## Credits
 
-## Third-party scripts
+### Third-party scripts
 
 - **iScroll 4:** http://cubiq.org/iscroll-4/
 	"position:fixed" for mobiles
@@ -164,6 +164,6 @@ Read about the options in the next section
 - **jQuery mousewheel:** http://brandonaaron.net/code/mousewheel/docs
 	horizontal mousewheel navigation
 
-## People
+### People
 
-- **Laurent Le Graverend** support and ideas :D
+- **Laurent Le Graverend:** For his support and ideas :D
