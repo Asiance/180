@@ -2,7 +2,7 @@
 
 + Container divs ID can be anything but must have `class="slide"`
 + Navigation links must have titles equal to div ID minus # (see example)
-+ /!\ Make sure to set font-size on `#menu a`
++ **/!\** Make sure to set font-size on `#menu a`
 
 **Required files:** reset.css, global.css, html5.js, jquery, iscroll.js, base.js
 
@@ -10,7 +10,7 @@
 
 ### HTML
 
-For example, index.html
+index.html
 
 ```html
 <nav>
@@ -28,7 +28,7 @@ For example, index.html
 
 ### Javascript
 
-For example, custom.js
+custom.js, initialize 180
 
 ```javascript
 $(document).ready(function() {
@@ -53,6 +53,13 @@ Read about the options in the next section
 + **mouseScroll:** [default: false] can be true only if verticalScrolling is disabled, it allows mousewheel navigation
 
 ## Features
+
+### Generated classes for further styling
+
+- mobile
+- tablet
+- landscape
+- portrait
 
 ### Create a slide without padding
 
@@ -146,20 +153,17 @@ Read about the options in the next section
 
 - Add `wmode=transparent` to the URL
 
-## Body classes
-
-- mobile
-- tablet
-- landscape
-- portrait
-
 # Credits
 
 ## Third-party scripts
 
-- iScroll 4 : http://cubiq.org/iscroll-4/
+- **iScroll 4:** http://cubiq.org/iscroll-4/
 	"position:fixed" for mobiles
-- jScrollpane : http://jscrollpane.kelvinluck.com/
+- **jScrollpane:** http://jscrollpane.kelvinluck.com/
 	pretty scrollbars
-- jQuery mousewheel : http://brandonaaron.net/code/mousewheel/docs
+- **jQuery mousewheel:** http://brandonaaron.net/code/mousewheel/docs
 	horizontal mousewheel navigation
+
+## People
+
+- **Laurent Le Graverend** support and ideas :D
