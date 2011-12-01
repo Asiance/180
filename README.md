@@ -8,6 +8,10 @@
 
 ## Basic site structure
 
+### HTML
+
+For example, index.html
+
 ```html
 <nav>
 	<a href="#home" title="home">Home</a>
@@ -22,7 +26,33 @@
 </div>
 ```
 
-## Functions
+### Javascript
+
+For example, custom.js
+
+```javascript
+$(document).ready(function() {
+	$('body')._180(options);
+});
+```
+
+Read about the options in the next section
+
+## Options
+
++ **showHeader:** [default: true] set this to false to hide the header (or footer depending on how you use it)
++ **headerPosition:** [default: 'top'] the header position can be `top` or `bottom`
++ **menuPosition:** [default: 'top'] the menu position can be `top` or `bottom`
++ **menuHeight:** [default: 50] menu height in pixels
++ **menuAlign:** [default: 'center'] menu links alignment, can be `left`, `center` or `right`
++ **menuStyle:** [default: 'auto'] the menu style can be `fill` (take 100% of the window width) or `auto`
++ **menuSpacing:** [default: 10] only if the menu style is set to auto, the spacing between links in pixels
++ **sidePadding:** [default: 30] slides side paddings in pixels
++ **verticalScrolling:** [default: true] set this to false to disable vertical scrolling on all the slides (to disable on a single slide, use `class="noscroll"`)
++ **menuAnimation:** [default: true] set this to false to disable the menu hover animation effect
++ **mouseScroll:** [default: false] can be true only if verticalScrolling is disabled, it allows mousewheel navigation
+
+## Features
 
 ### Create a slide without padding
 
