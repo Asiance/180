@@ -1,10 +1,8 @@
 #  Hello
 
 + Container divs ID can be anything but must have `class="slide"`
-+ Navigation links must have titles equal to div ID minus # (see example)
-+ **/!\** Make sure to set font-size on `#menu a`
-
-**Required files:** reset.css, global.css, html5.js, jquery.js, iscroll.js, jquery.180.js
++ Navigation links must have `data-title` equal to div ID minus # (see example)
++ **/!\\** Make sure to set font-size on `#menu a`
 
 ## Basic site structure
 
@@ -14,9 +12,9 @@ index.html
 
 ```html
 <nav>
-	<a href="#home" title="home">Home</a>
-	<a href="#page_one" title="page_one">Page 1</a>
-	<a href="#page_two" title="page_one">Page 2</a>
+	<a href="#home" data-title="home">Home</a>
+	<a href="#page_one" data-title="page_one">Page 1</a>
+	<a href="#page_two" data-title="page_one">Page 2</a>
 </nav>
 
 <div id="container">
