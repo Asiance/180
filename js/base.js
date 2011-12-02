@@ -288,9 +288,9 @@
 			
 			// If hash, redefine the active page for tracking and reposition if needed
 			if (document.location.hash != "") {
-				activePage = $menu.find('a').filter('[href="' + document.location.hash + '"]').attr('title');
+				activePage = $menu.find('a').filter('[href="' + document.location.hash + '"]').attr('data-title');
 			} else {
-				activePage = $menu.find('a').not('.customlink,.slidepanel').filter(':first').attr('title');
+				activePage = $menu.find('a').not('.customlink,.slidepanel').filter(':first').attr('data-title');
 			}
 			siteOptions.tracker.apply();
 			methods.reposition.apply();
@@ -577,7 +577,7 @@
 				methods.scrollSlide($this.attr('href'));
 				$(".active").removeClass("active");
 				$this.addClass('active');
-				activePage = $(this).attr("title");
+				activePage = $(this).attr("data-title");
 				// Track pageview
 				clearTimeout(timer_trackPage);
 				timer_trackPage = setTimeout(siteOptions.tracker, 2500);
@@ -680,10 +680,10 @@
 		keyboardNavigation : function (event) {
 			if (event.which === 37) {
 				event.preventDefault();
-				$('.active').prev().click();
+				$('.active').prev().not('.customlink,.slidepanel').click();
 			} else if (event.which === 39) {
 				event.preventDefault();
-				$('.active').next().click();
+				$('.active').next().not('.customlink,.slidepanel').click();
 			}
 		},
 		// Animate scrolling
@@ -708,7 +708,7 @@
 				useTransition: true,
 				onScrollEnd: function() {
 					$(".active").removeClass("active");
-					activePage = $("#menu a:nth-child(" + (this.currPageX + 1) + ")").attr("title");
+					activePage = $("#menu a:nth-child(" + (this.currPageX + 1) + ")").attr("data-title");
 					$("#menu a:nth-child(" + (this.currPageX + 1) + ")").addClass("active");
 					snaptoPage = (this.currPageX);
 					// Track pageview
