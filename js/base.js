@@ -8,6 +8,7 @@
 		$body = $('body'),
 		$menu = $('#menu'),
 		$header,
+		$footer,
 		$container = $('#container'),
 		$slides = $('.slide');
 
@@ -29,6 +30,10 @@
 	// Is there a header ?
 	if ($('header').length) {
 		$header = $('header');
+	}
+	// Is there a footer ?
+	if ($('footer').length) {
+		$footer = $('footer');
 	}
 	
 	// Has it been resized ? (for IE7)
@@ -450,6 +455,22 @@
 					$menu.find('a').filter(':first').click();
 				});
 			}
+			
+			// footer
+			if ($('footer').length) {
+				$footer.css({'top' : '-' + (siteOptions.menuHeight*10) + 'px', 'height' : (siteOptions.menuHeight*10) + 'px'});
+				$('.showfooter').toggle(function() {
+					$footer.stop().animate({'top': 0});
+					$menu.stop().animate({'top':(siteOptions.menuHeight*10) + 'px'});
+				},function() {
+					$footer.stop().animate({'top': '-' + (siteOptions.menuHeight*10) + 'px'});
+					$menu.stop().animate({'top':0});
+				});
+				$menu.find('a').not('.customlink').bind('click', function() {
+					$footer.stop().animate({'top': '-' + (siteOptions.menuHeight*10) + 'px'});
+					$menu.stop().animate({'top':0});
+				});
+			}
 		},
 		// Apply style options to mobile
 		mobileStyle : function () {
@@ -558,7 +579,7 @@
 		},
 		// Animate menu and internal links + track page views
 		menuLinks : function () {
-			$menu.find('a').bind('click', function(event){				
+			$menu.find('a').not('.customlink').bind('click', function(event){				
 				event.preventDefault();
 				var $this = $(this);
 				// Scroll and make active
@@ -591,6 +612,9 @@
 					event.preventDefault();
 					$menu.find('a[href="'+ anchor +'"]').click();
 				}
+			});
+			$('a:not(#menu a)').filter('[href="#"]').bind('click', function(event) {
+				event.preventDefault();
 			});
 		},
 		// Animate the menu

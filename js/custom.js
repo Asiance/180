@@ -3,12 +3,12 @@ $(document).ready(function() {
 		tracker: function() {
 			console.log(activePage);
 		},
-		onComplete: function() {
+		/*onComplete: function() {
 			alert('done');
 		},
 		before180: function () {
 			alert('start');
-		},
+		},*/
 		verticalScrolling: true
 	});
 });

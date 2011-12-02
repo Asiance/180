@@ -27,6 +27,20 @@ header {
 	outline: none;
 }
 /*
+	SLIDING FOOTER
+*/
+footer {
+    background: url(../images/overlay.png) repeat;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 3;
+    color: #fff;
+}
+footer > div {
+	padding: 30px;
+}
+/*
 	SLIDES
 */
 .slide {
