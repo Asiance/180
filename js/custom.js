@@ -8,6 +8,7 @@ $(document).ready(function() {
 		},
 		before180: function () {
 			alert('start');
-		}
+		},
+		verticalScrolling: true
 	});
 });

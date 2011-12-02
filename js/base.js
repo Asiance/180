@@ -298,10 +298,8 @@
 				if (isTablet) {
 					$body.addClass('tablet');
 					methods.style.apply();
-					alert('tablet');
 				} else {
 					$body.addClass('mobile');
-					alert('mobile');
 				}
 				
 				// Orientation ?
@@ -311,9 +309,9 @@
 				$container.wrap('<div id="scroller" />');
 				
 				// Framework options
-				if (siteOptions.verticalScrolling === true) {
+				/*if (siteOptions.verticalScrolling === true) {
 					$slides.not('.noscroll').wrapInner('<div class="scrollable">').wrapInner('<div class="verticalscroller">');
-				}
+				}*/
 				
 				// Actions on load
 				$window.bind('load._180', function() {
@@ -323,8 +321,13 @@
 						methods.sizes.apply();
 					}
 					methods.mobileBase.apply();
-					if (siteOptions.verticalScrolling === true) {
+					/*if (siteOptions.verticalScrolling === true) {
 						methods.mobileVertScroll.apply();
+					}*/
+					if (siteOptions.verticalScrolling === true) {
+						//$slides.css('overflow','auto');
+						$slides.not('.noscroll').wrapInner('<div class="scroll">');
+						methods.prettyScroll.apply();
 					}
 		
 				});

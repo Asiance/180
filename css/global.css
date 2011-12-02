@@ -38,6 +38,8 @@ header {
 }
 .scroll {
 	height: 100%;
+	-webkit-font-smoothing: antialiased;
+	-webkit-transform: translate3d(0,0,0);
 }
 .verticalscroller,
 .scrollable {
@@ -185,6 +187,9 @@ header {
 /*
 	ALIGNMENTS
 */
+.clear {
+	clear: both;
+}
 .alignleft {
 	float: left;
 	margin-right: 10px;
