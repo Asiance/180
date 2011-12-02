@@ -46,7 +46,7 @@ Read about the options in the next section
 + **menuHeight:** [default: 50] menu height in pixels
 + **menuAlign:** [default: 'center'] menu links alignment, can be `left`, `center` or `right`
 + **menuStyle:** [default: 'auto'] the menu style can be `fill` (take 100% of the window width) or `auto`
-+ **menuSpacing:** [default: 10] only if the menu style is set to auto, the spacing between links in pixels
++ **menuSpacing:** [default: 10] only if the menu style is set to auto, the spacing between links in pixels+ **slidingpanelHeight:** [default: 400] sliding panel height
 + **sidePadding:** [default: 30] slides side paddings in pixels
 + **verticalScrolling:** [default: true] set this to false to disable vertical scrolling on all the slides (to disable on a single slide, use `class="noscroll"`)
 + **menuAnimation:** [default: true] set this to false to disable the menu hover animation effect
@@ -152,7 +152,11 @@ Read about the options in the next section
 	[ CONTENT ]
 </div>
 ```
-
+### Create a sliding panel- Create a link with `class="slidepanel"` and add the following to your source code```html<div id="slidingpanel">
+	<div>
+		[ CONTENT ]
+	</div>
+</div>```### Exclude link from menu- Create a link with `class="customlink"` if you want it to be in the menu bar but if it's not a navigation link
 ## Notes
 
 ### Youtube video

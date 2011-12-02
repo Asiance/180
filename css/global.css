@@ -27,17 +27,17 @@ header {
 	outline: none;
 }
 /*
-	SLIDING FOOTER
+	SLIDING PANEL
 */
-footer {
+#slidingpanel {
     background: url(../images/overlay.png) repeat;
     left: 0;
     position: fixed;
     width: 100%;
     z-index: 3;
-    color: #fff;
+    color: #fff;    overflow: hidden;
 }
-footer > div {
+#slidingpanel > div {
 	padding: 30px;
 }
 /*

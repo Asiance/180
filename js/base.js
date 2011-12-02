@@ -32,8 +32,8 @@
 		$header = $('header');
 	}
 	// Is there a footer ?
-	if ($('footer').length) {
-		$footer = $('footer');
+	if ($('#slidingpanel').length) {
+		$slidingpanel = $('#slidingpanel');
 	}
 	
 	// Has it been resized ? (for IE7)
@@ -227,7 +227,7 @@
 				menuHeight: 50,
 				menuAlign: 'center',
 				menuStyle: 'auto',
-				menuSpacing: 10,
+				menuSpacing: 10,				slidingpanelHeight: 400,
 				sidePadding: 30,
 				verticalScrolling: true,
 				menuAnimation: true,
@@ -284,13 +284,13 @@
 			});
 			
 			// Obviously by default the first slide is the one active
-			$menu.find('a').filter(':first').addClass('active');
+			$menu.find('a').not('.customlink,.slidepanel').filter(':first').addClass('active');
 			
 			// If hash, redefine the active page for tracking and reposition if needed
 			if (document.location.hash != "") {
 				activePage = $menu.find('a').filter('[href="' + document.location.hash + '"]').attr('title');
 			} else {
-				activePage = $menu.find('a').filter(':first').attr('title');
+				activePage = $menu.find('a').not('.customlink,.slidepanel').filter(':first').attr('title');
 			}
 			siteOptions.tracker.apply();
 			methods.reposition.apply();
@@ -452,19 +452,14 @@
 					.css('line-height', siteOptions.menuHeight + 'px');
 				
 				$header.bind('click', function () {
-					$menu.find('a').filter(':first').click();
+					$menu.find('a').not('.customlink,.slidepanel').filter(':first').click();
 				});
 			}
 			
 			// footer
-			if ($('footer').length) {
-				$footer.css({'top' : '-' + (siteOptions.menuHeight*10) + 'px', 'height' : (siteOptions.menuHeight*10) + 'px'});
-				$('.showfooter').toggle(function() {
-					$footer.stop().animate({'top': 0});
-					$menu.stop().animate({'top':(siteOptions.menuHeight*10) + 'px'});
-				},function() {
-					$footer.stop().animate({'top': '-' + (siteOptions.menuHeight*10) + 'px'});
-					$menu.stop().animate({'top':0});
+			if ($('#slidingpanel').length) {				$slidingpanel					.css(siteOptions.menuPosition, 0 + siteOptions.menuHeight)					.css({'height' : (siteOptions.slidingpanelHeight) + 'px'}).hide();
+				$('.slidepanel').bind('click', function() {
+					$slidingpanel.stop().animate({'height':'toggle'});
 				});
 			}
 		},
@@ -480,7 +475,7 @@
 					.css('line-height', siteOptions.menuHeight/2 + 'px');
 				
 				$header.bind('click', function () {
-					$menu.find('a').filter(':first').click();
+					$menu.find('a').not('.customlink,.slidepanel').filter(':first').click();
 				});
 			}
 		},
@@ -575,7 +570,7 @@
 		},
 		// Animate menu and internal links + track page views
 		menuLinks : function () {
-			$menu.find('a').not('.customlink').bind('click', function(event){				
+			$menu.find('a').not('.customlink, .slidepanel').bind('click', function(event){				
 				event.preventDefault();
 				var $this = $(this);
 				// Scroll and make active
@@ -602,13 +597,13 @@
 				return false;
 			});
 			// Other internal links
-			$('a:not(#menu a)').filter('[href^="#"]').bind('click', function(event) {
+			$('a:not(#menu a, a[href="#"])').filter('[href^="#"]').bind('click', function(event) {
 				var anchor = $(this).attr('href');
 				if($menu.find('a[href="'+ anchor +'"]').length) {
 					event.preventDefault();
 					$menu.find('a[href="'+ anchor +'"]').click();
 				}
-			});
+			});			$('a[href="#"]').bind('click', function(event) {				event.preventDefault();			});
 		},
 		// Animate the menu
 		menuAnimation : function () {
@@ -632,7 +627,7 @@
 				.data('origLeft', $magicLine.position().left)
 				.data('origWidth', $magicLine.width());
 			
-			$menu.find('a').hover(function() {
+			$menu.find('a').not('.customlink, .slidepanel').hover(function() {
 				$el = $(this);
 				leftPos = $el.position().left;
 				newWidth = $el.outerWidth(true);
@@ -735,7 +730,7 @@
 					}
 				}
 			});
-			$menu.find('a').bind('click', function(event){				
+			$menu.find('a').not('.customlink,.slidepanel').bind('click', function(event){				
 				event.preventDefault();
 				var pagenumber = $(this).index();
 				myScroll.scrollToPage(pagenumber, 0, 1000);
