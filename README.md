@@ -55,7 +55,8 @@ Read about the options in the next section
 + **tablets:** use this to add tablet devices, separate them with `|`
 + **tracker:** [default: Google Analytics] function to track page views, can be customized, use variable `activePage` to fetch the active page
 + **before180:** [function] use this to do something before the framework is initialized
-+ **onComplete:** [function] use this to do something after the framework has loaded
++ **after180:** [function] use this to do something after the framework has loaded+ **beforeslide:** [function] use this to do something before a page slide
++ **afterslide:** [function] use this to do something after a page slide
 
 ## Features
 

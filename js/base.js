@@ -238,7 +238,7 @@
 					_gaq.push(['_trackPageview', '/' + activePage]);
 				},
 				before180: $.noop,
-				onComplete: $.noop
+				after180: $.noop,				beforeslide: $.noop,				afterslide: $.noop
 			}, options);
 			
 			// Custom init function
@@ -278,8 +278,8 @@
 				utilities.scrollarea.apply();
 				// If it can read this, JS is enabled
 				$('html').removeClass('no-js').addClass('js');
-				if ($.isFunction(siteOptions.onComplete)) {
-					siteOptions.onComplete.call();
+				if ($.isFunction(siteOptions.after180)) {
+					siteOptions.after180.call();
 				}
 			});
 			
@@ -466,10 +466,6 @@
 					$footer.stop().animate({'top': '-' + (siteOptions.menuHeight*10) + 'px'});
 					$menu.stop().animate({'top':0});
 				});
-				$menu.find('a').not('.customlink').bind('click', function() {
-					$footer.stop().animate({'top': '-' + (siteOptions.menuHeight*10) + 'px'});
-					$menu.stop().animate({'top':0});
-				});
 			}
 		},
 		// Apply style options to mobile
@@ -613,9 +609,6 @@
 					$menu.find('a[href="'+ anchor +'"]').click();
 				}
 			});
-			$('a:not(#menu a)').filter('[href="#"]').bind('click', function(event) {
-				event.preventDefault();
-			});
 		},
 		// Animate the menu
 		menuAnimation : function () {
@@ -699,8 +692,12 @@
 			}
 		},
 		// Animate scrolling
-		scrollSlide : function (page) {
-			$(scrollElement).stop(true, true).animate({scrollLeft: $(page).offset().left}, 1000, function() {document.location.hash = page;});
+		scrollSlide : function (page) {			// do something before?			if ($.isFunction(siteOptions.beforeslide)) {
+				siteOptions.beforeslide.call();
+			}
+			$(scrollElement).stop(true, true).animate({scrollLeft: $(page).offset().left}, 1000, function() {				document.location.hash = page;				// do something after?				if ($.isFunction(siteOptions.afterslide)) {
+					siteOptions.afterslide.call();
+				}			});
 		},
 		mobileBase : function () {
 			// init iScroll
