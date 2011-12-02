@@ -58,7 +58,6 @@
 				<li>iPad 2+</li>
 			</ul>
 			<p>Let's start with a little walkthrough basic functions...</p>
-			<p>The framework is Google Analytics ready and will track internal page clicks! Check your browser console ;) Don't forget to add your GA code and decomment a line in base.js trackPage function!</p>
 			<p>This page is the basic slide with padding and vertical scrolling. (Try scrolling!)</p>
 			<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
 			<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
@@ -304,12 +303,12 @@
 	
 	<!-- Javascripts -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+	<script type="text/javascript" src="./js/jquery.jscrollpane.min.js"></script>
 	<script type="text/javascript">
 		var mobile = (/iphone|ipod|ipad|playbook|hp-tablet|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
 		if (mobile) {
 			document.write('<script type=\"text/javascript\" src=\"./js/iscroll.js\"><\/script>');
 		} else {
-			document.write('<script type=\"text/javascript\" src=\"./js/jquery.jscrollpane.min.js\"><\/script>');
 			document.write('<script type=\"text/javascript\" src=\"./js/jquery.mousewheel.js\"><\/script>');
 		}
 	</script>

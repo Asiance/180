@@ -51,8 +51,8 @@ Read about the options in the next section
 + **verticalScrolling:** [default: true] set this to false to disable vertical scrolling on all the slides (to disable on a single slide, use `class="noscroll"`)
 + **menuAnimation:** [default: true] set this to false to disable the menu hover animation effect
 + **mouseScroll:** [default: false] can be true only if verticalScrolling is disabled, it allows mousewheel navigation
-+ **mobiles:** [array] use this to add mobile devices
-+ **tablets:** [array] use this to add tablet devices
++ **mobiles:** use this to add mobile devices, separate them with `|`
++ **tablets:** use this to add tablet devices, separate them with `|`
 + **tracker:** [default: Google Analytics] function to track page views, can be customized, use variable `activePage` to fetch the active page
 + **before180:** [function] use this to do something before the framework is initialized
 + **onComplete:** [function] use this to do something after the framework has loaded
