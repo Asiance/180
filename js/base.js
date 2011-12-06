@@ -65,7 +65,9 @@
 					_gaq.push(['_trackPageview', '/' + activePage]);
 				},
 				before180: $.noop,
-				after180: $.noop,				beforeslide: $.noop,				afterslide: $.noop
+				after180: $.noop,				beforeslide: $.noop,				afterslide: $.noop,
+				portrait: $.noop,
+				landscape: $.noop
 			}, options);
 			
 			// Custom init function
@@ -487,14 +489,16 @@
 		},
 		// Detect devices orientation
 		detectOrientation : function() {
-			if ( orientation == 0 ) {
+			if (window.innerHeight > window.innerWidth) {
 				$body.addClass('portrait').removeClass('landscape');
-			} else if ( orientation == 90 ) {
-		        $body.removeClass('portrait').addClass('landscape');
-			} else if ( orientation == -90 ) {
-		        $body.removeClass('portrait').addClass('landscape');
-			} else if ( orientation == 180 ) {
-		        $body.addClass('portrait').removeClass('landscape');
+				if ($.isFunction(siteOptions.portrait)) {
+					siteOptions.portrait.call();
+				}
+			} else if (window.innerHeight< window.innerWidth) {
+				$body.removeClass('portrait').addClass('landscape');
+		        if ($.isFunction(siteOptions.landscape)) {
+					siteOptions.landscape.call();
+				}
 			}
 		},
 		// Navigation by LR arrows
@@ -528,9 +532,9 @@
 				lockDirection: true,
 				useTransition: true,
 				onScrollEnd: function() {
-					$('.active').removeClass('.active');
+					$('.active').removeClass('active');
 					activePage = $('#menu a:nth-child(' + (this.currPageX + 1) + ')').attr('data-title');
-					$('#menu a:nth-child(' + (this.currPageX + 1) + ')').addClass('.active');
+					$('#menu a:nth-child(' + (this.currPageX + 1) + ')').addClass('active');
 					snaptoPage = (this.currPageX);
 					// Track pageview
 					clearTimeout(timer_trackPage);
@@ -538,8 +542,7 @@
 					if (siteOptions.menuAnimation === true) {
 						var $magicLine = $('#magic');
 						$magic = $('#menu a:nth-child(' + (this.currPageX + 1) + ')');						leftPos = $magic.position().left;
-						newWidth = $magic.outerWidth(true);						methods.menuAnimationUpdate.apply();
-						$magicLine
+						newWidth = $magic.outerWidth(true);						$magicLine
 							.data('origLeft', leftPos)
 							.data('origWidth', newWidth);						$magicLine.stop().animate({
 							left: leftPos,
@@ -609,13 +612,13 @@
 			    var lightboxID = $(this).attr('data-lightbox-name');
 			    var lightboxWidth = parseInt($(this).attr('data-lightbox-width'));
 			    var lightboxMargTop = ($('#' + lightboxID).height()) / 2;
-			    var lightboxMargLeft = ($('#' + lightboxID).width()) / 2;
+			    var lightboxMargLeft = lightboxWidth/2;
 			    
 			    $body.append('<div id="overlay" onclick=""></div>');			    			    $('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': $container.width()}).stop().fadeIn();
 			    
 			    $(document).off('keydown._180', methods.keyboardNavigation).on('keydown._180', function(e) {e.preventDefault(); });
 			    
-			    $('#' + lightboxID)			    	.insertAfter('#overlay')			    	.stop().fadeIn()			    	.css({ 'width': Number( lightboxWidth ) })			    	.prepend('<a href="#" class="close"><span><span></a>')			    	.css({'margin-top' : -lightboxMargTop, 'margin-left' : -lightboxMargLeft});
+			    $('#' + lightboxID)			    	.insertAfter('#overlay')			    	.stop().fadeIn()			    	.css({ 'width': lightboxWidth })			    	.prepend('<a href="#" class="close"><span><span></a>')			    	.css({'margin-top' : -lightboxMargTop, 'margin-left' : -lightboxMargLeft});
 			    
 			    return false;
 			});

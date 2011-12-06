@@ -55,6 +55,8 @@ Read about the options in the next section
 + **before180:** [function] use this to do something before the framework is initialized
 + **after180:** [function] use this to do something after the framework has loaded+ **beforeslide:** [function] use this to do something before a page slide
 + **afterslide:** [function] use this to do something after a page slide
++ **portrait:** [function] use this to do something in portrait mode
++ **landscape:** [function] use this to do something in landscape mode
 
 ## Features
 
