@@ -1,6 +1,6 @@
 /*
  *
- * 180° framework
+ * 180Â° framework
  *
  */
 (function($){
@@ -531,16 +531,33 @@
 		// Animate scrolling
 		scrollSlide : function(page) {
 			// do something before?
+			var self = this;
 			if ($.isFunction(siteOptions.beforeslide)) {
-				siteOptions.beforeslide.call(this);
+				siteOptions.beforeslide.call(this, page, self.getScrollDirection(page));
 			}
+
 			$(scrollElement).stop(true, true).animate({scrollLeft: $(page).offset().left}, 1000, function() {
 				document.location.hash = page;
 				// do something after?
 				if ($.isFunction(siteOptions.afterslide)) {
-					siteOptions.afterslide.call(this);
+					siteOptions.afterslide.call(this, page, self.getScrollDirection(page));
 				}
 			});
+		},
+		// Return the direction where the slides scroll to
+		getScrollDirection : function(page) {
+			var string = '';
+			$($menunavlinks).each (function (e) {
+				string += '#' + $(this).attr('title');
+			});
+			var j = string.indexOf(page) - string.indexOf(document.location.hash)
+			if (j == 0) {
+				return direction = 'none';
+			} else if (j > 0) {
+				return direction = 'right';
+			} else {
+				return direction = 'left';
+			}
 		},
 		mobileBase : function() {
 			// init iScroll
