@@ -1,12 +1,14 @@
 /*
  *
- * 180° framework *
+ * 180° framework
+ *
  */
 (function($){
 	// Cache variables
 	var $window = $(window),
 		$body = $('body'),
-		$menu = $('#menu'),		$menunavlinks = $menu.find('a').not('.customlink, .slidepanel'),
+		$menu = $('#menu'),
+		$menunavlinks = $menu.find('a').not('.customlink, .slidepanel'),
 		$header,
 		$footer,
 		$container = $('#container'),
@@ -54,7 +56,8 @@
 				menuHeight: 50,
 				menuAlign: 'center',
 				menuStyle: 'auto',
-				menuSpacing: 10,				slidingpanelHeight: 400,
+				menuSpacing: 10,
+				slidingpanelHeight: 400,
 				sidePadding: 30,
 				verticalScrolling: true,
 				menuAnimation: true,
@@ -65,9 +68,13 @@
 					_gaq.push(['_trackPageview', '/' + activePage]);
 				},
 				before180: $.noop,
-				after180: $.noop,				beforeslide: $.noop,				afterslide: $.noop,
+				after180: $.noop,
+				beforeslide: $.noop,
+				afterslide: $.noop,
 				portrait: $.noop,
-				landscape: $.noop
+				landscape: $.noop,
+				textPrev: "Prev",
+				textNext: "Next"
 			}, options);
 			
 			// Custom init function
@@ -278,13 +285,17 @@
 					.css(siteOptions.headerPosition, '0px')
 					.css('height', siteOptions.menuHeight + 'px')
 					.children()
-					.css('line-height', siteOptions.menuHeight + 'px')					.bind('click._180', function() {
+					.css('line-height', siteOptions.menuHeight + 'px')
+					.bind('click._180', function() {
 						$menunavlinks.filter(':first').click();
 					});
 			}
 			
 			// footer
-			if ($('#slidingpanel').length) {				$slidingpanel					.css(siteOptions.menuPosition, 0 + siteOptions.menuHeight)					.css({'height' : (siteOptions.slidingpanelHeight) + 'px'}).hide();
+			if ($('#slidingpanel').length) {
+				$slidingpanel
+					.css(siteOptions.menuPosition, 0 + siteOptions.menuHeight)
+					.css({'height' : (siteOptions.slidingpanelHeight) + 'px'}).hide();
 				$('.slidepanel').bind('click._180', function() {
 					$slidingpanel.stop().animate({'height':'toggle'});
 				});
@@ -299,7 +310,8 @@
 					.css('top', '0px')
 					.css('height', siteOptions.menuHeight/2 + 'px')
 					.children()
-					.css('line-height', siteOptions.menuHeight/2 + 'px')					.bind('click._180', function() {
+					.css('line-height', siteOptions.menuHeight/2 + 'px')
+					.bind('click._180', function() {
 						$menunavlinks.filter(':first').click();
 					});
 			}
@@ -410,7 +422,8 @@
 				if (siteOptions.menuAnimation === true) {
 					var $magicLine = $('#magic');
 					leftPos = $this.position().left;
-					newWidth = $this.outerWidth(true);					$magicLine
+					newWidth = $this.outerWidth(true);
+					$magicLine
 						.data('origLeft', leftPos)
 						.data('origWidth', newWidth);
 					$magicLine.stop().animate({
@@ -427,7 +440,10 @@
 					event.preventDefault();
 					$menu.find('a[href="'+ anchor +'"]').click();
 				}
-			});			$('a[href="#"]').bind('click._180', function(event) {				event.preventDefault();			});
+			});
+			$('a[href="#"]').bind('click._180', function(event) {
+				event.preventDefault();
+			});
 		},
 		// Animate the menu
 		menuAnimation : function() {
@@ -465,7 +481,8 @@
 					width: $magicLine.data('origWidth')
 				});
 			});
-		},		// Use pretty scrollbars for non-webkit browsers
+		},
+		// Use pretty scrollbars for non-webkit browsers
 		prettyScroll : function() {
 			$('.scroll').each(function(){
 				$(this).jScrollPane({
@@ -512,12 +529,18 @@
 			}
 		},
 		// Animate scrolling
-		scrollSlide : function(page) {			// do something before?			if ($.isFunction(siteOptions.beforeslide)) {
+		scrollSlide : function(page) {
+			// do something before?
+			if ($.isFunction(siteOptions.beforeslide)) {
 				siteOptions.beforeslide.call(this);
 			}
-			$(scrollElement).stop(true, true).animate({scrollLeft: $(page).offset().left}, 1000, function() {				document.location.hash = page;				// do something after?				if ($.isFunction(siteOptions.afterslide)) {
+			$(scrollElement).stop(true, true).animate({scrollLeft: $(page).offset().left}, 1000, function() {
+				document.location.hash = page;
+				// do something after?
+				if ($.isFunction(siteOptions.afterslide)) {
 					siteOptions.afterslide.call(this);
-				}			});
+				}
+			});
 		},
 		mobileBase : function() {
 			// init iScroll
@@ -541,13 +564,17 @@
 					timer_trackPage = setTimeout(siteOptions.tracker, 2000);
 					if (siteOptions.menuAnimation === true) {
 						var $magicLine = $('#magic');
-						$magic = $('#menu a:nth-child(' + (this.currPageX + 1) + ')');						leftPos = $magic.position().left;
-						newWidth = $magic.outerWidth(true);						$magicLine
+						$magic = $('#menu a:nth-child(' + (this.currPageX + 1) + ')');
+						leftPos = $magic.position().left;
+						newWidth = $magic.outerWidth(true);
+						$magicLine
 							.data('origLeft', leftPos)
-							.data('origWidth', newWidth);						$magicLine.stop().animate({
+							.data('origWidth', newWidth);
+						$magicLine.stop().animate({
 							left: leftPos,
 							width: newWidth
-						});					}
+						});
+					}
 				}
 			});
 			$menunavlinks.bind('click._180', function(event){				
@@ -573,12 +600,20 @@
 				});
 			}
 		}
-	};	
+	};
+	
 	// Utilities
 	var utilities = {
 		collapsibleBlocks : function() {
-			$('.collapsible')				.children('div').hide()				.end()				.find('h2').css('cursor','pointer');			
-			$('.collapsible').each(function() {				$(this).find('h2:first').addClass('opened').next().show();			});			
+			$('.collapsible')
+				.children('div').hide()
+				.end()
+				.find('h2').css('cursor','pointer');
+			
+			$('.collapsible').each(function() {
+				$(this).find('h2:first').addClass('opened').next().show();
+			});
+			
 			$('.collapsible').find('h2').bind('click._180 touchstart._180', function() {
 				if ($(this).next().is(':hidden')) {
 					$(this).parent('.collapsible').find('h2').removeClass('opened').next().slideUp();
@@ -591,7 +626,9 @@
 			});
 		},
 		hoverEffect : function() {
-			$('.hovereffect').each(function() {				$(this).css({'width': $(this).find('img').width(), 'height': $(this).find('img').height()});				
+			$('.hovereffect').each(function() {
+				$(this).css({'width': $(this).find('img').width(), 'height': $(this).find('img').height()});
+				
 				$(this).hover(function() {
 					$(this).find('.hovertext').stop(true,true).fadeIn('slow');
 					if ($(this).find('.caption').length) {
@@ -614,11 +651,18 @@
 			    var lightboxMargTop = ($('#' + lightboxID).height()) / 2;
 			    var lightboxMargLeft = lightboxWidth/2;
 			    
-			    $body.append('<div id="overlay" onclick=""></div>');			    			    $('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': $container.width()}).stop().fadeIn();
+			    $body.append('<div id="overlay" onclick=""></div>');
+			    
+			    $('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': $container.width()}).stop().fadeIn();
 			    
 			    $(document).off('keydown._180', methods.keyboardNavigation).on('keydown._180', function(e) {e.preventDefault(); });
 			    
-			    $('#' + lightboxID)			    	.insertAfter('#overlay')			    	.stop().fadeIn()			    	.css({ 'width': lightboxWidth })			    	.prepend('<a href="#" class="close"><span><span></a>')			    	.css({'margin-top' : -lightboxMargTop, 'margin-left' : -lightboxMargLeft});
+			    $('#' + lightboxID)
+			    	.insertAfter('#overlay')
+			    	.stop().fadeIn()
+			    	.css({ 'width': lightboxWidth })
+			    	.prepend('<a href="#" class="close"><span><span></a>')
+			    	.css({'margin-top' : -lightboxMargTop, 'margin-left' : -lightboxMargLeft});
 			    
 			    return false;
 			});
@@ -647,14 +691,23 @@
 					slider_width_unit = 'px';
 				}
 				
-				$('<div class="buttons"><a href="#" class="prev"><span>Prev</span></a><a href="#" class="next"><span>Next</span></a></div>').insertAfter($slider);				
-				$slider					.css({'width' : slider_width, 'height' : slider_height})					.find('li:first').before($slider.find('li:last'))					.end()
-					.find('ul').css({'left' : move_left + slider_width_unit, 'width' : inner_width + slider_width_unit})					.end()					.find('li').css({'width' : slider_item});
+				$('<div class="buttons"><a href="#" class="prev"><span>'+siteOptions.txtPrev+'</span></a><a href="#" class="next"><span>'+siteOptions.txtNext+'</span></a></div>').insertAfter($slider);
+				
+				$slider
+					.css({'width' : slider_width, 'height' : slider_height})
+					.find('li:first').before($slider.find('li:last'))
+					.end()
+					.find('ul').css({'left' : move_left + slider_width_unit, 'width' : inner_width + slider_width_unit})
+					.end()
+					.find('li').css({'width' : slider_item});
 				
 				$slider.next().find('.prev').bind('click._180 touchstart._180', function() {
 					var $this = $(this);
 					$this.parent('.buttons').prev().find('ul').animate({'left' : '+=' + slider_width}, 600, function(){
-						$slider							.find('li:first').before($slider.find('li:last'))							.end()							.find('ul').css({'left' : move_left  + slider_width_unit});
+						$slider
+							.find('li:first').before($slider.find('li:last'))
+							.end()
+							.find('ul').css({'left' : move_left  + slider_width_unit});
 					});
 					return false;
 				});
@@ -662,7 +715,10 @@
 				$slider.next().find('.next').bind('click._180 touchstart._180', function() {
 					var $this = $(this);
 					$this.parent('.buttons').prev().find('ul').animate({'left' : '-=' + slider_width}, 600, function() {
-						$slider							.find('li:last').after($slider.find('li:first'))							.end()							.find('ul').css({'left' : move_left + slider_width_unit});
+						$slider
+							.find('li:last').after($slider.find('li:first'))
+							.end()
+							.find('ul').css({'left' : move_left + slider_width_unit});
 					});
 					return false;
 				});
