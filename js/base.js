@@ -387,7 +387,7 @@
 		},
 		// Reposition if hash is used in URL (Browsers only)
 		reposition : function() {
-			if (document.location.hash != '') {
+			if (document.location.hash != '' && $(document.location.hash).length) {
 				methods.scrollSlide(document.location.hash);
 				$('.active').removeClass('active');
 				$menunavlinks.filter('[href=' + document.location.hash + ']').addClass('active');
@@ -469,7 +469,8 @@
 		prettyScroll : function() {
 			$('.scroll').each(function(){
 				$(this).jScrollPane({
-					showArrows: false
+					showArrows: false,
+					autoReinitialise: true
 				});
 				var api = $(this).data('jsp');
 				var throttleTimeout;
