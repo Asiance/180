@@ -72,10 +72,10 @@
 				beforeslide: $.noop,
 				afterslide: $.noop,
 				portrait: $.noop,
-				landscape: $.noop,
-				textPrev: "Prev",
-				textNext: "Next"
+				landscape: $.noop
 			}, options);
+
+			utilities.init.call(this, arguments[0].utilitiesOptions);
 			
 			// Custom init function
 			if ($.isFunction(siteOptions.before180)) {
@@ -104,6 +104,7 @@
 					siteOptions.menuPosition = 'top';
 				}
 			}
+			
 			// Framework features for all
 			$window.bind('load._180', function() {
 				utilities.caption.apply();
@@ -124,9 +125,9 @@
 			
 			// If hash, redefine the active page for tracking and reposition if needed
 			if (document.location.hash != '') {
-				activePage = $menu.find('a').filter('[href="' + document.location.hash + '"]').data('title');
+				activePage = $menu.find('a').filter('[href="' + document.location.hash + '"]').attr('data-title');
 			} else {
-				activePage = $menunavlinks.filter(':first').data('title');
+				activePage = $menunavlinks.filter(':first').attr('data-title');
 			}
 			siteOptions.tracker.apply();
 			methods.reposition.apply();
@@ -414,7 +415,7 @@
 				methods.scrollSlide($this.attr('href'));
 				$('.active').removeClass('active');
 				$this.addClass('active');
-				activePage = $(this).data('title');
+				activePage = $(this).attr('data-title');
 				// Track pageview
 				clearTimeout(timer_trackPage);
 				timer_trackPage = setTimeout(siteOptions.tracker, 2500);
@@ -513,7 +514,7 @@
 				}
 			} else if (window.innerHeight< window.innerWidth) {
 				$body.removeClass('portrait').addClass('landscape');
-		        if ($.isFunction(siteOptions.landscape)) {
+				if ($.isFunction(siteOptions.landscape)) {
 					siteOptions.landscape.call();
 				}
 			}
@@ -548,9 +549,9 @@
 		getScrollDirection : function(page) {
 			var string = '';
 			$($menunavlinks).each (function (e) {
-				string += '#' + $(this).data('title');
+				string += '#' + $(this).attr('title');
 			});
-			var j = string.indexOf(page) - string.indexOf(document.location.hash)
+			var j = string.indexOf(page) - string.indexOf(document.location.hash);
 			if (j == 0) {
 				return direction = 'none';
 			} else if (j > 0) {
@@ -573,7 +574,7 @@
 				useTransition: true,
 				onScrollEnd: function() {
 					$('.active').removeClass('active');
-					activePage = $('#menu a:nth-child(' + (this.currPageX + 1) + ')').data('title');
+					activePage = $('#menu a:nth-child(' + (this.currPageX + 1) + ')').attr('data-title');
 					$('#menu a:nth-child(' + (this.currPageX + 1) + ')').addClass('active');
 					snaptoPage = (this.currPageX);
 					// Track pageview
@@ -621,6 +622,17 @@
 	
 	// Utilities
 	var utilities = {
+			
+		init : function(options) {
+			// Utilities defaults options
+			utilitiesOptions = $.extend({
+				sliderButtonsInside: false,
+				sliderPagination: false,
+				sliderTextPrev: "Prev",
+				sliderTextNext: "Next"
+			}, options);
+		},
+
 		collapsibleBlocks : function() {
 			$('.collapsible')
 				.children('div').hide()
@@ -642,6 +654,7 @@
 				return false;
 			});
 		},
+
 		hoverEffect : function() {
 			$('.hovereffect').each(function() {
 				$(this).css({'width': $(this).find('img').width(), 'height': $(this).find('img').height()});
@@ -661,41 +674,44 @@
 				});
 			});
 		},
+
 		lightbox : function() {
 			$('.lightbox').bind('click._180 touchstart._180', function() {
-			    var lightboxID = $(this).data('lightbox-name');
-			    var lightboxWidth = parseInt($(this).data('lightbox-width'));
-			    var lightboxMargTop = ($('#' + lightboxID).height()) / 2;
-			    var lightboxMargLeft = lightboxWidth/2;
-			    
-			    $body.append('<div id="overlay" onclick=""></div>');
-			    
-			    $('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': $container.width()}).stop().fadeIn();
-			    
-			    $(document).off('keydown._180', methods.keyboardNavigation).on('keydown._180', function(e) {e.preventDefault(); });
-			    
-			    $('#' + lightboxID)
-			    	.insertAfter('#overlay')
-			    	.stop().fadeIn()
-			    	.css({ 'width': lightboxWidth })
-			    	.prepend('<a href="#" class="close"><span><span></a>')
-			    	.css({'margin-top' : -lightboxMargTop, 'margin-left' : -lightboxMargLeft});
-			    
-			    return false;
+				var lightboxID = $(this).attr('data-lightbox-name');
+				var lightboxWidth = parseInt($(this).attr('data-lightbox-width'));
+				var lightboxMargTop = ($('#' + lightboxID).height()) / 2;
+				var lightboxMargLeft = lightboxWidth/2;
+				
+				$body.append('<div id="overlay" onclick=""></div>');
+				
+				$('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': $container.width()}).stop().fadeIn();
+				
+				$(document).off('keydown._180', methods.keyboardNavigation).on('keydown._180', function(e) {e.preventDefault(); });
+				
+				$('#' + lightboxID)
+					.insertAfter('#overlay')
+					.stop().fadeIn()
+					.css({ 'width': lightboxWidth })
+					.prepend('<a href="#" class="close"><span><span></a>')
+					.css({'margin-top' : -lightboxMargTop, 'margin-left' : -lightboxMargLeft});
+				
+				return false;
 			});
 			
 			$('a.close, #overlay').live('click._180 touchstart._180', function() {
-			    $('#overlay , .lightbox_content').stop(true, true).fadeOut();
+				$('#overlay , .lightbox_content').stop(true, true).fadeOut();
 				$('#overlay, .close').remove();
-			    $(document).on('keydown._180', methods.keyboardNavigation).off('keydown._180', function(e) {e.preventDefault(); });
-			    return false;
+				$(document).on('keydown._180', methods.keyboardNavigation).off('keydown._180', function(e) {e.preventDefault(); });
+				return false;
 			});
 		},
+
 		slideshow : function() {
+			var self = this;
 			$('.slider').each(function() {
 				var $slider = $(this);
-				var slider_width = $slider.data('slider-width');
-				var slider_height = $slider.data('slider-height');
+				var slider_width = $slider.attr('data-slider-width');
+				var slider_height = $slider.attr('data-slider-height');
 				var slider_width_value = parseInt(slider_width);
 				var slider_width_unit = slider_width.slice(-1);
 				var inner_width = slider_width_value * $slider.find('li').length;
@@ -708,19 +724,18 @@
 					slider_width_unit = 'px';
 				}
 				
-				$('<div class="buttons"><a href="#" class="prev"><span>'+siteOptions.txtPrev+'</span></a><a href="#" class="next"><span>'+siteOptions.txtNext+'</span></a></div>').insertAfter($slider);
 				
-				$slider
-					.css({'width' : slider_width, 'height' : slider_height})
-					.find('li:first').before($slider.find('li:last'))
-					.end()
-					.find('ul').css({'left' : move_left + slider_width_unit, 'width' : inner_width + slider_width_unit})
-					.end()
-					.find('li').css({'width' : slider_item});
+				var $nav = $('<div class="buttons"></div>');
 				
-				$slider.next().find('.prev').bind('click._180 touchstart._180', function() {
+				if (utilitiesOptions.sliderButtonsInside === false) {
+					$nav.insertAfter($slider);
+				} else {
+					$nav.appendTo($slider);
+				}
+				
+				$('<a href="#prev" class="prev"><span>'+utilitiesOptions.sliderTextPrev+'</span></a>').appendTo($nav).bind('click._180 touchstart._180', function() {
 					var $this = $(this);
-					$this.parent('.buttons').prev().find('ul').animate({'left' : '+=' + slider_width}, 600, function(){
+					$this.parent('.buttons').prev().find('ul').animate({'left' : '+=' + slider_width}, 600, function() {
 						$slider
 							.find('li:first').before($slider.find('li:last'))
 							.end()
@@ -728,8 +743,25 @@
 					});
 					return false;
 				});
+
+				if (utilitiesOptions.sliderPagination === true) {
+					var nb_slides = ($slider.find('ul').find('li').length);
+					for (var i = 1; i <= nb_slides; i ++) {
+						$('<a href="#slide-'+i+'" data-nav-id='+i+'><span>'+i+'</span></a>').appendTo($nav).bind('click._180 touchstart._180', function() {
+							var $this = $(this);
+							// TODO pagination
+							/*$this.parent('.buttons').prev().find('ul').animate({'left' : slider_width * i + 'px'}, 600, function() {
+								$slider
+									.find('li:first').before($slider.find('li:last'))
+									.end()
+									.find('ul').css({'left' : move_left * $this.data('nav-id')  + slider_width_unit});
+							});*/
+							return false;
+						});
+					}
+				}
 				
-				$slider.next().find('.next').bind('click._180 touchstart._180', function() {
+				$('<a href="#next" class="next"><span>'+utilitiesOptions.sliderTextNext+'</span></a>').appendTo($nav).bind('click._180 touchstart._180', function() {
 					var $this = $(this);
 					$this.parent('.buttons').prev().find('ul').animate({'left' : '-=' + slider_width}, 600, function() {
 						$slider
@@ -739,9 +771,17 @@
 					});
 					return false;
 				});
-
+				
+				$slider
+					.css({'width' : slider_width, 'height' : slider_height})
+					.find('li:first').before($slider.find('li:last'))
+					.end()
+					.find('ul').css({'left' : move_left + slider_width_unit, 'width' : inner_width + slider_width_unit})
+					.end()
+					.find('li').css({'width' : slider_item});
 			});
 		},
+
 		caption : function() {
 			$('.caption').each(function() {
 				var $caption = $(this);
@@ -751,10 +791,11 @@
 				$caption.parent('div').css({'width': image.outerWidth(true), 'height': image.outerHeight(true), 'float': imagealign, 'position': 'relative', 'overflow': 'hidden'});
 			});
 		},
+
 		scrollarea : function() {
 			$('.scrollarea').each(function() {
-				var area_width = $(this).data('area-width');
-				var area_height = $(this).data('area-height');
+				var area_width = $(this).attr('data-area-width');
+				var area_height = $(this).attr('data-area-height');
 				$(this)
 					.css({'width': area_width, 'height': area_height})
 					.jScrollPane({showArrows: false});
