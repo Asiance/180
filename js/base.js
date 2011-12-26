@@ -711,7 +711,7 @@
 				var slider_width = $slider.data('slider-width');
 				var slider_height = $slider.data('slider-height');
 				var slider_width_value = parseInt(slider_width);
-				var slides = $slider.find('ul').first().children().addClass('slide');
+				var slides = $slider.find('ul').first().children().addClass('diapo');
 				
 				var inner_width = slider_width_value * slides.length;
 				var move_left = slider_width_value * (-1);
@@ -735,7 +735,7 @@
 					var $this = $(this);
 					$this.parent('.buttons').prev().find('ul').first().animate({'left' : '+=' + slider_width}, 600, function() {
 						$slider
-							.find('li.slide:first').before($slider.find('li.slide:last'))
+							.find('li.diapo:first').before($slider.find('li.diapo:last'))
 							.end()
 							.find('ul').first().css({'left' : move_left  + slider_width_unit});
 					});
@@ -750,7 +750,7 @@
 							// TODO pagination
 							/*$this.parent('.buttons').prev().find('ul').first().animate({'left' : slider_width * i + 'px'}, 600, function() {
 								$slider
-									.find('li.slide:first').before($slider.find('li.slide:last'))
+									.find('li.diapo:first').before($slider.find('li.diapo:last'))
 									.end()
 									.find('ul').first().css({'left' : move_left * $this.data('nav-id')  + slider_width_unit});
 							});*/
@@ -763,7 +763,7 @@
 					var $this = $(this);
 					$this.parent('.buttons').prev().find('ul').first().animate({'left' : '-=' + slider_width}, 600, function() {
 						$slider
-							.find('li.slide:last').after($slider.find('li.slide:first'))
+							.find('li.diapo:last').after($slider.find('li.diapo:first'))
 							.end()
 							.find('ul').first().css({'left' : move_left + slider_width_unit});
 					});
@@ -772,7 +772,7 @@
 				
 				$slider
 					.css({'width' : slider_width, 'height' : slider_height})
-					.find('li.slide:first').before($slider.find('li.slide:last'))
+					.find('li.diapo:first').before($slider.find('li.diapo:last'))
 					.end()
 					.find('ul').first().css({'left' : move_left + slider_width_unit, 'width' : inner_width + slider_width_unit});
 				$(slides).css({'width' : slider_item});
