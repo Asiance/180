@@ -1,28 +1,33 @@
 /**
- * lightbox
+ * 180° Lightbox plugin
  * 
  * This is a part of the 180° Framework
  * 
- * @package Feel Montpellier
  * @author Karine Do, Laurent Le Graverend
+ * @see https://github.com/Asiance/180/ 
  * @version 2
  */
 (function($) {
 
 	var methods = {
-
+			
 		// Start
 		init : function(options) {
+			settings = $.extend({
+				container : $('#container')
+			}, options);
+			
 			this.bind('click._180 touchstart._180', function() {
 				var lightboxID = $(this).data('lightbox-name');
 				var lightboxWidth = parseInt($(this).data('lightbox-width'));
 				var lightboxMargTop = ($('#' + lightboxID).height()) / 2;
 				var lightboxMargLeft = lightboxWidth/2;
 				
-				$body.append('<div id="overlay" onclick=""></div>');
+				$('body').append('<div id="overlay" onclick=""></div>');
 				
-				$('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': $container.width()}).stop().fadeIn();
+				$('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': settings.container.width()}).stop().fadeIn();
 				
+				// TODO, something is wrong here
 				$(document).off('keydown._180', jQuery.fn._180('keyboardNavigation')).on('keydown._180', function(e) {e.preventDefault(); });
 				
 				$('#' + lightboxID)

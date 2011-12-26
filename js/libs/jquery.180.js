@@ -1,7 +1,11 @@
-/*
- *
- * 180° framework
- *
+/**
+ * 180° Core module
+ * 
+ * This is a part of the 180° Framework
+ * 
+ * @author Karine Do, Laurent Le Graverend
+ * @see https://github.com/Asiance/180/ 
+ * @version 2
  */
 (function($){
 	// Cache variables
@@ -107,12 +111,12 @@
 			
 			// Framework features for all
 			$window.bind('load._180', function() {
-				/*utilities.caption.apply();
+				utilities.caption.apply();
 				utilities.hoverEffect.apply();
-				//utilities.slideshow.apply();
-				utilities.collapsibleBlocks.apply();
+				utilities.slideshow.apply();
+				utilities.collapsible.apply();
 				utilities.lightbox.apply();
-				utilities.scrollarea.apply();*/
+				utilities.scrollarea.apply();
 				// If it can read this, JS is enabled
 				$('html').removeClass('no-js').addClass('js');
 				if ($.isFunction(siteOptions.after180)) {
@@ -622,13 +626,13 @@
 	
 	// Utilities
 	var utilities = {
-		collapsibleBlocks : function() {
-			$('.collapsible')._180_collapsibleBlocks();
+		collapsible : function() {
+			$('.collapsible')._180_collapsible();
 		},
 
 		hoverEffect : function() {
 			$('.hovereffect').each(function() {
-				this._180_hoverEffect();
+				$(this)._180_hover();
 			});
 		},
 
@@ -638,19 +642,19 @@
 
 		slideshow : function() {
 			$('.slider').each(function() {
-				this._180_slideshow();
+				$(this)._180_slideshow();
 			});
 		},
 
 		caption : function() {
 			$('.caption').each(function() {
-				//this._180_caption();
+				$(this)._180_caption();
 			});
 		},
 
 		scrollarea : function() {
 			$('.scrollarea').each(function() {
-				this._180_scrollarea();
+				$(this)._180_scrollarea();
 			});
 		}
 	};	

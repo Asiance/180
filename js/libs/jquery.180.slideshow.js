@@ -1,15 +1,14 @@
 /**
- * Slideshow
- *
+ * 180° Slideshow plugin
+ * 
  * This is a part of the 180° Framework
- *
- * @package    Feel Montpellier
- * @author     Karine Do, Laurent Le Graverend
- * @version    2
+ * 
+ * @author Karine Do, Laurent Le Graverend
+ * @see https://github.com/Asiance/180/ 
+ * @version 2
  */
 (function($){
 	
-	// Some actions
 	var methods = {
 		
 		// Start

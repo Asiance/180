@@ -1,10 +1,10 @@
 /**
- * hoverEffect
+ * 180° Hover plugin
  * 
  * This is a part of the 180° Framework
  * 
- * @package Feel Montpellier
  * @author Karine Do, Laurent Le Graverend
+ * @see https://github.com/Asiance/180/ 
  * @version 2
  */
 (function($) {
@@ -33,7 +33,7 @@
 
 	// Make it work
 	// No chainability needed
-	$.fn._180_hoverEffect = function(method) {
+	$.fn._180_hover = function(method) {
 		if (methods[method]) {
 			return methods[method].apply(this, Array.prototype.slice.call(
 					arguments, 1));
