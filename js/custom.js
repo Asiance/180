@@ -9,8 +9,4 @@ $(document).ready(function() {
 		before180: function () {
 			alert('start');
 		},*/
-		verticalScrolling: true,
-		utilitiesOptions: {
-			sliderTextPrev: "Previous",
-			sliderTextNext: "Next"
-		}	});});
+		verticalScrolling: true	});});

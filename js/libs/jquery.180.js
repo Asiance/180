@@ -75,7 +75,7 @@
 				landscape: $.noop
 			}, options);
 
-			utilities.init.call(this, arguments[0].utilitiesOptions);
+			//utilities.init.call(this, arguments[0].utilitiesOptions);
 			
 			// Custom init function
 			if ($.isFunction(siteOptions.before180)) {
@@ -107,12 +107,12 @@
 			
 			// Framework features for all
 			$window.bind('load._180', function() {
-				utilities.caption.apply();
+				/*utilities.caption.apply();
 				utilities.hoverEffect.apply();
-				utilities.slideshow.apply();
+				//utilities.slideshow.apply();
 				utilities.collapsibleBlocks.apply();
 				utilities.lightbox.apply();
-				utilities.scrollarea.apply();
+				utilities.scrollarea.apply();*/
 				// If it can read this, JS is enabled
 				$('html').removeClass('no-js').addClass('js');
 				if ($.isFunction(siteOptions.after180)) {
@@ -622,180 +622,35 @@
 	
 	// Utilities
 	var utilities = {
-			
-		init : function(options) {
-			// Utilities defaults options
-			utilitiesOptions = $.extend({
-				sliderPagination: false,
-				sliderTextPrev: "Prev",
-				sliderTextNext: "Next"
-			}, options);
-		},
-
 		collapsibleBlocks : function() {
-			$('.collapsible')
-				.children('div').hide()
-				.end()
-				.find('h2').css('cursor','pointer');
-			
-			$('.collapsible').each(function() {
-				$(this).find('h2:first').addClass('opened').next().show();
-			});
-			
-			$('.collapsible').find('h2').bind('click._180 touchstart._180', function() {
-				if ($(this).next().is(':hidden')) {
-					$(this).parent('.collapsible').find('h2').removeClass('opened').next().slideUp();
-					$(this).toggleClass('opened').next().slideDown();
-				}
-				else if ($(this).hasClass('opened') && $(this).next().is(':visible')) {
-					$(this).removeClass('opened').next().slideUp();
-				}
-				return false;
-			});
+			$('.collapsible')._180_collapsibleBlocks();
 		},
 
 		hoverEffect : function() {
 			$('.hovereffect').each(function() {
-				$(this).css({'width': $(this).find('img').width(), 'height': $(this).find('img').height()});
-				
-				$(this).hover(function() {
-					$(this).find('.hovertext').stop(true,true).fadeIn('slow');
-					if ($(this).find('.caption').length) {
-						$(this).find('.caption').stop().hide();
-					}
-					//$(this).find('img').stop(false,true).animate({'width':$(this).width()*1.2, 'height':$(this).height()*1.2, 'top':'-'+$(this).width()*0.1, 'left':'-'+$(this).height()*0.1}, {duration:200});
-				}, function() {
-					$(this).find('.hovertext').hide();
-					if ($(this).find('.caption').length) {
-						$(this).find('.caption').stop().show();
-					}
-					//$(this).find('img').stop(false,true).animate({'width':$(this).width(), 'height':$(this).height(), 'top':'0', 'left':'0'}, {duration:100});
-				});
+				this._180_hoverEffect();
 			});
 		},
 
 		lightbox : function() {
-			$('.lightbox').bind('click._180 touchstart._180', function() {
-				var lightboxID = $(this).data('lightbox-name');
-				var lightboxWidth = parseInt($(this).data('lightbox-width'));
-				var lightboxMargTop = ($('#' + lightboxID).height()) / 2;
-				var lightboxMargLeft = lightboxWidth/2;
-				
-				$body.append('<div id="overlay" onclick=""></div>');
-				
-				$('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': $container.width()}).stop().fadeIn();
-				
-				$(document).off('keydown._180', methods.keyboardNavigation).on('keydown._180', function(e) {e.preventDefault(); });
-				
-				$('#' + lightboxID)
-					.insertAfter('#overlay')
-					.stop().fadeIn()
-					.css({ 'width': lightboxWidth })
-					.prepend('<a href="#" class="close"><span><span></a>')
-					.css({'margin-top' : -lightboxMargTop, 'margin-left' : -lightboxMargLeft});
-				
-				return false;
-			});
-			
-			$('a.close, #overlay').live('click._180 touchstart._180', function() {
-				$('#overlay , .lightbox_content').stop(true, true).fadeOut();
-				$('#overlay, .close').remove();
-				$(document).on('keydown._180', methods.keyboardNavigation).off('keydown._180', function(e) {e.preventDefault(); });
-				return false;
-			});
+			$('.lightbox')._180_lightbox();
 		},
 
 		slideshow : function() {
 			$('.slider').each(function() {
-				var $slider = $(this);
-				var slider_width = $slider.data('slider-width');
-				var slider_height = $slider.data('slider-height');
-				var slider_width_value = parseInt(slider_width);
-				var slides = $slider.find('ul').first().children().addClass('diapo');
-				
-				var inner_width = slider_width_value * slides.length;
-				var move_left = slider_width_value * (-1);
-				
-				var slider_width_unit = 'px';
-				if (slider_width != slider_width_value) {
-					slider_width_unit = slider_width.replace(new RegExp('[0-9]*'), '');
-				}
-
-				if (slider_width_unit === '%') {
-					slider_item = slider_width_value / slides.length + slider_width_unit;
-				} else {
-					slider_item = slider_width_value;
-				}
-				
-				var $nav = $('<div class="buttons"></div>');
-				
-				$nav.insertAfter($slider);
-				
-				$('<a href="#prev" class="prev"><span>'+utilitiesOptions.sliderTextPrev+'</span></a>').appendTo($nav).bind('click._180 touchstart._180', function() {
-					var $this = $(this);
-					$this.parent('.buttons').prev().find('ul').first().animate({'left' : '+=' + slider_width}, 600, function() {
-						$slider
-							.find('li.diapo:first').before($slider.find('li.diapo:last'))
-							.end()
-							.find('ul').first().css({'left' : move_left  + slider_width_unit});
-					});
-					return false;
-				});
-
-				if (utilitiesOptions.sliderPagination === true) {
-					var nb_slides = ($slider.find('ul').find('li').length);
-					for (var i = 1; i <= nb_slides; i ++) {
-						$('<a href="#slide-'+i+'" data-nav-id='+i+'><span>'+i+'</span></a>').appendTo($nav).bind('click._180 touchstart._180', function() {
-							var $this = $(this);
-							// TODO pagination
-							/*$this.parent('.buttons').prev().find('ul').first().animate({'left' : slider_width * i + 'px'}, 600, function() {
-								$slider
-									.find('li.diapo:first').before($slider.find('li.diapo:last'))
-									.end()
-									.find('ul').first().css({'left' : move_left * $this.data('nav-id')  + slider_width_unit});
-							});*/
-							return false;
-						});
-					}
-				}
-				
-				$('<a href="#next" class="next"><span>'+utilitiesOptions.sliderTextNext+'</span></a>').appendTo($nav).bind('click._180 touchstart._180', function() {
-					var $this = $(this);
-					$this.parent('.buttons').prev().find('ul').first().animate({'left' : '-=' + slider_width}, 600, function() {
-						$slider
-							.find('li.diapo:last').after($slider.find('li.diapo:first'))
-							.end()
-							.find('ul').first().css({'left' : move_left + slider_width_unit});
-					});
-					return false;
-				});
-				
-				$slider
-					.css({'width' : slider_width, 'height' : slider_height})
-					.find('li.diapo:first').before($slider.find('li.diapo:last'))
-					.end()
-					.find('ul').first().css({'left' : move_left + slider_width_unit, 'width' : inner_width + slider_width_unit});
-				$(slides).css({'width' : slider_item});
+				this._180_slideshow();
 			});
 		},
 
 		caption : function() {
 			$('.caption').each(function() {
-				var $caption = $(this);
-				var image = $caption.prev('img');
-				var imagealign = image.css('float');
-				$caption.prev('img').andSelf().wrapAll('<div>');
-				$caption.parent('div').css({'width': image.outerWidth(true), 'height': image.outerHeight(true), 'float': imagealign, 'position': 'relative', 'overflow': 'hidden'});
+				//this._180_caption();
 			});
 		},
 
 		scrollarea : function() {
 			$('.scrollarea').each(function() {
-				var area_width = $(this).data('area-width');
-				var area_height = $(this).data('area-height');
-				$(this)
-					.css({'width': area_width, 'height': area_height})
-					.jScrollPane({showArrows: false});
+				this._180_scrollarea();
 			});
 		}
 	};	

@@ -309,16 +309,23 @@
 	
 	<!-- Javascripts -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-	<script type="text/javascript" src="./js/jquery.jscrollpane.min.js"></script>
+	<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>
+	<script type="text/javascript" src="./js/libs/jquery.jscrollpane.min.js"></script>
 	<script type="text/javascript">
 		var mobile = (/iphone|ipod|playbook|hp-tablet|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
 		if (mobile) {
-			document.write('<script type=\"text/javascript\" src=\"./js/iscroll.js\"><\/script>');
+			document.write('<script type=\"text/javascript\" src=\"./js/libs/iscroll.js\"><\/script>');
 		} else {
-			document.write('<script type=\"text/javascript\" src=\"./js/jquery.mousewheel.js\"><\/script>');
+			document.write('<script type=\"text/javascript\" src=\"./js/libs/jquery.mousewheel.js\"><\/script>');
 		}
 	</script>
-	<script type="text/javascript" src="./js/base.js"></script>
+	<script type="text/javascript" src="./js/libs/jquery.180.js"></script>
+	<script type="text/javascript" src="./js/libs/jquery.180.caption.js"></script>
+	<script type="text/javascript" src="./js/libs/jquery.180.collapsible.js"></script>
+	<script type="text/javascript" src="./js/libs/jquery.180.hovereffect.js"></script>
+	<script type="text/javascript" src="./js/libs/jquery.180.lightbox.js"></script>
+	<script type="text/javascript" src="./js/libs/jquery.180.scrollarea.js"></script>
+	<script type="text/javascript" src="./js/libs/jquery.180.slideshow.js"></script>
 	<script type="text/javascript" src="./js/custom.js"></script>
 </body>
 </html>
