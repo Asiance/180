@@ -125,9 +125,9 @@
 			
 			// If hash, redefine the active page for tracking and reposition if needed
 			if (document.location.hash != '') {
-				activePage = $menu.find('a').filter('[href="' + document.location.hash + '"]').attr('data-title');
+				activePage = $menu.find('a').filter('[href="' + document.location.hash + '"]').data('title');
 			} else {
-				activePage = $menunavlinks.filter(':first').attr('data-title');
+				activePage = $menunavlinks.filter(':first').data('title');
 			}
 			siteOptions.tracker.apply();
 			methods.reposition.apply();
@@ -415,7 +415,7 @@
 				methods.scrollSlide($this.attr('href'));
 				$('.active').removeClass('active');
 				$this.addClass('active');
-				activePage = $(this).attr('data-title');
+				activePage = $(this).data('title');
 				// Track pageview
 				clearTimeout(timer_trackPage);
 				timer_trackPage = setTimeout(siteOptions.tracker, 2500);
@@ -574,7 +574,7 @@
 				useTransition: true,
 				onScrollEnd: function() {
 					$('.active').removeClass('active');
-					activePage = $('#menu a:nth-child(' + (this.currPageX + 1) + ')').attr('data-title');
+					activePage = $('#menu a:nth-child(' + (this.currPageX + 1) + ')').data('title');
 					$('#menu a:nth-child(' + (this.currPageX + 1) + ')').addClass('active');
 					snaptoPage = (this.currPageX);
 					// Track pageview
@@ -626,7 +626,6 @@
 		init : function(options) {
 			// Utilities defaults options
 			utilitiesOptions = $.extend({
-				sliderButtonsInside: false,
 				sliderPagination: false,
 				sliderTextPrev: "Prev",
 				sliderTextNext: "Next"
@@ -677,8 +676,8 @@
 
 		lightbox : function() {
 			$('.lightbox').bind('click._180 touchstart._180', function() {
-				var lightboxID = $(this).attr('data-lightbox-name');
-				var lightboxWidth = parseInt($(this).attr('data-lightbox-width'));
+				var lightboxID = $(this).data('lightbox-name');
+				var lightboxWidth = parseInt($(this).data('lightbox-width'));
 				var lightboxMargTop = ($('#' + lightboxID).height()) / 2;
 				var lightboxMargLeft = lightboxWidth/2;
 				
@@ -710,8 +709,8 @@
 			var self = this;
 			$('.slider').each(function() {
 				var $slider = $(this);
-				var slider_width = $slider.attr('data-slider-width');
-				var slider_height = $slider.attr('data-slider-height');
+				var slider_width = $slider.data('slider-width');
+				var slider_height = $slider.data('slider-height');
 				var slider_width_value = parseInt(slider_width);
 				var slider_width_unit = slider_width.slice(-1);
 				var inner_width = slider_width_value * $slider.find('li').length;
@@ -727,11 +726,7 @@
 				
 				var $nav = $('<div class="buttons"></div>');
 				
-				if (utilitiesOptions.sliderButtonsInside === false) {
-					$nav.insertAfter($slider);
-				} else {
-					$nav.appendTo($slider);
-				}
+				$nav.insertAfter($slider);
 				
 				$('<a href="#prev" class="prev"><span>'+utilitiesOptions.sliderTextPrev+'</span></a>').appendTo($nav).bind('click._180 touchstart._180', function() {
 					var $this = $(this);
@@ -794,8 +789,8 @@
 
 		scrollarea : function() {
 			$('.scrollarea').each(function() {
-				var area_width = $(this).attr('data-area-width');
-				var area_height = $(this).attr('data-area-height');
+				var area_width = $(this).data('area-width');
+				var area_height = $(this).data('area-height');
 				$(this)
 					.css({'width': area_width, 'height': area_height})
 					.jScrollPane({showArrows: false});

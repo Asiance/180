@@ -58,7 +58,6 @@ Read about the options in the next section
 + **portrait:** [function] use this to do something in portrait mode
 + **landscape:** [function] use this to do something in landscape mode
 + **utilitiesOptions:** [object] optional parameters for utilities
-    + **sliderButtonsInside:** [default: false] position the navigation buttons inside the slider
     + **sliderPagination:** [default: false] add a pagination for the sliders [1..n]
     + **sliderTextPrev:** [default: 'Prev'] text for previous button
     + **sliderTextNext:** [default: 'Next'] text for next button
