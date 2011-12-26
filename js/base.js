@@ -706,23 +706,26 @@
 		},
 
 		slideshow : function() {
-			var self = this;
 			$('.slider').each(function() {
 				var $slider = $(this);
 				var slider_width = $slider.data('slider-width');
 				var slider_height = $slider.data('slider-height');
 				var slider_width_value = parseInt(slider_width);
-				var slider_width_unit = slider_width.slice(-1);
-				var inner_width = slider_width_value * $slider.find('li').length;
+				var slides = $slider.find('ul').first().children().addClass('slide');
+				
+				var inner_width = slider_width_value * slides.length;
 				var move_left = slider_width_value * (-1);
 				
+				var slider_width_unit = 'px';
+				if (slider_width != slider_width_value) {
+					slider_width_unit = slider_width.replace(new RegExp('[0-9]*'), '');
+				}
+
 				if (slider_width_unit === '%') {
-					slider_item = slider_width_value / $slider.find('li').length + slider_width_unit;
+					slider_item = slider_width_value / slides.length + slider_width_unit;
 				} else {
 					slider_item = slider_width_value;
-					slider_width_unit = 'px';
 				}
-				
 				
 				var $nav = $('<div class="buttons"></div>');
 				
@@ -730,11 +733,11 @@
 				
 				$('<a href="#prev" class="prev"><span>'+utilitiesOptions.sliderTextPrev+'</span></a>').appendTo($nav).bind('click._180 touchstart._180', function() {
 					var $this = $(this);
-					$this.parent('.buttons').prev().find('ul').animate({'left' : '+=' + slider_width}, 600, function() {
+					$this.parent('.buttons').prev().find('ul').first().animate({'left' : '+=' + slider_width}, 600, function() {
 						$slider
-							.find('li:first').before($slider.find('li:last'))
+							.find('li.slide:first').before($slider.find('li.slide:last'))
 							.end()
-							.find('ul').css({'left' : move_left  + slider_width_unit});
+							.find('ul').first().css({'left' : move_left  + slider_width_unit});
 					});
 					return false;
 				});
@@ -745,11 +748,11 @@
 						$('<a href="#slide-'+i+'" data-nav-id='+i+'><span>'+i+'</span></a>').appendTo($nav).bind('click._180 touchstart._180', function() {
 							var $this = $(this);
 							// TODO pagination
-							/*$this.parent('.buttons').prev().find('ul').animate({'left' : slider_width * i + 'px'}, 600, function() {
+							/*$this.parent('.buttons').prev().find('ul').first().animate({'left' : slider_width * i + 'px'}, 600, function() {
 								$slider
-									.find('li:first').before($slider.find('li:last'))
+									.find('li.slide:first').before($slider.find('li.slide:last'))
 									.end()
-									.find('ul').css({'left' : move_left * $this.data('nav-id')  + slider_width_unit});
+									.find('ul').first().css({'left' : move_left * $this.data('nav-id')  + slider_width_unit});
 							});*/
 							return false;
 						});
@@ -758,22 +761,21 @@
 				
 				$('<a href="#next" class="next"><span>'+utilitiesOptions.sliderTextNext+'</span></a>').appendTo($nav).bind('click._180 touchstart._180', function() {
 					var $this = $(this);
-					$this.parent('.buttons').prev().find('ul').animate({'left' : '-=' + slider_width}, 600, function() {
+					$this.parent('.buttons').prev().find('ul').first().animate({'left' : '-=' + slider_width}, 600, function() {
 						$slider
-							.find('li:last').after($slider.find('li:first'))
+							.find('li.slide:last').after($slider.find('li.slide:first'))
 							.end()
-							.find('ul').css({'left' : move_left + slider_width_unit});
+							.find('ul').first().css({'left' : move_left + slider_width_unit});
 					});
 					return false;
 				});
 				
 				$slider
 					.css({'width' : slider_width, 'height' : slider_height})
-					.find('li:first').before($slider.find('li:last'))
+					.find('li.slide:first').before($slider.find('li.slide:last'))
 					.end()
-					.find('ul').css({'left' : move_left + slider_width_unit, 'width' : inner_width + slider_width_unit})
-					.end()
-					.find('li').css({'width' : slider_item});
+					.find('ul').first().css({'left' : move_left + slider_width_unit, 'width' : inner_width + slider_width_unit});
+				$(slides).css({'width' : slider_item});
 			});
 		},
 
