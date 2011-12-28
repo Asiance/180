@@ -3,15 +3,16 @@
  * 
  * This is a part of the 180° Framework
  * 
- * @author Karine Do, Laurent Le Graverend
- * @see https://github.com/Asiance/180/ 
- * @version 2
+ * @author  Karine Do, Laurent Le Graverend
+ * @license Copyright (c) 2011 Asiance (http://www.asiance.com), Licensed under the MIT License.
+ * @updated 2011-12-28
+ * @link    https://github.com/Asiance/180/
+ * @version 2.0
  */
 (function($) {
 
 	var methods = {
 			
-		// Start
 		init : function(options) {
 			settings = $.extend({
 				container : $('#container')
@@ -28,7 +29,8 @@
 				$('#overlay').css({'filter' : 'alpha(opacity=80)', 'width': settings.container.width()}).stop().fadeIn();
 				
 				// TODO, something is wrong here
-				$(document).off('keydown._180', jQuery.fn._180('keyboardNavigation')).on('keydown._180', function(e) {e.preventDefault(); });
+				// See with Karine if this is usefull
+				//$(document).off('keydown._180', jQuery.fn._180('keyboardNavigation')).on('keydown._180', function(e) {e.preventDefault(); });
 				
 				$('#' + lightboxID)
 					.insertAfter('#overlay')
@@ -43,18 +45,15 @@
 			$('a.close, #overlay').live('click._180 touchstart._180', function() {
 				$('#overlay , .lightbox_content').stop(true, true).fadeOut();
 				$('#overlay, .close').remove();
-				$(document).on('keydown._180', jQuery.fn._180('keyboardNavigation')).off('keydown._180', function(e) {e.preventDefault(); });
+				//$(document).on('keydown._180', jQuery.fn._180('keyboardNavigation')).off('keydown._180', function(e) {e.preventDefault(); });
 				return false;
 			});
 		}
 	};
 
-	// Make it work
-	// No chainability needed
 	$.fn._180_lightbox = function(method) {
 		if (methods[method]) {
-			return methods[method].apply(this, Array.prototype.slice.call(
-					arguments, 1));
+			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
 		} else if (typeof method === 'object' || !method) {
 			return methods.init.apply(this, arguments);
 		} else {

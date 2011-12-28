@@ -3,9 +3,11 @@
  * 
  * This is a part of the 180° Framework
  * 
- * @author Karine Do, Laurent Le Graverend
- * @see https://github.com/Asiance/180/ 
- * @version 2
+ * @author  Karine Do, Laurent Le Graverend
+ * @license Copyright (c) 2011 Asiance (http://www.asiance.com), Licensed under the MIT License.
+ * @updated 2011-12-28
+ * @link    https://github.com/Asiance/180/
+ * @version 2.0
  */
 (function($){
 	// Cache variables
