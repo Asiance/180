@@ -15,8 +15,7 @@
 		$body = $('body'),
 		$menu = $('#menu'),
 		$menunavlinks = $menu.find('a').not('.customlink, .slidepanel'),
-		$header,
-		$footer,
+		$header = $('body>header').first(),
 		$container = $('#container'),
 		$slides = $('.slide');
 
@@ -34,15 +33,6 @@
 	var currentBrowser = navigator.userAgent.toLowerCase();
 	var mobiledevices = 'iphone|ipod|android|blackberry|mini|windows\sce|palm';
 	var tabletdevices = 'ipad|playbook|hp-tablet';
-
-	// Is there a header ?
-	if ($('header').length) {
-		$header = $('header');
-	}
-	// Is there a footer ?
-	if ($('#slidingpanel').length) {
-		$slidingpanel = $('#slidingpanel');
-	}
 	
 	// Has it been resized ? (for IE7)
 	var resized = 0;
@@ -63,7 +53,6 @@
 				menuAlign: 'center',
 				menuStyle: 'auto',
 				menuSpacing: 10,
-				slidingpanelHeight: 400,
 				sidePadding: 30,
 				verticalScrolling: true,
 				menuAnimation: true,
@@ -73,6 +62,7 @@
 				tracker: function() {
 					_gaq.push(['_trackPageview', '/' + activePage]);
 				},
+				utilities: true,
 				before180: $.noop,
 				after180: $.noop,
 				beforeslide: $.noop,
@@ -113,12 +103,19 @@
 			
 			// Framework features for all
 			$window.bind('load._180', function() {
-				utilities.caption.apply();
-				utilities.hoverEffect.apply();
-				utilities.slideshow.apply();
-				utilities.collapsible.apply();
-				utilities.lightbox.apply();
-				utilities.scrollarea.apply();
+				// Auto-load utilities?
+				if (siteOptions.utilities === true) {
+					utilities.caption.apply();
+					utilities.hoverEffect.apply();
+					utilities.slideshow.apply();
+					utilities.collapsible.apply();
+					utilities.lightbox.apply();
+					utilities.scrollarea.apply();
+					// sliding panel
+					if (!isMobile && $('#slidingpanel').length) {
+						$('#slidingpanel')._180_slidingpanel();
+					}
+				}
 				// If it can read this, JS is enabled
 				$('html').removeClass('no-js').addClass('js');
 				if ($.isFunction(siteOptions.after180)) {
@@ -264,7 +261,7 @@
 				$menu.css('text-align','center');
 			} else if (siteOptions.menuAlign === 'left') {
 				$menu.css('text-align','left');
-				if ($('header').length && siteOptions.showHeader === true) {
+				if ($header.length && siteOptions.showHeader === true) {
 					$header.css('right', '0px');
 				}
 			} else if (siteOptions.menuAlign === 'right') {
@@ -279,9 +276,9 @@
 			}
 			
 			// header
-			if ($('header').length && siteOptions.showHeader === false) {
+			if ($header.length && siteOptions.showHeader === false) {
 				$header.hide();
-			} else if ($('header').length && siteOptions.showHeader === true) {
+			} else if ($header.length && siteOptions.showHeader === true) {
 				// If header and menu are on oposite sides
 				if (siteOptions.headerPosition != siteOptions.menuPosition) {
 					$slides
@@ -297,22 +294,13 @@
 						$menunavlinks.filter(':first').click();
 					});
 			}
-			
-			// footer
-			if ($('#slidingpanel').length) {
-				$slidingpanel
-					.css(siteOptions.menuPosition, 0 + siteOptions.menuHeight)
-					.css({'height' : (siteOptions.slidingpanelHeight) + 'px'}).hide();
-				$('.slidepanel').bind('click._180', function() {
-					$slidingpanel.stop().animate({'height':'toggle'});
-				});
-			}
 		},
 		// Apply style options to mobile
 		mobileStyle : function() {
 			$slides
-				.css({'padding-left': siteOptions.sidePadding/2 + 'px', 'padding-right': siteOptions.sidePadding/2 + 'px', 'padding-top': '+=' + siteOptions.sidePadding + 'px', 'padding-bottom': '+=' + siteOptions.sidePadding/2 + 'px'});		
-			if ($('header').length && (siteOptions.showHeader === true || siteOptions.showHeader === false)) {		
+				.css({'padding-left': siteOptions.sidePadding/2 + 'px', 'padding-right': siteOptions.sidePadding/2 + 'px', 'padding-top': '+=' + siteOptions.sidePadding + 'px', 'padding-bottom': '+=' + siteOptions.sidePadding/2 + 'px'});
+			// TODO WTF Karine ? if true ?
+			if ($header.length && (siteOptions.showHeader === true || siteOptions.showHeader === false)) {		
 				$header
 					.css('top', '0px')
 					.css('height', siteOptions.menuHeight/2 + 'px')
@@ -659,7 +647,7 @@
 				$(this)._180_scrollarea();
 			});
 		}
-	};	
+	};
 	// Make it work
 	// No chainability needed
 	$.fn._180 = function(method) {
