@@ -14,7 +14,7 @@
 	var methods = {
 			
 		init : function(options) {
-			settings = $.extend({
+			var settings = $.extend({
 				container : $('#container')
 			}, options);
 			

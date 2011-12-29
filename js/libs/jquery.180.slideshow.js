@@ -14,7 +14,7 @@
 	var methods = {
 		
 		init : function(options) {
-			settings = $.extend({
+			var settings = $.extend({
 				sliderPagination: false,
 				sliderTextPrev: "Prev",
 				sliderTextNext: "Next"

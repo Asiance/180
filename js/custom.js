@@ -1,11 +1,9 @@
 $(document).ready(function() {
-	$('body')._180({
+	window._180.init({
 		tracker: function() {
-			console.log(activePage);
+			console.log(window._180.activePage);
 		},
-		/*onComplete: function() {
-			alert('done');
-		},
+		/*
 		before180: function () {
 			alert('start');
 		},*/

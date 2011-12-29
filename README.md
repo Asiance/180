@@ -30,7 +30,7 @@ custom.js, initialize 180
 
 ```javascript
 $(document).ready(function() {
-	$('body')._180(options);
+	window._180.init._180(options);
 });
 ```
 

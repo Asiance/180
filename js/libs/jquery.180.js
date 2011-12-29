@@ -5,9 +5,9 @@
  * 
  * @author  Karine Do, Laurent Le Graverend
  * @license Copyright (c) 2011 Asiance (http://www.asiance.com), Licensed under the MIT License.
- * @updated 2011-12-28
+ * @updated 2011-12-29
  * @link    https://github.com/Asiance/180/
- * @version 2.0
+ * @version 3.0
  */
 (function($){
 	// Cache variables
@@ -19,10 +19,10 @@
 		$container = $('#container'),
 		$slides = $('.slide');
 
-	var myScroll,
+	var myScroll = null,
 		snaptoPage = 0;
 
-	var timer_trackPage;
+	var timer_trackPage = null;
 
 	// Detect browser
 	if ($.browser.webkit) {
@@ -41,11 +41,17 @@
 	var total_slides = $slides.length;
 	
 	// Some actions
-	var methods = {
+	window._180 = {
+		
+		// Object variables
+		activePage: null,
+		settings: null,
+
 		// Start
 		init : function(options) {
+			var self = this;
 			// Framework options defaults
-			siteOptions = $.extend({
+			self.settings = $.extend({
 				showHeader: true,
 				headerPosition: 'top',
 				menuPosition: 'top',
@@ -60,7 +66,7 @@
 				mobiles: '',
 				tablets: '',
 				tracker: function() {
-					_gaq.push(['_trackPageview', '/' + activePage]);
+					_gaq.push(['_trackPageview', '/' + self.activePage]);
 				},
 				utilities: true,
 				before180: $.noop,
@@ -72,16 +78,16 @@
 			}, options);
 			
 			// Custom init function
-			if ($.isFunction(siteOptions.before180)) {
-				siteOptions.before180.call();
+			if ($.isFunction(self.settings.before180)) {
+				self.settings.before180.call();
 			}
 			
 			// Add devices
-			if (siteOptions.mobiles.length) {
-				mobiledevices += '|' + siteOptions.mobiles;
+			if (self.settings.mobiles.length) {
+				mobiledevices += '|' + self.settings.mobiles;
 			}
-			if (siteOptions.tablets.length) {
-				tabletdevices += '|' + siteOptions.tablets;
+			if (self.settings.tablets.length) {
+				tabletdevices += '|' + self.settings.tablets;
 			}
 			
 			// Test devices
@@ -91,24 +97,24 @@
 			isTablet = (tablets.test(currentBrowser));
 
 			// Avoid overlap if menu is set to fill and header is in the same position
-			if (siteOptions.showHeader === true && siteOptions.menuStyle === 'fill' && siteOptions.headerPosition === siteOptions.menuPosition) {
-				if (siteOptions.headerPosition === 'top') {
-					siteOptions.menuPosition = 'bottom';
-				} else if (siteOptions.headerPosition === 'bottom') {
-					siteOptions.menuPosition = 'top';
+			if (self.settings.showHeader === true && self.settings.menuStyle === 'fill' && self.settings.headerPosition === self.settings.menuPosition) {
+				if (self.settings.headerPosition === 'top') {
+					self.settings.menuPosition = 'bottom';
+				} else if (self.settings.headerPosition === 'bottom') {
+					self.settings.menuPosition = 'top';
 				}
 			}
 			
 			// Framework features for all
 			$window.bind('load._180', function() {
 				// Auto-load utilities?
-				if (siteOptions.utilities === true) {
-					utilities.caption.apply();
-					utilities.hoverEffect.apply();
-					utilities.slideshow.apply();
-					utilities.collapsible.apply();
-					utilities.lightbox.apply();
-					utilities.scrollarea.apply();
+				if (self.settings.utilities === true) {
+					window._180.utilities.caption();
+					window._180.utilities.hoverEffect();
+					window._180.utilities.slideshow();
+					window._180.utilities.collapsible();
+					window._180.utilities.lightbox();
+					window._180.utilities.scrollarea();
 					// sliding panel
 					if (!isMobile && $('#slidingpanel').length) {
 						$('#slidingpanel')._180_slidingpanel();
@@ -116,8 +122,8 @@
 				}
 				// If it can read this, JS is enabled
 				$('html').removeClass('no-js').addClass('js');
-				if ($.isFunction(siteOptions.after180)) {
-					siteOptions.after180.call();
+				if ($.isFunction(self.settings.after180)) {
+					self.settings.after180.call();
 				}
 			});
 			
@@ -125,67 +131,67 @@
 			// If hash, redefine the active page for tracking and reposition if needed
 			// The page's offset is not defined yet so we need to place the page on the good slide
 			if (document.location.hash != '') {
-				activePage = $menu.find('a').filter('[href="' + document.location.hash + '"]').addClass('active').data('title');
+				self.activePage = $menu.find('a').filter('[href="' + document.location.hash + '"]').addClass('active').data('title');
 				$(scrollElement).animate({
 					scrollLeft: window.innerWidth*($('div.slide').index($(document.location.hash)))
 					}, 0
 				);
 			} else {
 				// Obviously by default the first slide is the one active
-				activePage = $menunavlinks.filter(':first').addClass('active').data('title');
+				self.activePage = $menunavlinks.filter(':first').addClass('active').data('title');
 			}
 			
-			siteOptions.tracker.apply();
+			self.settings.tracker();
 			
 			// For mobile and tablet
 			if (isMobile || isTablet) {
 				if (isMobile) {
-					methods.mobileStyle.apply();
+					self.mobileStyle();
 				}
 				if (isTablet) {
 					$body.addClass('tablet');
-					methods.style.apply();
+					self.style();
 				} else {
 					$body.addClass('mobile');
 				}
 				
 				// Orientation ?
-				methods.detectOrientation.apply();
+				self.detectOrientation();
 				
 				// To use iScroll
 				$container.wrap('<div id="scroller" />');
 				
 				// Framework options
-				/*if (siteOptions.verticalScrolling === true) {
+				/*if (self.settings.verticalScrolling === true) {
 					$slides.not('.noscroll').wrapInner('<div class="scrollable">').wrapInner('<div class="verticalscroller">');
 				}*/
 				
 				// Actions on load
 				$window.bind('load._180', function() {
 					if (isMobile) {
-						methods.mobileSizes.apply();
+						self.mobileSizes();
 					} else {
-						methods.sizes.apply();
+						self.sizes();
 					}
-					methods.mobileBase.apply();
-					/*if (siteOptions.verticalScrolling === true) {
-						methods.mobileVertScroll.apply();
+					self.mobileBase();
+					/*if (self.settings.verticalScrolling === true) {
+						self.mobileVertScroll();
 					}*/
-					if (siteOptions.verticalScrolling === true) {
+					if (self.settings.verticalScrolling === true) {
 						//$slides.css('overflow','auto');
 						$slides.not('.noscroll').wrapInner('<div class="scroll">');
-						methods.prettyScroll.apply();
+						self.prettyScroll();
 					}
 		
 				});
 				
 				// Actions on resize or orientation change
 				$window.bind('resize._180', function() {
-					methods.detectOrientation.apply();
+					self.detectOrientation();
 					if (isMobile) {
-						methods.mobileSizes.apply();
+						self.mobileSizes();
 					} else {
-						methods.sizes.apply();
+						self.sizes();
 					}
 					myScroll.refresh();
 					// Reposition iScroll
@@ -202,20 +208,20 @@
 			// For browsers
 			else {
 				// Apply style and sizes
-				methods.style.apply();
-				methods.sizes.apply();
+				self.style();
+				self.sizes();
 				
 				// Menu and internal links behaviour
-				methods.menuLinks.apply();
+				self.menuLinks();
 				
 				// Framework options
 				$window.bind('load._180', function() {
-					if (siteOptions.verticalScrolling === true) {
+					if (self.settings.verticalScrolling === true) {
 						//$slides.css('overflow','auto');
 						$slides.not('.noscroll').wrapInner('<div class="scroll">');
-						methods.prettyScroll.apply();
+						self.prettyScroll();
 					} else {
-						if (siteOptions.mouseScroll === true) {
+						if (self.settings.mouseScroll === true) {
 							$(scrollElement)
 								.bind('mousewheel._180', function(event, delta) {
 									if (delta > 0) {
@@ -233,8 +239,8 @@
 				
 				// Actions on window resize
 				$window.bind('resize._180', function() {
-					methods.sizes.apply();
-					methods.reposition.apply();
+					self.sizes();
+					self.reposition();
 				});
 				
 				// Prevent Firefox from refreshing page on hashchange
@@ -244,54 +250,55 @@
 				});
 				
 				// Keyboard nav
-				$(document).on('keydown._180', methods.keyboardNavigation);
+				$(document).on('keydown._180', self.keyboardNavigation);
 			}
 		},
 		// Apply style options to browser
 		style : function() {
+			var self = this;
 			$slides
-				.css('padding-' + siteOptions.menuPosition, '+=' + siteOptions.menuHeight + 'px')
-				.css({'padding-left': siteOptions.sidePadding + 'px', 'padding-right': siteOptions.sidePadding + 'px', 'padding-top': '+=' + siteOptions.sidePadding + 'px', 'padding-bottom': '+=' + siteOptions.sidePadding + 'px'});
+				.css('padding-' + self.settings.menuPosition, '+=' + self.settings.menuHeight + 'px')
+				.css({'padding-left': self.settings.sidePadding + 'px', 'padding-right': self.settings.sidePadding + 'px', 'padding-top': '+=' + self.settings.sidePadding + 'px', 'padding-bottom': '+=' + self.settings.sidePadding + 'px'});
 		
 			$menu
-				.css(siteOptions.menuPosition, '0px')
-				.css('height', siteOptions.menuHeight + 'px')
-				.find('a').css('line-height', siteOptions.menuHeight + 'px');
+				.css(self.settings.menuPosition, '0px')
+				.css('height', self.settings.menuHeight + 'px')
+				.find('a').css('line-height', self.settings.menuHeight + 'px');
 			
 			// menu align
-			if (siteOptions.menuAlign === 'center') {
+			if (self.settings.menuAlign === 'center') {
 				$menu.css('text-align','center');
-			} else if (siteOptions.menuAlign === 'left') {
+			} else if (self.settings.menuAlign === 'left') {
 				$menu.css('text-align','left');
-				if ($header.length && siteOptions.showHeader === true) {
+				if ($header.length && self.settings.showHeader === true) {
 					$header.css('right', '0px');
 				}
-			} else if (siteOptions.menuAlign === 'right') {
+			} else if (self.settings.menuAlign === 'right') {
 				$menu.css('text-align','right');
 			}
 			
 			// menu style
-			if (siteOptions.menuStyle === 'fill') {
+			if (self.settings.menuStyle === 'fill') {
 				$menu.find('a').css('width',(100/$menu.find('a').length) + '%');
-			} else if (siteOptions.menuStyle === 'auto') {
-				$menu.find('a').css('padding-left', siteOptions.menuSpacing + 'px').css('padding-right', siteOptions.menuSpacing + 'px');
+			} else if (self.settings.menuStyle === 'auto') {
+				$menu.find('a').css('padding-left', self.settings.menuSpacing + 'px').css('padding-right', self.settings.menuSpacing + 'px');
 			}
 			
 			// header
-			if ($header.length && siteOptions.showHeader === false) {
+			if ($header.length && self.settings.showHeader === false) {
 				$header.hide();
-			} else if ($header.length && siteOptions.showHeader === true) {
+			} else if ($header.length && self.settings.showHeader === true) {
 				// If header and menu are on oposite sides
-				if (siteOptions.headerPosition != siteOptions.menuPosition) {
+				if (self.settings.headerPosition != self.settings.menuPosition) {
 					$slides
-						.css('padding-' + siteOptions.headerPosition, '+=' + siteOptions.menuHeight + 'px');
+						.css('padding-' + self.settings.headerPosition, '+=' + self.settings.menuHeight + 'px');
 				}
 			
 				$header
-					.css(siteOptions.headerPosition, '0px')
-					.css('height', siteOptions.menuHeight + 'px')
+					.css(self.settings.headerPosition, '0px')
+					.css('height', self.settings.menuHeight + 'px')
 					.children()
-					.css('line-height', siteOptions.menuHeight + 'px')
+					.css('line-height', self.settings.menuHeight + 'px')
 					.bind('click._180', function() {
 						$menunavlinks.filter(':first').click();
 					});
@@ -299,15 +306,16 @@
 		},
 		// Apply style options to mobile
 		mobileStyle : function() {
+			var self = this;
 			$slides
-				.css({'padding-left': siteOptions.sidePadding/2 + 'px', 'padding-right': siteOptions.sidePadding/2 + 'px', 'padding-top': '+=' + siteOptions.sidePadding + 'px', 'padding-bottom': '+=' + siteOptions.sidePadding/2 + 'px'});
+				.css({'padding-left': self.settings.sidePadding/2 + 'px', 'padding-right': self.settings.sidePadding/2 + 'px', 'padding-top': '+=' + self.settings.sidePadding + 'px', 'padding-bottom': '+=' + self.settings.sidePadding/2 + 'px'});
 			// TODO WTF Karine ? if true ?
-			if ($header.length && (siteOptions.showHeader === true || siteOptions.showHeader === false)) {		
+			if ($header.length && (self.settings.showHeader === true || self.settings.showHeader === false)) {		
 				$header
 					.css('top', '0px')
-					.css('height', siteOptions.menuHeight/2 + 'px')
+					.css('height', self.settings.menuHeight/2 + 'px')
 					.children()
-					.css('line-height', siteOptions.menuHeight/2 + 'px')
+					.css('line-height', self.settings.menuHeight/2 + 'px')
 					.bind('click._180', function() {
 						$menunavlinks.filter(':first').click();
 					});
@@ -315,16 +323,18 @@
 		},
 		// Flexible sizes
 		sizes : function() {
+			var self = this;
+			
 			var windowH = $window.height(),
 				windowW = $window.width();
 			
 			// Dertermine sizes of slides with or without padding
-			if (siteOptions.showHeader === false || (siteOptions.showHeader === true && siteOptions.headerPosition === siteOptions.menuPosition)) {
-				paddingTB = windowH - siteOptions.menuHeight - siteOptions.sidePadding*2;
-				nopaddingTB = windowH - siteOptions.menuHeight;
+			if (self.settings.showHeader === false || (self.settings.showHeader === true && self.settings.headerPosition === self.settings.menuPosition)) {
+				paddingTB = windowH - self.settings.menuHeight - self.settings.sidePadding*2;
+				nopaddingTB = windowH - self.settings.menuHeight;
 			} else {
-				paddingTB = windowH - siteOptions.menuHeight*2 - siteOptions.sidePadding*2;
-				nopaddingTB = windowH - siteOptions.menuHeight*2;
+				paddingTB = windowH - self.settings.menuHeight*2 - self.settings.sidePadding*2;
+				nopaddingTB = windowH - self.settings.menuHeight*2;
 			}
 			
 			// Set overall container size
@@ -334,25 +344,25 @@
 			if (($.browser.msie && $.browser.version === 7) && (resized === 0)) {
 				$container.height(windowH-18);
 				$slides.not('.nopadding')
-					.width((windowW - siteOptions.sidePadding*2)).height((paddingTB - 18));
-				if (siteOptions.headerPosition === siteOptions.menuPosition) {
+					.width((windowW - self.settings.sidePadding*2)).height((paddingTB - 18));
+				if (self.settings.headerPosition === self.settings.menuPosition) {
 					$('.nopadding')
-						.attr('style', 'height:' + (nopaddingTB-18) + 'px; width:' + windowW + 'px; padding-' + siteOptions.menuPosition + ':' + siteOptions.menuHeight + 'px !important');
+						.attr('style', 'height:' + (nopaddingTB-18) + 'px; width:' + windowW + 'px; padding-' + self.settings.menuPosition + ':' + self.settings.menuHeight + 'px !important');
 				} else {
 					$('.nopadding')
-						.attr('style', 'height:' + (nopaddingTB-18) + 'px; width:' + windowW + 'px; padding-' + siteOptions.menuPosition + ':' + siteOptions.menuHeight + 'px !important; padding-' + siteOptions.headerPosition + ':' + siteOptions.menuHeight + 'px !important;');
+						.attr('style', 'height:' + (nopaddingTB-18) + 'px; width:' + windowW + 'px; padding-' + self.settings.menuPosition + ':' + self.settings.menuHeight + 'px !important; padding-' + self.settings.headerPosition + ':' + self.settings.menuHeight + 'px !important;');
 				}
 				resized = 1;
 			} else {
 			// Good people not using IE7
 				$slides.not('.nopadding')
-					.width((windowW - siteOptions.sidePadding*2)).height((paddingTB));
-				if (siteOptions.showHeader === true && siteOptions.headerPosition === siteOptions.menuPosition) {
+					.width((windowW - self.settings.sidePadding*2)).height((paddingTB));
+				if (self.settings.showHeader === true && self.settings.headerPosition === self.settings.menuPosition) {
 					$('.nopadding')
-						.attr('style', 'height:' + nopaddingTB + 'px; width:' + windowW + 'px; padding-' + siteOptions.menuPosition + ':' + siteOptions.menuHeight + 'px !important');
+						.attr('style', 'height:' + nopaddingTB + 'px; width:' + windowW + 'px; padding-' + self.settings.menuPosition + ':' + self.settings.menuHeight + 'px !important');
 				} else {
 					$('.nopadding')
-						.attr('style', 'height:' + nopaddingTB + 'px; width:' + windowW + 'px; padding-' + siteOptions.menuPosition + ':' + siteOptions.menuHeight + 'px !important; padding-' + siteOptions.headerPosition + ':' + siteOptions.menuHeight + 'px !important;');
+						.attr('style', 'height:' + nopaddingTB + 'px; width:' + windowW + 'px; padding-' + self.settings.menuPosition + ':' + self.settings.menuHeight + 'px !important; padding-' + self.settings.headerPosition + ':' + self.settings.menuHeight + 'px !important;');
 				}
 				// For tablets
 				if (isTablet) {
@@ -361,22 +371,24 @@
 				}
 			}
 			// Recalculate magic menu size
-			if (siteOptions.menuAnimation === true) {
-				methods.menuAnimation.apply();
+			if (self.settings.menuAnimation === true) {
+				this.menuAnimation();
 			}
 		},
 		// Flexible sizes for mobile
 		mobileSizes : function() {
+			var self = this;
+			
 			var windowH = $window.height(),
 				windowW = $window.width();
 			
 			// Dertermine sizes of slides with or without padding
-			if (siteOptions.showHeader === false || (siteOptions.showHeader === true && siteOptions.headerPosition === siteOptions.menuPosition)) {
-				paddingTB = windowH - siteOptions.menuHeight - siteOptions.sidePadding*2;
-				nopaddingTB = windowH - siteOptions.menuHeight;
+			if (self.settings.showHeader === false || (self.settings.showHeader === true && self.settings.headerPosition === self.settings.menuPosition)) {
+				paddingTB = windowH - self.settings.menuHeight - self.settings.sidePadding*2;
+				nopaddingTB = windowH - self.settings.menuHeight;
 			} else {
-				paddingTB = windowH - siteOptions.menuHeight*2 - siteOptions.sidePadding*2;
-				nopaddingTB = windowH - siteOptions.menuHeight*2;
+				paddingTB = windowH - self.settings.menuHeight*2 - self.settings.sidePadding*2;
+				nopaddingTB = windowH - self.settings.menuHeight*2;
 			}
 			
 			// Set overall container size
@@ -384,10 +396,10 @@
 			
 			// For mobiles
 			$slides.not('.nopadding')
-				.width((windowW - siteOptions.sidePadding)).height(windowH - siteOptions.sidePadding*1.5 + 70);
+				.width((windowW - self.settings.sidePadding)).height(windowH - self.settings.sidePadding*1.5 + 70);
 			$('.nopadding')
-				.attr('style', 'height:' + (windowH - siteOptions.menuHeight + 70) + 'px; width:' + windowW + 'px; padding-top:' + siteOptions.menuHeight + 'px !important;');
-			$('.verticalscroller').height((windowH - siteOptions.menuHeight + 70));
+				.attr('style', 'height:' + (windowH - self.settings.menuHeight + 70) + 'px; width:' + windowW + 'px; padding-top:' + self.settings.menuHeight + 'px !important;');
+			$('.verticalscroller').height((windowH - self.settings.menuHeight + 70));
 			
 			setTimeout(function() {
 				window.scrollTo(0,1);
@@ -397,26 +409,27 @@
 		// Reposition if hash is used in URL (Browsers only)
 		reposition : function() {
 			if (document.location.hash != '') {
-				methods.scrollSlide(document.location.hash);
+				this.scrollSlide(document.location.hash);
 				$('.active').removeClass('active');
 				$menunavlinks.filter('[href=' + document.location.hash + ']').addClass('active');
 			}
 		},
 		// Animate menu and internal links + track page views
 		menuLinks : function() {
+			var self = this;
 			$menunavlinks.bind('click._180', function(event){				
 				event.preventDefault();
 				var $this = $(this);
 				// Scroll and make active
-				methods.scrollSlide($this.attr('href'));
+				self.scrollSlide($this.attr('href'));
 				$('.active').removeClass('active');
 				$this.addClass('active');
-				activePage = $(this).data('title');
+				self.activePage = $(this).data('title');
 				// Track pageview
 				clearTimeout(timer_trackPage);
-				timer_trackPage = setTimeout(siteOptions.tracker, 2500);
+				timer_trackPage = setTimeout(self.settings.tracker, 2500);
 				// Animate menu if needed
-				if (siteOptions.menuAnimation === true) {
+				if (self.settings.menuAnimation === true) {
 					var $magicLine = $('#magic');
 					leftPos = $this.position().left;
 					newWidth = $this.outerWidth(true);
@@ -444,6 +457,8 @@
 		},
 		// Animate the menu
 		menuAnimation : function() {
+			var self = this;
+			
 			var $el, leftPos, newWidth;
 			if (!$('#magic').length) {
 				$menu.append('<span id="magic"></span>');
@@ -453,7 +468,7 @@
 			$window.bind('load._180', function() {
 				$magicLine
 					.width($('.active').outerWidth(true))
-					.height(siteOptions.menuHeight)
+					.height(self.settings.menuHeight)
 					.css('left', $('.active').position().left)
 					.data('origLeft', $magicLine.position().left)
 					.data('origWidth', $magicLine.width());
@@ -505,13 +520,13 @@
 		detectOrientation : function() {
 			if (window.innerHeight > window.innerWidth) {
 				$body.addClass('portrait').removeClass('landscape');
-				if ($.isFunction(siteOptions.portrait)) {
-					siteOptions.portrait.call();
+				if ($.isFunction(self.settings.portrait)) {
+					self.settings.portrait.call();
 				}
 			} else if (window.innerHeight< window.innerWidth) {
 				$body.removeClass('portrait').addClass('landscape');
-				if ($.isFunction(siteOptions.landscape)) {
-					siteOptions.landscape.call();
+				if ($.isFunction(self.settings.landscape)) {
+					self.settings.landscape.call();
 				}
 			}
 		},
@@ -529,15 +544,15 @@
 		scrollSlide : function(page) {
 			// do something before?
 			var self = this;
-			if ($.isFunction(siteOptions.beforeslide)) {
-				siteOptions.beforeslide.call(this, page, self.getScrollDirection(page));
+			if ($.isFunction(self.settings.beforeslide)) {
+				self.settings.beforeslide.call(this, page, self.getScrollDirection(page));
 			}
 
 			$(scrollElement).stop(true, true).animate({scrollLeft: $(page).offset().left}, 1000, function() {
 				document.location.hash = page;
 				// do something after?
-				if ($.isFunction(siteOptions.afterslide)) {
-					siteOptions.afterslide.call(this, page, self.getScrollDirection(page));
+				if ($.isFunction(self.settings.afterslide)) {
+					self.settings.afterslide.call(this, page, self.getScrollDirection(page));
 				}
 			});
 		},
@@ -558,6 +573,7 @@
 			return $('div.slide').index($(page)) + 1;
 		},
 		mobileBase : function() {
+			var self = this;
 			// init iScroll
 			myScroll = new iScroll('scroller', {
 				hScrollbar: false,
@@ -571,13 +587,13 @@
 				useTransition: true,
 				onScrollEnd: function() {
 					$('.active').removeClass('active');
-					activePage = $('#menu a:nth-child(' + (this.currPageX + 1) + ')').data('title');
+					self.activePage = $('#menu a:nth-child(' + (this.currPageX + 1) + ')').data('title');
 					$('#menu a:nth-child(' + (this.currPageX + 1) + ')').addClass('active');
 					snaptoPage = (this.currPageX);
 					// Track pageview
 					clearTimeout(timer_trackPage);
-					timer_trackPage = setTimeout(siteOptions.tracker, 2000);
-					if (siteOptions.menuAnimation === true) {
+					timer_trackPage = setTimeout(self.settings.tracker, 2000);
+					if (self.settings.menuAnimation === true) {
 						var $magicLine = $('#magic');
 						$magic = $('#menu a:nth-child(' + (this.currPageX + 1) + ')');
 						leftPos = $magic.position().left;
@@ -618,7 +634,7 @@
 	};
 	
 	// Utilities
-	var utilities = {
+	window._180.utilities = {
 		collapsible : function() {
 			$('.collapsible')._180_collapsible();
 		},
@@ -651,15 +667,6 @@
 			});
 		}
 	};
-	// Make it work
-	// No chainability needed
-	$.fn._180 = function(method) {
-		if (methods[method]) {
-			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-		} else if (typeof method === 'object' || ! method) {
-			return methods.init.apply(this, arguments);
-		} else {
-			$.error( 'Method ' +  method + ' does not exist' );
-		}
-	};
+
+	"180° Framework by Karine Do & Laurent Le Graverend";
 })(jQuery);

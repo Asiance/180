@@ -14,7 +14,7 @@
 	var methods = {
 
 		init : function(options) {
-			settings = $.extend({
+			var settings = $.extend({
 				slidingpanelHeight: 400
 			}, options);
 			var $self = $(this);
