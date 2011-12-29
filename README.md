@@ -52,15 +52,13 @@ Read about the options in the next section
 + **mobiles:** use this to add mobile devices, separate them with `|`
 + **tablets:** use this to add tablet devices, separate them with `|`
 + **tracker:** [default: Google Analytics] function to track page views, can be customized, use variable `activePage` to fetch the active page
++ **utilities:** [default: true] autoload utilities (see the section above)
 + **before180:** [function] use this to do something before the framework is initialized
 + **after180:** [function] use this to do something after the framework has loaded+ **beforeslide:** [function] use this to do something before a page slide
 + **afterslide:** [function] use this to do something after a page slide
 + **portrait:** [function] use this to do something in portrait mode
 + **landscape:** [function] use this to do something in landscape mode
-+ **utilitiesOptions:** [object] optional parameters for utilities
-    + **sliderPagination:** [default: false] add a pagination for the sliders [1..n]
-    + **sliderTextPrev:** [default: 'Prev'] text for previous button
-    + **sliderTextNext:** [default: 'Next'] text for next button
+
 
 ## Features
 
@@ -79,8 +77,16 @@ Read about the options in the next section
 
 - Add `class="noscroll"` to slide
 
+## Utilities
+
 ### Create collapsible blocks
 
+#### Constructor
+```javasript
+$(element)._180_collapsible();
+```
+
+#### Format
 ```html
 <div class="collapsible">
 	<h2>[ BLOCK TITLE ]</h2>
@@ -94,8 +100,12 @@ Read about the options in the next section
 
 ### Create a hover effect on image
 
-- Make sure to add width and height !
+#### Constructor
+```javasript
+$(element)._180_hover();
+```
 
+#### Format
 ```html
 <div class="hovereffect">
 	<img src="[ IMAGE ]" width="" height="" alt="" />
@@ -114,14 +124,22 @@ Read about the options in the next section
 
 ### Create a slideshow
 
+#### Constructor
+```javasript
+$(element)._180_slideshow(options);
+```
+
+#### Options
++ **sliderPagination:** [default: false] add a pagination for the sliders [1..n]
++ **sliderTextPrev:** [default: 'Prev'] text for previous button
++ **sliderTextNext:** [default: 'Next'] text for next button
+    
 - Width and Height can be in percentage
 
+#### Format
 ```html
 <div class="slider" data-slider-width="[ WIDTH ]" data-slider-height="[ HEIGHT ]">
 	<ul>
-		<li>
-			[ CONTENT ]
-		</li>
 		<li>
 			[ CONTENT ]
 		</li>
@@ -140,8 +158,12 @@ Read about the options in the next section
 
 ### Automatic image captions
 
-- Add a span with `class="caption"` right after the image
+#### Constructor
+```javasript
+$(element)._180_caption();
+```
 
+#### Format
 ```html
 <img src="[ IMAGE ]" alt="" />
 <span class="caption">[ CAPTION ]</span>
@@ -149,19 +171,40 @@ Read about the options in the next section
 
 ### Create a scrollable area
 
-- Width and Height can be in percentage
+#### Constructor
+```javasript
+$(element)._180_scrollarea();
+```
 
+#### Format
 ```html
 <div class="scrollarea" data-area-width="[ WIDTH ]" data-area-height="[ HEIGHT ]">
 	[ CONTENT ]
 </div>
 ```
-### Create a sliding panel- Create a link with `class="slidepanel"` and add the following to your source code```html<div id="slidingpanel">
+
+- Width and Height can be in percentage
+### Create a sliding panel
+#### Constructor
+```javasript
+$(element)._180_slidepanel();
+```
+
+#### Options
++ **height:** [default: 400] integer, height of the panel
+
+#### Format```html
+<a href="" class="slidepanel"></a>
+[...]<div id="slidingpanel">
 	<div>
 		[ CONTENT ]
 	</div>
-</div>```### Exclude link from menu- Create a link with `class="customlink"` if you want it to be in the menu bar but if it's not a navigation link
+</div>```
 ## Notes
+
+### Exclude link from menu
+
+- Create a link with `class="customlink"` if you want it to be in the menu bar but if it's not a navigation link
 
 ### Youtube video
 
@@ -180,4 +223,5 @@ Read about the options in the next section
 
 ### People
 
+- **Karine Do:** The creator
 - **Laurent Le Graverend:** For his support and ideas :D
