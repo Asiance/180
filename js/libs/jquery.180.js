@@ -123,17 +123,21 @@
 				}
 			});
 			
-			// Obviously by default the first slide is the one active
-			$menunavlinks.filter(':first').addClass('active');
-			
+			// First reposition
 			// If hash, redefine the active page for tracking and reposition if needed
+			// The page's offset is not defined yet so we need to place the page on the good slide
 			if (document.location.hash != '') {
-				activePage = $menu.find('a').filter('[href="' + document.location.hash + '"]').data('title');
+				activePage = $menu.find('a').filter('[href="' + document.location.hash + '"]').addClass('active').data('title');
+				$(scrollElement).animate({
+					scrollLeft: window.innerWidth*($('div.slide').index($(document.location.hash)))
+					}, 0
+				);
 			} else {
-				activePage = $menunavlinks.filter(':first').data('title');
+				// Obviously by default the first slide is the one active
+				activePage = $menunavlinks.filter(':first').addClass('active').data('title');
 			}
+			
 			siteOptions.tracker.apply();
-			methods.reposition.apply();
 			
 			// For mobile and tablet
 			if (isMobile || isTablet) {
@@ -541,11 +545,8 @@
 		},
 		// Return the direction where the slides scroll to
 		getScrollDirection : function(page) {
-			var string = '';
-			$($menunavlinks).each (function (e) {
-				string += '#' + $(this).attr('title');
-			});
-			var j = string.indexOf(page) - string.indexOf(document.location.hash);
+			var self = this;
+			var j = self.getSlideNumber(page) - self.getSlideNumber(document.location.hash);
 			if (j == 0) {
 				return direction = 'none';
 			} else if (j > 0) {
@@ -553,6 +554,10 @@
 			} else {
 				return direction = 'left';
 			}
+		},
+		// Return the number of the slide
+		getSlideNumber : function(page) {
+			return $('div.slide').index($(page)) + 1;
 		},
 		mobileBase : function() {
 			// init iScroll
