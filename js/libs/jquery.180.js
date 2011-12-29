@@ -70,8 +70,6 @@
 				portrait: $.noop,
 				landscape: $.noop
 			}, options);
-
-			//utilities.init.call(this, arguments[0].utilitiesOptions);
 			
 			// Custom init function
 			if ($.isFunction(siteOptions.before180)) {
