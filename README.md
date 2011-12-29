@@ -30,7 +30,7 @@ custom.js, initialize 180
 
 ```javascript
 $(document).ready(function() {
-	window._180.init._180(options);
+	window._180.init(options);
 });
 ```
 
@@ -209,6 +209,12 @@ $(element)._180_slidepanel();
 ### Youtube video
 
 - Add `wmode=transparent` to the URL
+
+## Changelog
+
++ **V3:** The Framework is now an object, not a plugin anymore 
++ **V2:** Extract utilities to JQuery plugins
++ **V1:** Plugin creation
 
 ## Credits
 
