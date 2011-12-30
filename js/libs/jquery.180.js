@@ -5,7 +5,7 @@
  * 
  * @author  Karine Do, Laurent Le Graverend
  * @license Copyright (c) 2011 Asiance (http://www.asiance.com), Licensed under the MIT License.
- * @updated 2011-12-29
+ * @updated 2011-12-30
  * @link    https://github.com/Asiance/180/
  * @version 3.0
  */
@@ -122,25 +122,23 @@
 				}
 				// If it can read this, JS is enabled
 				$('html').removeClass('no-js').addClass('js');
+				
+				// Reposition to the current slide
+				$(scrollElement).animate({scrollLeft: window.innerWidth*($('div.slide').index($(document.location.hash)))}, 0);
+
 				if ($.isFunction(self.settings.after180)) {
 					self.settings.after180.call();
 				}
 			});
-			
-			// First reposition
-			// If hash, redefine the active page for tracking and reposition if needed
-			// The page's offset is not defined yet so we need to place the page on the good slide
+
+			// If hash, redefine the active page for tracking
 			if (document.location.hash != '') {
 				self.activePage = $menu.find('a').filter('[href="' + document.location.hash + '"]').addClass('active').data('title');
-				$(scrollElement).animate({
-					scrollLeft: window.innerWidth*($('div.slide').index($(document.location.hash)))
-					}, 0
-				);
 			} else {
 				// Obviously by default the first slide is the one active
 				self.activePage = $menunavlinks.filter(':first').addClass('active').data('title');
 			}
-			
+
 			self.settings.tracker();
 			
 			// For mobile and tablet
@@ -162,6 +160,7 @@
 				$container.wrap('<div id="scroller" />');
 				
 				// Framework options
+				// TODO, check for removing
 				/*if (self.settings.verticalScrolling === true) {
 					$slides.not('.noscroll').wrapInner('<div class="scrollable">').wrapInner('<div class="verticalscroller">');
 				}*/
@@ -174,6 +173,7 @@
 						self.sizes();
 					}
 					self.mobileBase();
+					// TODO, check for removing
 					/*if (self.settings.verticalScrolling === true) {
 						self.mobileVertScroll();
 					}*/
@@ -246,6 +246,16 @@
 				// Prevent Firefox from refreshing page on hashchange
 				$window.bind('hashchange._180', function(event) {
 					event.preventDefault();
+					// TODO, we should find a way to detect if hash change is due to click or not
+					// If not we should trigger the click on the relative menu
+					var thisHashChangeHasBeenMadeManually = false;
+					if (thisHashChangeHasBeenMadeManually) {
+						// If the menu hash actually exists!
+						if ($menunavlinks.index($('a[href="'+document.location.hash+'"]')) != -1) {
+							// Trigger click on the menu link, pan!
+							$('a[href="'+document.location.hash+'"]').trigger('click._180');
+						}
+					}
 					return false;
 				});
 				
@@ -372,7 +382,7 @@
 			}
 			// Recalculate magic menu size
 			if (self.settings.menuAnimation === true) {
-				this.menuAnimation();
+				self.menuAnimation();
 			}
 		},
 		// Flexible sizes for mobile
@@ -501,10 +511,10 @@
 					showArrows: false
 				});
 				var api = $(this).data('jsp');
-				var throttleTimeout;
+				var throttleTimeout = null;
 				$window.bind('resize._180', function() {
 					if ($.browser.msie) {
-						if (!throttleTimeout) {
+						if (throttleTimeout === null) {
 							throttleTimeout = setTimeout(function() {
 								api.reinitialise();
 								throttleTimeout = null;
@@ -638,29 +648,24 @@
 		collapsible : function() {
 			$('.collapsible')._180_collapsible();
 		},
-
 		hoverEffect : function() {
 			$('.hovereffect').each(function() {
 				$(this)._180_hover();
 			});
 		},
-
 		lightbox : function() {
 			$('.lightbox')._180_lightbox();
 		},
-
 		slideshow : function() {
 			$('.slider').each(function() {
 				$(this)._180_slideshow();
 			});
 		},
-
 		caption : function() {
 			$('.caption').each(function() {
 				$(this)._180_caption();
 			});
 		},
-
 		scrollarea : function() {
 			$('.scrollarea').each(function() {
 				$(this)._180_scrollarea();
@@ -668,5 +673,5 @@
 		}
 	};
 
-	"180° Framework by Karine Do & Laurent Le Graverend";
+	"180° JQuery Framework by Karine Do & Laurent Le Graverend";
 })(jQuery);
