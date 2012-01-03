@@ -89,9 +89,9 @@
 			self.browser.isTablet = new RegExp(self.settings.tablets, 'i').test(self.browser.agent);
 			
 			if (self.browser.isMobile || self.browser.isTablet) {
-				$('<script type=\"text/javascript\" src=\"./js/libs/iscroll.js\"><\/script>').appendTo('body');
+				window._180.Utils.include('./js/libs/iscroll.js');
 			} else {
-				$('<script type=\"text/javascript\" src=\"./js/libs/jquery.mousewheel.js\"><\/script>').appendTo('body');
+				window._180.Utils.include('./js/libs/jquery.mousewheel.js');
 			}			
 
 			// Avoid overlap if menu is set to fill and header is in the same position
@@ -679,6 +679,23 @@
 			$('.scrollarea').each(function() {
 				$(this)._180_scrollarea();
 			});
+		}
+	};
+	
+	window._180.Utils = {
+		include: function(src, attributes) {
+			try {
+				attributes = attributes || {};
+				attributes.type = "text/javascript";
+				attributes.src = src;
+
+				var script = document.createElement("script");
+				for(aName in attributes)
+					script[aName] = attributes[aName];
+
+				document.getElementsByTagName("body")[0].appendChild(script);
+				return true;
+			} catch(e) { return false; }
 		}
 	};
 
