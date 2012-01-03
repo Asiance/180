@@ -5,9 +5,9 @@
  * 
  * @author  Karine Do, Laurent Le Graverend
  * @license Copyright (c) 2011 Asiance (http://www.asiance.com), Licensed under the MIT License.
- * @updated 2011-12-30
+ * @updated 2012-01-03
  * @link    https://github.com/Asiance/180/
- * @version 3.0
+ * @version 3.1
  */
 (function($){
 	// Cache variables
@@ -17,12 +17,12 @@
 		$menunavlinks = $menu.find('a').not('.customlink, .slidepanel'),
 		$header = $('body>header').first(),
 		$container = $('#container'),
-		$slides = $('.slide');
+		$slides = $('.slide'),
 
-	var myScroll = null,
-		snaptoPage = 0;
+		myScroll = null,
+		snaptoPage = 0,
 
-	var timer_trackPage = null;
+		timer_trackPage = null;
 
 	// Detect browser
 	if ($.browser.webkit) {
@@ -30,9 +30,6 @@
 	} else {
 		scrollElement = 'html';
 	}
-	var currentBrowser = navigator.userAgent.toLowerCase();
-	var mobiledevices = 'iphone|ipod|android|blackberry|mini|windows\sce|palm';
-	var tabletdevices = 'ipad|playbook|hp-tablet';
 	
 	// Has it been resized ? (for IE7)
 	var resized = 0;
@@ -40,15 +37,20 @@
 	// To determine container width
 	var total_slides = $slides.length;
 	
-	// Some actions
+	// Main Object
 	window._180 = {
-		
-		// Object variables
-		activePage: null,
+
+		browser: {
+			activePage: null,
+			agent: navigator.userAgent.toLowerCase(),
+			isMobile: false,
+			isTablet: false
+		},
+
 		settings: null,
 
 		// Start
-		init : function(options) {
+		init: function(options) {
 			var self = this;
 			// Framework options defaults
 			self.settings = $.extend({
@@ -63,10 +65,10 @@
 				verticalScrolling: true,
 				menuAnimation: true,
 				mouseScroll: false,
-				mobiles: '',
-				tablets: '',
+				mobiles: 'iphone|ipod|mobile|blackberry|mini|windows\sce|palm',
+				tablets: 'ipad|playbook|android|hp-tablet',
 				tracker: function() {
-					_gaq.push(['_trackPageview', '/' + self.activePage]);
+					_gaq.push(['_trackPageview', '/' + self.browser.activePage]);
 				},
 				utilities: true,
 				before180: $.noop,
@@ -81,20 +83,16 @@
 			if ($.isFunction(self.settings.before180)) {
 				self.settings.before180.call();
 			}
-			
-			// Add devices
-			if (self.settings.mobiles.length) {
-				mobiledevices += '|' + self.settings.mobiles;
-			}
-			if (self.settings.tablets.length) {
-				tabletdevices += '|' + self.settings.tablets;
-			}
-			
+
 			// Test devices
-			var mobiles = new RegExp(mobiledevices, 'i');
-			var tablets = new RegExp(tabletdevices, 'i');
-			isMobile = (mobiles.test(currentBrowser));
-			isTablet = (tablets.test(currentBrowser));
+			self.browser.isMobile = new RegExp(self.settings.mobiles, 'i').test(self.browser.agent);
+			self.browser.isTablet = new RegExp(self.settings.tablets, 'i').test(self.browser.agent);
+			
+			if (self.browser.isMobile || self.browser.isTablet) {
+				$('<script type=\"text/javascript\" src=\"./js/libs/iscroll.js\"><\/script>').appendTo('body');
+			} else {
+				$('<script type=\"text/javascript\" src=\"./js/libs/jquery.mousewheel.js\"><\/script>').appendTo('body');
+			}			
 
 			// Avoid overlap if menu is set to fill and header is in the same position
 			if (self.settings.showHeader === true && self.settings.menuStyle === 'fill' && self.settings.headerPosition === self.settings.menuPosition) {
@@ -116,7 +114,7 @@
 					window._180.utilities.lightbox();
 					window._180.utilities.scrollarea();
 					// sliding panel
-					if (!isMobile && $('#slidingpanel').length) {
+					if (!self.browser.isMobile && $('#slidingpanel').length) {
 						$('#slidingpanel')._180_slidingpanel();
 					}
 				}
@@ -133,138 +131,148 @@
 
 			// If hash, redefine the active page for tracking
 			if (document.location.hash != '') {
-				self.activePage = $menu.find('a').filter('[href="' + document.location.hash + '"]').addClass('active').data('title');
+				self.browser.activePage = $menu.find('a').filter('[href="' + document.location.hash + '"]').addClass('active').data('title');
 			} else {
 				// Obviously by default the first slide is the one active
-				self.activePage = $menunavlinks.filter(':first').addClass('active').data('title');
+				self.browser.activePage = $menunavlinks.filter(':first').addClass('active').data('title');
 			}
 
 			self.settings.tracker();
 			
-			// For mobile and tablet
-			if (isMobile || isTablet) {
-				if (isMobile) {
-					self.mobileStyle();
-				}
-				if (isTablet) {
-					$body.addClass('tablet');
-					self.style();
-				} else {
-					$body.addClass('mobile');
-				}
-				
-				// Orientation ?
-				self.detectOrientation();
-				
-				// To use iScroll
-				$container.wrap('<div id="scroller" />');
-				
-				// Framework options
-				// TODO, check for removing
-				/*if (self.settings.verticalScrolling === true) {
-					$slides.not('.noscroll').wrapInner('<div class="scrollable">').wrapInner('<div class="verticalscroller">');
-				}*/
-				
-				// Actions on load
-				$window.bind('load._180', function() {
-					if (isMobile) {
-						self.mobileSizes();
-					} else {
-						self.sizes();
-					}
-					self.mobileBase();
-					// TODO, check for removing
-					/*if (self.settings.verticalScrolling === true) {
-						self.mobileVertScroll();
-					}*/
-					if (self.settings.verticalScrolling === true) {
-						//$slides.css('overflow','auto');
-						$slides.not('.noscroll').wrapInner('<div class="scroll">');
-						self.prettyScroll();
-					}
-		
-				});
-				
-				// Actions on resize or orientation change
-				$window.bind('resize._180', function() {
-					self.detectOrientation();
-					if (isMobile) {
-						self.mobileSizes();
-					} else {
-						self.sizes();
-					}
-					myScroll.refresh();
-					// Reposition iScroll
-					if (snaptoPage != 0) {
-						myScroll.scrollToPage(snaptoPage, 0, 200);
-					}
-				});
-				
-				$body.bind('touchmove', function(event) {
-					event.preventDefault();
-				});
+			// For portable devices
+			if (self.browser.isMobile || self.browser.isTablet) {
+				self.init_portable_devices();
 			}
-			
 			// For browsers
 			else {
-				// Apply style and sizes
-				self.style();
-				self.sizes();
-				
-				// Menu and internal links behaviour
-				self.menuLinks();
-				
-				// Framework options
-				$window.bind('load._180', function() {
-					if (self.settings.verticalScrolling === true) {
-						//$slides.css('overflow','auto');
-						$slides.not('.noscroll').wrapInner('<div class="scroll">');
-						self.prettyScroll();
-					} else {
-						if (self.settings.mouseScroll === true) {
-							$(scrollElement)
-								.bind('mousewheel._180', function(event, delta) {
-									if (delta > 0) {
-										event.preventDefault();
-										$('.active').prev().not('.customlink,.slidepanel').click();
-									} else {
-										event.preventDefault();
-										$('.active').next().not('.customlink,.slidepanel').click();
-									}
-										return false;
-								});
-						}
-					}
-				});
-				
-				// Actions on window resize
-				$window.bind('resize._180', function() {
-					self.sizes();
-					self.reposition();
-				});
-				
-				// Prevent Firefox from refreshing page on hashchange
-				$window.bind('hashchange._180', function(event) {
-					event.preventDefault();
-					// TODO, we should find a way to detect if hash change is due to click or not
-					// If not we should trigger the click on the relative menu
-					var thisHashChangeHasBeenMadeManually = false;
-					if (thisHashChangeHasBeenMadeManually) {
-						// If the menu hash actually exists!
-						if ($menunavlinks.index($('a[href="'+document.location.hash+'"]')) != -1) {
-							// Trigger click on the menu link, pan!
-							$('a[href="'+document.location.hash+'"]').trigger('click._180');
-						}
-					}
-					return false;
-				});
-				
-				// Keyboard nav
-				$(document).on('keydown._180', self.keyboardNavigation);
+				self.init_browsers();
 			}
 		},
+		// For desktop browsers
+		init_browsers: function() {
+			var self = this;
+
+			// Apply style and sizes
+			self.style();
+			self.sizes();
+			
+			// Menu and internal links behaviour
+			self.menuLinks();
+			
+			// Framework options
+			$window.bind('load._180', function() {
+				if (self.settings.verticalScrolling === true) {
+					// TODO, @Karine, check for removing
+					//$slides.css('overflow','auto');
+					$slides.not('.noscroll').wrapInner('<div class="scroll">');
+					self.prettyScroll();
+				} else if (self.settings.mouseScroll === true) {
+					$(scrollElement).bind('mousewheel._180', function(event, delta) {
+						if (delta > 0) {
+							event.preventDefault();
+							$('.active').prev().not('.customlink,.slidepanel').click();
+						} else {
+							event.preventDefault();
+							$('.active').next().not('.customlink,.slidepanel').click();
+						}
+						return false;
+					});
+				}
+			});
+			
+			// Actions on window resize
+			$window.bind('resize._180', function() {
+				self.sizes();
+				self.reposition();
+			});
+			
+			// Prevent Firefox from refreshing page on hashchange
+			$window.bind('hashchange._180', function(event) {
+				event.preventDefault();
+				// TODO, we should find a way to detect if hash change is due to click or not
+				// If not we should trigger the click on the relative menu
+				var thisHashChangeHasBeenMadeManually = false;
+				if (thisHashChangeHasBeenMadeManually) {
+					// If the menu hash actually exists!
+					if ($menunavlinks.index($('a[href="'+document.location.hash+'"]')) != -1) {
+						// Trigger click on the menu link, pan!
+						$('a[href="'+document.location.hash+'"]').trigger('click._180');
+					}
+				}
+				return false;
+			});
+			
+			// Keyboard nav
+			$(document).on('keydown._180', self.keyboardNavigation);
+		},
+		// For portable devices
+		init_portable_devices: function() {
+			var self = this;
+
+			if (self.browser.isMobile) {
+				self.mobileStyle();
+			}
+			//TODO @Karine, I guess you can handle that with CSS mediaqueries
+			if (self.browser.isTablet) {
+				$body.addClass('tablet');
+				self.style();
+			} else {
+				$body.addClass('mobile');
+			}
+			
+			// Orientation ?
+			self.detectOrientation();
+			
+			// To use iScroll
+			$container.wrap('<div id="scroller" />');
+			
+			// Framework options
+			// TODO, @Karine, check for removing
+			/*if (self.settings.verticalScrolling === true) {
+				$slides.not('.noscroll').wrapInner('<div class="scrollable">').wrapInner('<div class="verticalscroller">');
+			}*/
+			
+			// Actions on load
+			$window.bind('load._180', function() {
+				if (self.browser.isMobile) {
+					self.mobileSizes();
+				} else {
+					self.sizes();
+				}
+				self.mobileBase();
+				// TODO, @Karine, check for removing
+				/*if (self.settings.verticalScrolling === true) {
+					self.mobileVertScroll();
+				}*/
+				if (self.settings.verticalScrolling === true) {
+					//$slides.css('overflow','auto');
+					$slides.not('.noscroll').wrapInner('<div class="scroll">');
+					self.prettyScroll();
+				}
+	
+			});
+			
+			// Actions on resize or orientation change
+			$window.bind('resize._180', function() {
+				self.detectOrientation();
+				if (self.browser.isMobile) {
+					self.mobileSizes();
+				} else {
+					self.sizes();
+				}
+				myScroll.refresh();
+				// Reposition iScroll
+				if (snaptoPage != 0) {
+					myScroll.scrollToPage(snaptoPage, 0, 200);
+				}
+			});
+			
+			$body.bind('touchmove', function(event) {
+				event.preventDefault();
+			});
+		},
 		// Apply style options to browser
-		style : function() {
+		style: function() {
 			var self = this;
 			$slides
 				.css('padding-' + self.settings.menuPosition, '+=' + self.settings.menuHeight + 'px')
@@ -315,7 +323,7 @@
 			}
 		},
 		// Apply style options to mobile
-		mobileStyle : function() {
+		mobileStyle: function() {
 			var self = this;
 			$slides
 				.css({'padding-left': self.settings.sidePadding/2 + 'px', 'padding-right': self.settings.sidePadding/2 + 'px', 'padding-top': '+=' + self.settings.sidePadding + 'px', 'padding-bottom': '+=' + self.settings.sidePadding/2 + 'px'});
@@ -332,7 +340,7 @@
 			}
 		},
 		// Flexible sizes
-		sizes : function() {
+		sizes: function() {
 			var self = this;
 			
 			var windowH = $window.height(),
@@ -375,7 +383,7 @@
 						.attr('style', 'height:' + nopaddingTB + 'px; width:' + windowW + 'px; padding-' + self.settings.menuPosition + ':' + self.settings.menuHeight + 'px !important; padding-' + self.settings.headerPosition + ':' + self.settings.menuHeight + 'px !important;');
 				}
 				// For tablets
-				if (isTablet) {
+				if (self.browser.isTablet) {
 					$slides.not('.nopadding').find('.verticalscroller').height(paddingTB);
 					$('.nopadding').find('.verticalscroller').height(nopaddingTB);			
 				}
@@ -386,7 +394,7 @@
 			}
 		},
 		// Flexible sizes for mobile
-		mobileSizes : function() {
+		mobileSizes: function() {
 			var self = this;
 			
 			var windowH = $window.height(),
@@ -417,7 +425,7 @@
 			
 		},
 		// Reposition if hash is used in URL (Browsers only)
-		reposition : function() {
+		reposition: function() {
 			if (document.location.hash != '') {
 				this.scrollSlide(document.location.hash);
 				$('.active').removeClass('active');
@@ -425,7 +433,7 @@
 			}
 		},
 		// Animate menu and internal links + track page views
-		menuLinks : function() {
+		menuLinks: function() {
 			var self = this;
 			$menunavlinks.bind('click._180', function(event){				
 				event.preventDefault();
@@ -434,7 +442,7 @@
 				self.scrollSlide($this.attr('href'));
 				$('.active').removeClass('active');
 				$this.addClass('active');
-				self.activePage = $(this).data('title');
+				self.browser.activePage = $(this).data('title');
 				// Track pageview
 				clearTimeout(timer_trackPage);
 				timer_trackPage = setTimeout(self.settings.tracker, 2500);
@@ -466,7 +474,7 @@
 			});
 		},
 		// Animate the menu
-		menuAnimation : function() {
+		menuAnimation: function() {
 			var self = this;
 			
 			var $el, leftPos, newWidth;
@@ -505,7 +513,7 @@
 			});
 		},
 		// Use pretty scrollbars for non-webkit browsers
-		prettyScroll : function() {
+		prettyScroll: function() {
 			$('.scroll').each(function(){
 				$(this).jScrollPane({
 					showArrows: false
@@ -527,7 +535,8 @@
 			});
 		},
 		// Detect devices orientation
-		detectOrientation : function() {
+		detectOrientation: function() {
+			var self = this;
 			if (window.innerHeight > window.innerWidth) {
 				$body.addClass('portrait').removeClass('landscape');
 				if ($.isFunction(self.settings.portrait)) {
@@ -541,7 +550,7 @@
 			}
 		},
 		// Navigation by LR arrows
-		keyboardNavigation : function(event) {
+		keyboardNavigation: function(event) {
 			if (event.which === 37) {
 				event.preventDefault();
 				$('.active').prev().not('.customlink,.slidepanel').click();
@@ -551,7 +560,7 @@
 			}
 		},
 		// Animate scrolling
-		scrollSlide : function(page) {
+		scrollSlide: function(page) {
 			// do something before?
 			var self = this;
 			if ($.isFunction(self.settings.beforeslide)) {
@@ -567,7 +576,7 @@
 			});
 		},
 		// Return the direction where the slides scroll to
-		getScrollDirection : function(page) {
+		getScrollDirection: function(page) {
 			var self = this;
 			var j = self.getSlideNumber(page) - self.getSlideNumber(document.location.hash);
 			if (j == 0) {
@@ -579,10 +588,10 @@
 			}
 		},
 		// Return the number of the slide
-		getSlideNumber : function(page) {
+		getSlideNumber: function(page) {
 			return $('div.slide').index($(page)) + 1;
 		},
-		mobileBase : function() {
+		mobileBase: function() {
 			var self = this;
 			// init iScroll
 			myScroll = new iScroll('scroller', {
@@ -597,7 +606,7 @@
 				useTransition: true,
 				onScrollEnd: function() {
 					$('.active').removeClass('active');
-					self.activePage = $('#menu a:nth-child(' + (this.currPageX + 1) + ')').data('title');
+					self.browser.activePage = $('#menu a:nth-child(' + (this.currPageX + 1) + ')').data('title');
 					$('#menu a:nth-child(' + (this.currPageX + 1) + ')').addClass('active');
 					snaptoPage = (this.currPageX);
 					// Track pageview
@@ -625,7 +634,7 @@
 			});
 			// TODO internal links iPad
 		},
-		mobileVertScroll : function() {
+		mobileVertScroll: function() {
 			var myScrolls = [];
 			var wrappers = $('.verticalscroller');
 			
@@ -645,28 +654,28 @@
 	
 	// Utilities
 	window._180.utilities = {
-		collapsible : function() {
+		collapsible: function() {
 			$('.collapsible')._180_collapsible();
 		},
-		hoverEffect : function() {
+		hoverEffect: function() {
 			$('.hovereffect').each(function() {
 				$(this)._180_hover();
 			});
 		},
-		lightbox : function() {
+		lightbox: function() {
 			$('.lightbox')._180_lightbox();
 		},
-		slideshow : function() {
+		slideshow: function() {
 			$('.slider').each(function() {
 				$(this)._180_slideshow();
 			});
 		},
-		caption : function() {
+		caption: function() {
 			$('.caption').each(function() {
 				$(this)._180_caption();
 			});
 		},
-		scrollarea : function() {
+		scrollarea: function() {
 			$('.scrollarea').each(function() {
 				$(this)._180_scrollarea();
 			});
