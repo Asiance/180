@@ -70,7 +70,7 @@
 				tracker: function() {
 					_gaq.push(['_trackPageview', '/' + self.browser.activePage]);
 				},
-				utilities: true,
+				plugins: true,
 				before180: $.noop,
 				after180: $.noop,
 				beforeslide: $.noop,
@@ -105,14 +105,14 @@
 			
 			// Framework features for all
 			$window.bind('load._180', function() {
-				// Auto-load utilities?
-				if (self.settings.utilities === true) {
-					window._180.utilities.caption();
-					window._180.utilities.hoverEffect();
-					window._180.utilities.slideshow();
-					window._180.utilities.collapsible();
-					window._180.utilities.lightbox();
-					window._180.utilities.scrollarea();
+				// Auto-load plugins?
+				if (self.settings.plugins === true) {
+					window._180.Plugins.caption();
+					window._180.Plugins.hoverEffect();
+					window._180.Plugins.slideshow();
+					window._180.Plugins.collapsible();
+					window._180.Plugins.lightbox();
+					window._180.Plugins.scrollarea();
 					// sliding panel
 					if (!self.browser.isMobile && $('#slidingpanel').length) {
 						$('#slidingpanel')._180_slidingpanel();
@@ -652,8 +652,8 @@
 		}
 	};
 	
-	// Utilities
-	window._180.utilities = {
+	// Plugins
+	window._180.Plugins = {
 		collapsible: function() {
 			$('.collapsible')._180_collapsible();
 		},

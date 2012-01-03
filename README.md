@@ -52,7 +52,7 @@ Read about the options in the next section
 + **mobiles:** [default: iphone|ipod|android|blackberry|mini|windows\sce|palm] edit to modify mobile devices, separate them with `|`
 + **tablets:** [default: ipad|playbook|hp-tablet] edit to modify tablet devices, separate them with `|`
 + **tracker:** [default: Google Analytics] function to track page views, can be customized, use variable `activePage` to fetch the active page
-+ **utilities:** [default: true] autoload utilities (see the section above)
++ **plugins:** [default: true] autoload plugins (see the section above)
 + **before180:** [function] use this to do something before the framework is initialized
 + **after180:** [function] use this to do something after the framework has loaded+ **beforeslide:** [function] use this to do something before a page slide
 + **afterslide:** [function] use this to do something after a page slide
@@ -77,7 +77,7 @@ Read about the options in the next section
 
 - Add `class="noscroll"` to slide
 
-## Utilities
+## Plugins
 
 ### Create collapsible blocks
 
