@@ -90,9 +90,7 @@
 			
 			if (self.browser.isMobile || self.browser.isTablet) {
 				window._180.Utils.include('./js/libs/iscroll.js');
-			} else {
-				window._180.Utils.include('./js/libs/jquery.mousewheel.js');
-			}			
+			}
 
 			// Avoid overlap if menu is set to fill and header is in the same position
 			if (self.settings.showHeader === true && self.settings.menuStyle === 'fill' && self.settings.headerPosition === self.settings.menuPosition) {
