@@ -1,6 +1,6 @@
 /*
  *
- * 180° framework *
+ * 180ï¿½ framework *
  */html>/**/body {
 	overflow: hidden; /* for everyone except IE7... */
 }:focus {
@@ -101,13 +101,13 @@ header {
 	clear: both;
 	position: relative;
 }
-.slider ul {
+.slider>ul {
 	overflow: hidden;
 	position: relative;
 	height: 100%;
 	-webkit-transform: translate3d(0,0,0);
 }
-.slider ul li {
+.slider>ul>li {
 	display: block;
 	float: left;
 	-webkit-transform: translate3d(0,0,0);
