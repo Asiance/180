@@ -91,7 +91,7 @@
 			if (self.browser.isMobile || self.browser.isTablet) {
 				if (self.browser.isMobile && self.browser.isTablet) {
 					// Because Android phones user agent contains both "mobile" and "android"
-					self.browser.isMobile = false;
+					self.browser.isTablet = false;
 				}
 				window._180.Utils.include('./js/libs/iscroll.js');
 			}
