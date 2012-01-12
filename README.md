@@ -181,3 +181,4 @@ Read about the options in the next section
 ### People
 
 - **Laurent Le Graverend:** For his support and ideas :D
+- Keumbi
