@@ -146,11 +146,11 @@
 		
 		<div id="four" class="slide">
 			<h2>Slideshows</h2>
-			<p>With the framework, you can have as many infinite slideshows as you want and customize their sizes (set in % or px).</p>
-			<div class="slider" data-slider-width="500" data-slider-height="200">
+			<p>With the framework, you can have as many slideshows as you want and customize their sizes (set in % or px). The slides can loop (infinite) or not, and you can add pagination. You can also display 2 or more elements.</p>
+			<div class="slider" data-slider-width="500" data-slider-height="200" data-infinite="true" data-paginate="false" data-show="1">
 				<ul>
 					<li>
-						<p>I'm a 500*200 slider</p>
+						<p>I'm a 500*200 infinite slider</p>
 						<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
 					</li>
 					<li>
@@ -174,11 +174,11 @@
 			
 			<h3>Advanced</h3>
 			<p>Combine slideshows and scrollable areas !</p>
-			<div class="slider" data-slider-width="400" data-slider-height="100">
+			<div class="slider" data-slider-width="400" data-slider-height="100" data-slider-infinite="false" data-slider-paginate="true" data-slider-show="1">
 				<ul>
 					<li>
 						<div class="scrollarea" data-area-width="400" data-area-height="100">
-							<p>I'm a 400*100 slider but you can scroll inside me!</p>
+							<p>I'm a 400*100 non-looping slider but you can scroll inside me!</p>
 							<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
 						</div>
 					</li>
@@ -200,7 +200,7 @@
 			</div>
 			
 			<h3>Image slideshow</h3>
-			<div class="slider" data-slider-width="300" data-slider-height="150">
+			<div class="slider" data-slider-width="300" data-slider-height="150" data-slider-infinite="true" data-slider-paginate="false" data-slider-show="1">
 				<ul>
 					<li>
 						<img src="http://dummyimage.com/300x150/999/fff" alt="" />
@@ -217,6 +217,47 @@
 					</li>
 					<li>
 						<img src="http://dummyimage.com/300x150/999/fff" alt="" />
+					</li>
+				</ul>
+			</div>
+			<h3>Image slideshow</h3>
+			<div class="slider" data-slider-width="600" data-slider-height="150" data-slider-infinite="false" data-slider-paginate="false" data-slider-show="2">
+				<ul>
+					<li>
+						<img src="http://dummyimage.com/300x150/999/fff" alt="" />
+						<span class="caption">Image with caption</span>
+					</li>
+					<li>
+						<div class="hovereffect">
+							<img src="http://dummyimage.com/300x150/999/fff" alt="" />
+							<span class="caption">Mouse over me</span>
+							<div class="hovertext">
+								<p>How are you ?</p>
+							</div>
+						</div>
+					</li>
+					<li>
+						<img src="http://dummyimage.com/300x150/999/fff" alt="" />
+					</li>
+					<li>
+						<img src="http://dummyimage.com/300x150/999/fff" alt="" />
+						<span class="caption">Next !</span>
+					</li>
+					<li>
+						<img src="http://dummyimage.com/300x150/999/fff" alt="" />
+						<span class="caption">Hello</span>
+					</li>
+					<li>
+						<img src="http://dummyimage.com/300x150/999/fff" alt="" />
+						<span class="caption">World</span>
+					</li>
+					<li>
+						<img src="http://dummyimage.com/300x150/999/fff" alt="" />
+						<span class="caption">What's</span>
+					</li>
+					<li>
+						<img src="http://dummyimage.com/300x150/999/fff" alt="" />
+						<span class="caption">Up ?</span>
 					</li>
 				</ul>
 			</div>

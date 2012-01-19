@@ -58,7 +58,6 @@ Read about the options in the next section
 + **portrait:** [function] use this to do something in portrait mode
 + **landscape:** [function] use this to do something in landscape mode
 + **utilitiesOptions:** [object] optional parameters for utilities
-    + **sliderPagination:** [default: false] add a pagination for the sliders [1..n]
     + **sliderTextPrev:** [default: 'Prev'] text for previous button
     + **sliderTextNext:** [default: 'Next'] text for next button
 
@@ -117,7 +116,7 @@ Read about the options in the next section
 - Width and Height can be in percentage
 
 ```html
-<div class="slider" data-slider-width="[ WIDTH ]" data-slider-height="[ HEIGHT ]">
+<div class="slider" data-slider-width="[ WIDTH ]" data-slider-height="[ HEIGHT ]" data-slider-infinite="[ BOOLEAN ]" data-slider-paginate="[ BOOLEAN ]" data-slider-show="[ INT ]">
 	<ul>
 		<li>
 			[ CONTENT ]
