@@ -96,13 +96,11 @@
 			isMobile = (mobiles.test(currentBrowser));
 			isTablet = (tablets.test(currentBrowser));
 
-			// Avoid overlap if menu is set to fill and header is in the same position
-			if (siteOptions.showHeader === true && siteOptions.menuStyle === 'fill' && siteOptions.headerPosition === siteOptions.menuPosition) {
-				if (siteOptions.headerPosition === 'top') {
-					siteOptions.menuPosition = 'bottom';
-				} else if (siteOptions.headerPosition === 'bottom') {
-					siteOptions.menuPosition = 'top';
-				}
+			// Avoid overlap if menu is set to fill
+			if ($('#header').length && siteOptions.menuStyle === 'fill' && siteOptions.menuPosition === 'top') {
+				siteOptions.menuPosition = 'bottom';
+			} else if ($('#footer').length && siteOptions.menuStyle === 'fill' && siteOptions.menuPosition === 'bottom') {
+				siteOptions.menuPosition = 'top';
 			}
 			
 			// Framework features for all
@@ -131,19 +129,14 @@
 			}
 			siteOptions.tracker.apply();
 			methods.reposition.apply();
-			
-			// For mobile and tablet
-			if (isMobile || isTablet) {
-				if (isMobile) {
-					methods.mobileStyle.apply();
-				}
-				if (isTablet) {
-					$body.addClass('tablet');
-					methods.style.apply();
-				} else {
-					$body.addClass('mobile');
-				}
+			methods.style.apply();
+			// For mobile
+			if (isMobile) {
 				
+			}
+			// For tablet
+			else if (isTablet) {
+				$body.addClass('tablet');
 				// Orientation ?
 				methods.detectOrientation.apply();
 				
@@ -152,29 +145,19 @@
 				
 				// Actions on load
 				$window.bind('load._180', function() {
-					if (isMobile) {
-						methods.mobileSizes.apply();
-					} else {
-						methods.sizes.apply();
-					}
-					methods.mobileBase.apply();
-
+					methods.sizes.apply();
+					methods.tabletBase.apply();
 					if (siteOptions.verticalScrolling === true) {
 						//$slides.css('overflow','auto');
 						$slides.not('.noscroll').wrapInner('<div class="scroll">');
 						methods.prettyScroll.apply();
 					}
-		
 				});
 				
 				// Actions on resize or orientation change
 				$window.bind('resize._180', function() {
 					methods.detectOrientation.apply();
-					if (isMobile) {
-						methods.mobileSizes.apply();
-					} else {
-						methods.sizes.apply();
-					}
+					methods.sizes.apply();
 					myScroll.refresh();
 					// Reposition iScroll
 					if (snaptoPage != 0) {
@@ -189,8 +172,7 @@
 			
 			// For browsers
 			else {
-				// Apply style and sizes
-				methods.style.apply();
+				// Apply sizes
 				methods.sizes.apply();
 				
 				// Menu and internal links behaviour
@@ -298,21 +280,6 @@
 				});
 			}
 		},
-		// Apply style options to mobile
-		/*mobileStyle : function() {
-			$slides
-				.css({'padding-left': siteOptions.sidePadding/2 + 'px', 'padding-right': siteOptions.sidePadding/2 + 'px', 'padding-top': '+=' + siteOptions.sidePadding + 'px', 'padding-bottom': '+=' + siteOptions.sidePadding/2 + 'px'});		
-			if ($('#header').length && (siteOptions.showHeader === true || siteOptions.showHeader === false)) {		
-				$header
-					.css('top', '0px')
-					.css('height', siteOptions.menuHeight/2 + 'px')
-					.children()
-					.css('line-height', siteOptions.menuHeight/2 + 'px')
-					.bind('click._180', function() {
-						$menunavlinks.filter(':first').click();
-					});
-			}
-		},*/
 		// Flexible sizes
 		sizes : function() {
 			var windowH = $window.height(),
@@ -531,9 +498,6 @@
 			methods.getScrollDirection(page);
 			
 			if ($.isFunction(siteOptions.beforeslide)) {
-				if (scrollDirection == 'none') {
-					return false;
-				}
 				siteOptions.beforeslide.call();
 			}
 
@@ -556,7 +520,7 @@
 				return scrollDirection = 'none';
 			}
 		},
-		mobileBase : function() {
+		tabletBase : function() {
 			// init iScroll
 			myScroll = new iScroll('scroller', {
 				hScrollbar: false,
@@ -597,22 +561,6 @@
 				myScroll.scrollToPage(pagenumber, 0, 1000);
 			});
 			// TODO internal links iPad
-		},
-		mobileVertScroll : function() {
-			var myScrolls = [];
-			var wrappers = $('.verticalscroller');
-			
-			for (var i=0; i<wrappers.length; i++) {
-				myScrolls[myScrolls.length] = new iScroll(wrappers[i], {
-					checkDOMChanges: true,
-					hScrollbar: false,
-					vScrollbar: true,
-					hScroll: false,
-					bounce: false,
-					lockDirection: true,
-					hideScrollbar: false
-				});
-			}
 		}
 	};
 	
