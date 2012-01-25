@@ -135,9 +135,18 @@
 					<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
 				</div>
 			</div>
+			<p>Here, I use custom HTML tags to create an accordion: h3 and p</p>
+			<div class="collapsible" data-options='{"title":"h3","block":"p"}'>
+				<h3>Click me</h3>
+				<p>Hello</p>
+				<h3>Click me</h3>
+				<p>Hello</p>
+				<h3>Click me</h3>
+				<p>Hello</p>
+			</div>
 			<h3>Scrollable areas</h3>
 			<p>An other way to display long text is to create "scrollable areas". You can customize width and height!</p>
-			<div class="scrollarea" data-area-width="300" data-area-height="200">
+			<div class="scrollarea" data-options='{"width":"300", "height":"200"}'>
 				<p>I'm a 300*200px scrolling block! You can use % too!</p>
 				<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
 				<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
@@ -147,7 +156,7 @@
 		<div id="four" class="slide">
 			<h2>Slideshows</h2>
 			<p>With the framework, you can have as many slideshows as you want and customize their sizes (set in % or px). The slides can loop (infinite) or not, and you can add pagination. You can also display 2 or more elements.</p>
-			<div class="slider" data-slider-width="500" data-slider-height="200" data-infinite="true" data-paginate="false" data-show="1">
+			<div class="slider" data-options='{"width":"500","height":"200","loop":true,"paginate":false,"display":"1","prev":"<- Previous","next":"Next ->"}'>
 				<ul>
 					<li>
 						<p>I'm a 500*200 infinite slider</p>
@@ -174,22 +183,22 @@
 			
 			<h3>Advanced</h3>
 			<p>Combine slideshows and scrollable areas !</p>
-			<div class="slider" data-slider-width="400" data-slider-height="100" data-slider-infinite="false" data-slider-paginate="true" data-slider-show="1">
+			<div class="slider" data-options='{"width":"400","height":"100", "loop":false}'>
 				<ul>
 					<li>
-						<div class="scrollarea" data-area-width="400" data-area-height="100">
+						<div class="scrollarea" data-options='{"width":"400", "height":"100"}'>
 							<p>I'm a 400*100 non-looping slider but you can scroll inside me!</p>
 							<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
 						</div>
 					</li>
 					<li>
-						<div class="scrollarea" data-area-width="400" data-area-height="100">
+						<div class="scrollarea" data-options='{"width":"400", "height":"100"}'>
 							<p>#2</p>
 							<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
 						</div>
 					</li>
 					<li>
-						<div class="scrollarea" data-area-width="400" data-area-height="100">
+						<div class="scrollarea" data-options='{"width":"400", "height":"100"}'>
 							<div style="width: 2000px;">
 								<p>#3: horizontal scroll</p>
 								<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra.</p>
@@ -200,7 +209,7 @@
 			</div>
 			
 			<h3>Image slideshow</h3>
-			<div class="slider" data-slider-width="300" data-slider-height="150" data-slider-infinite="true" data-slider-paginate="false" data-slider-show="1">
+			<div class="slider" data-options='{"width":"300","height":"150","loop":false,"paginate":true}'>
 				<ul>
 					<li>
 						<img src="http://dummyimage.com/300x150/999/fff" alt="" />
@@ -221,7 +230,7 @@
 				</ul>
 			</div>
 			<h3>Image slideshow</h3>
-			<div class="slider" data-slider-width="600" data-slider-height="150" data-slider-infinite="false" data-slider-paginate="false" data-slider-show="2">
+			<div class="slider" data-options='{"width":"600","height":"150","display":"2"}'>
 				<ul>
 					<li>
 						<img src="http://dummyimage.com/300x150/999/fff" alt="" />
@@ -283,7 +292,7 @@
 			<img src="http://dummyimage.com/300x150/999/fff" alt="" data-lightbox-width="300" data-lightbox-name="demo_three" class="lightbox" />
 			<span class="caption">Slideshow</span>
 			<div class="lightbox_content" id="demo_three">
-				<div class="slider" data-slider-width="300" data-slider-height="150">
+				<div class="slider" data-options='{"width":"300","height":"150"}'>
 					<ul>
 						<li>
 							<img src="http://dummyimage.com/300x150/999/fff" alt="" />
@@ -307,7 +316,7 @@
 			<img src="http://dummyimage.com/300x150/999/fff" alt="" data-lightbox-width="300" data-lightbox-name="demo_four" class="lightbox" />
 			<span class="caption">Scrollable area</span>
 			<div class="lightbox_content" id="demo_four">
-				<div class="scrollarea" data-area-width="300" data-area-height="200">
+				<div class="scrollarea" data-options='{"width":"300", "height":"200"}'>
 					<p>I'm a 300*200 scrolling block!</p>
 					<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
 					<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>

@@ -74,8 +74,6 @@
 				portrait: $.noop,
 				landscape: $.noop
 			}, options);
-
-			utilities.init.call(this, arguments[0].utilitiesOptions);
 			
 			// Custom init function
 			if ($.isFunction(siteOptions.before180)) {
@@ -150,11 +148,6 @@
 				// To use iScroll
 				$container.wrap('<div id="scroller" />');
 				
-				// Framework options
-				/*if (siteOptions.verticalScrolling === true) {
-					$slides.not('.noscroll').wrapInner('<div class="scrollable">').wrapInner('<div class="verticalscroller">');
-				}*/
-				
 				// Actions on load
 				$window.bind('load._180', function() {
 					if (isMobile) {
@@ -163,9 +156,7 @@
 						methods.sizes.apply();
 					}
 					methods.mobileBase.apply();
-					/*if (siteOptions.verticalScrolling === true) {
-						methods.mobileVertScroll.apply();
-					}*/
+
 					if (siteOptions.verticalScrolling === true) {
 						//$slides.css('overflow','auto');
 						$slides.not('.noscroll').wrapInner('<div class="scroll">');
@@ -623,35 +614,28 @@
 	
 	// Utilities
 	var utilities = {
-			
-		init : function(options) {
-			// Utilities defaults options
-			utilitiesOptions = $.extend({
-				sliderPagination: false,
-				sliderTextPrev: "Prev",
-				sliderTextNext: "Next"
-			}, options);
-		},
 
 		collapsibleBlocks : function() {
-			$('.collapsible')
-				.children('div').hide()
-				.end()
-				.find('h2').css('cursor','pointer');
-			
 			$('.collapsible').each(function() {
-				$(this).find('h2:first').addClass('opened').next().show();
-			});
+				var defaults = {"title":"h2","block":"div"};
+				var options = $.extend(true, defaults, $(this).data('options'));
+				$(this)
+					.children(options.block).hide()
+					.end()
+					.find(options.title).css('cursor','pointer');
 			
-			$('.collapsible').find('h2').bind('click._180 touchstart._180', function() {
-				if ($(this).next().is(':hidden')) {
-					$(this).parent('.collapsible').find('h2').removeClass('opened').next().slideUp();
-					$(this).toggleClass('opened').next().slideDown();
-				}
-				else if ($(this).hasClass('opened') && $(this).next().is(':visible')) {
-					$(this).removeClass('opened').next().slideUp();
-				}
-				return false;
+				$(this).find(options.title + ':first').addClass('opened').next().show();
+			
+				$('.collapsible').find(options.title).bind('click._180 touchstart._180', function() {
+					if ($(this).next().is(':hidden')) {
+						$(this).parent('.collapsible').find(options.title).removeClass('opened').next().slideUp();
+						$(this).toggleClass('opened').next().slideDown();
+					}
+					else if ($(this).hasClass('opened') && $(this).next().is(':visible')) {
+						$(this).removeClass('opened').next().slideUp();
+					}
+					return false;
+				});
 			});
 		},
 
@@ -664,13 +648,11 @@
 					if ($(this).find('.caption').length) {
 						$(this).find('.caption').stop().hide();
 					}
-					//$(this).find('img').stop(false,true).animate({'width':$(this).width()*1.2, 'height':$(this).height()*1.2, 'top':'-'+$(this).width()*0.1, 'left':'-'+$(this).height()*0.1}, {duration:200});
 				}, function() {
 					$(this).find('.hovertext').hide();
 					if ($(this).find('.caption').length) {
 						$(this).find('.caption').stop().show();
 					}
-					//$(this).find('img').stop(false,true).animate({'width':$(this).width(), 'height':$(this).height(), 'top':'0', 'left':'0'}, {duration:100});
 				});
 			});
 		},
@@ -709,32 +691,26 @@
 		slideshow : function() {
 			$('.slider').each(function() {
 				var $slider = $(this);
+				var defaults = {"width":"500","height":"300","loop":true,"paginate":false,"display":"1","prev":"Previous","next":"Next"};
+				var options = $.extend(true, defaults, $slider.data('options'));
 				var item = $slider.children('ul').children('li');
-				var infinite = $slider.data('slider-infinite');
-				var paginate = $slider.data('slider-paginate');
-				
-				var slider_width = $slider.data('slider-width');
-				var slider_height = $slider.data('slider-height');
-				
-				var slider_width_value = parseInt(slider_width);
+
+				var slider_width_value = parseInt(options.width);
 				
 				var slider_width_unit = 'px';
-				if (slider_width != slider_width_value) {
-					slider_width_unit = slider_width.replace(new RegExp('[0-9]*'), '');
+				if (options.width != slider_width_value) {
+					slider_width_unit = options.width.replace(new RegExp('[0-9]*'), '');
 				}
-				
-						
-				var shownumber = parseInt($slider.data('slider-show'));
-				
+								
 				var current_slide = 1;
 				
-				if (shownumber > 1) {
-					var slider_width_value = parseInt(slider_width_value/shownumber);
+				if (options.display > 1) {
+					slider_width_value = parseInt(slider_width_value/options.display);
 				}
 				var inner_width = slider_width_value * item.length;
 				
 				if (slider_width_unit === '%') {
-					slider_item = slider_width_value / item.length * shownumber + slider_width_unit;
+					slider_item = slider_width_value / item.length * options.display + slider_width_unit;
 					move_left = slider_width_value;
 				} else {
 					slider_item = slider_width_value;
@@ -743,16 +719,16 @@
 				}
 				
 				if(item.length >= 2) {
-					$('<div class="buttons"><a href="#" class="prev"><span>'+utilitiesOptions.sliderTextPrev+'</span></a><a href="#" class="next"><span>'+utilitiesOptions.sliderTextNext+'</span></a></div>').insertAfter($slider);
+					$('<div class="buttons"><a href="#" class="prev"><span>' + options.prev + '</span></a><a href="#" class="next"><span>' +  options.next + '</span></a></div>').insertAfter($slider);
 				}
 				
 				$slider
-					.css({'width' : slider_width, 'height' : slider_height})
+					.css({'width' : options.width, 'height' : options.height})
 					.children('ul').css({'width' : inner_width + slider_width_unit})
 					.end()
 					.children('ul').children('li').css({'width' : slider_item});
 
-				if(infinite === false) {
+				if(options.loop === false) {
 					$slider.next().children('.prev').hide();
 					$slider.next().children('.prev').bind('click._180 touchstart._180', function(e) {
 						var $this = $(this);
@@ -817,7 +793,7 @@
 						return false;
 					});
 				}
-				if(paginate === true && infinite === false) {
+				if(options.paginate === true && options.loop === false) {
 					$('<div class="pages"></div>').insertBefore($slider.next().children('.next'));
 					for (var i = 0; i < item.length; i ++) {
 						var $link = $('<a href="#"></a>');
@@ -862,10 +838,10 @@
 
 		scrollarea : function() {
 			$('.scrollarea').each(function() {
-				var area_width = $(this).data('area-width');
-				var area_height = $(this).data('area-height');
+				var defaults = {"width":"500","height":"300"};
+				var options = $.extend(true, defaults, $(this).data('options'));
 				$(this)
-					.css({'width': area_width, 'height': area_height})
+					.css({'width': options.width, 'height': options.height})
 					.jScrollPane({showArrows: false});
 			});
 		}

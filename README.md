@@ -57,9 +57,6 @@ Read about the options in the next section
 + **afterslide:** [function] use this to do something after a page slide
 + **portrait:** [function] use this to do something in portrait mode
 + **landscape:** [function] use this to do something in landscape mode
-+ **utilitiesOptions:** [object] optional parameters for utilities
-    + **sliderTextPrev:** [default: 'Prev'] text for previous button
-    + **sliderTextNext:** [default: 'Next'] text for next button
 
 ## Features
 
@@ -80,6 +77,8 @@ Read about the options in the next section
 
 ### Create collapsible blocks
 
+By default, use `<h2>` to create a clickable title and `<div>` to create a collapsible block.
+
 ```html
 <div class="collapsible">
 	<h2>[ BLOCK TITLE ]</h2>
@@ -88,6 +87,19 @@ Read about the options in the next section
 	<div>[ CONTENT ]</div>
 	<h2>[ BLOCK TITLE ]</h2>
 	<div>[ CONTENT ]</div>
+</div>
+```
+
+You can use your own HTML tags to define clickable titles and blocks
+
+```html
+<div class="collapsible" data-options='{"title":"h3","block":"p"}'>
+	<h3>[ BLOCK TITLE ]</h3>
+	<p>[ CONTENT ]</p>
+	<h3>[ BLOCK TITLE ]</h3>
+	<p>[ CONTENT ]</p>
+	<h3>[ BLOCK TITLE ]</h3>
+	<p>[ CONTENT ]</p>
 </div>
 ```
 
@@ -116,7 +128,7 @@ Read about the options in the next section
 - Width and Height can be in percentage
 
 ```html
-<div class="slider" data-slider-width="[ WIDTH ]" data-slider-height="[ HEIGHT ]" data-slider-infinite="[ BOOLEAN ]" data-slider-paginate="[ BOOLEAN ]" data-slider-show="[ INT ]">
+<div class="slider" data-options='{"width":"[ WIDTH ]", "height":"[ HEIGHT ]", "loop":[ BOOLEAN ], "paginate":[ BOOLEAN ], "display":"[ INTEGER ]", "prev":"[ CUSTOM TEXT]", "next":"[ CUSTOM TEXT]"}'>
 	<ul>
 		<li>
 			[ CONTENT ]
@@ -151,7 +163,7 @@ Read about the options in the next section
 - Width and Height can be in percentage
 
 ```html
-<div class="scrollarea" data-area-width="[ WIDTH ]" data-area-height="[ HEIGHT ]">
+<div class="scrollarea" data-options='{"width":"[ WIDTH ]", "height":"[ HEIGHT ]"}'>
 	[ CONTENT ]
 </div>
 ```
