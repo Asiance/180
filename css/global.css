@@ -16,12 +16,19 @@
 ::-webkit-scrollbar-thumb:window-inactive { background: #999; }
 
 /*
-	HEADER
+	HEADER AND FOOTER
 */
-header {
+#header,
+#footer {
 	position: fixed;
 	width: auto;
 	z-index: 2;
+}
+#header {
+	top: 0;
+}
+#footer {
+	bottom: 0;
 }
 /*
 	SLIDING PANEL
@@ -141,7 +148,7 @@ header {
 /*
 	CAPTIONS
 */
-.js .caption {
+.js span.caption {
 	background: url(../images/overlay.png) repeat;
 	bottom: 0;
 	color: #FFFFFF;

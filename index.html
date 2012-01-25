@@ -20,9 +20,13 @@
 	<!-- Google analytics code -->
 </head>
 <body>	<!-- Can be used as header or footer -->
-	<header>
-		<h1>180&deg; framework</h1>
-	</header>	<!-- To make a sliding panel -->
+	<div id="header">
+		<h1>180&deg;</h1>
+	</div>
+	<!--<div id="footer">
+		<p>Footer</p>
+	</div>
+	 To make a sliding panel -->
 	<div id="slidingpanel">
 		<div>
 			<h1>You found me!</h1>			<p>You can use this panel to put more information ! Be creative~</p>
@@ -88,7 +92,7 @@
 			<p>The framework lets you display your images in a beautiful way! Please refer to the source or to the readme file to know how to achieve this.</p>
 			
 			<h3>Captions</h3>
-			<p>Captions are created automatically if you add <code>&lt;span class="caption"&gt;Your caption text&lt;span&gt;</code> right after an image.</p>
+			<p>Captions are created automatically if you add <code>&lt;span class="caption"&gt;Your caption text&lt;span&gt;</code> right after an image. They are pulled from an image alt property if you add <code>class="caption"</code> to the image</p>
 			<img src="http://dummyimage.com/300x150/999/fff" alt="" />
 			<span class="caption">I'm a caption</span>
 			
@@ -358,7 +362,7 @@
 	</div><!--#container-->
 	
 	<!-- Javascripts -->
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script type="text/javascript" src="./js/jquery.jscrollpane.min.js"></script>
 	<script type="text/javascript">
 		var mobile = (/iphone|ipod|playbook|hp-tablet|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));

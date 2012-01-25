@@ -7,7 +7,8 @@
 p, ul, pre {
 	margin-bottom: 20px;
 }
-header {
+#header,
+#footer {
 	background: url(../images/overlay.png) repeat;
 	color: #fff;
 }

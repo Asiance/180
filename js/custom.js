@@ -3,14 +3,4 @@ $(document).ready(function() {
 		tracker: function() {
 			console.log(activePage);
 		},
-		/*onComplete: function() {
-			alert('done');
-		},
-		before180: function () {
-			alert('start');
-		},*/
-		verticalScrolling: true,
-		utilitiesOptions: {
-			sliderTextPrev: "Previous",
-			sliderTextNext: "Next"
-		}	});});
+		verticalScrolling: true	});});

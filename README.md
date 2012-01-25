@@ -38,8 +38,6 @@ Read about the options in the next section
 
 ## Options
 
-+ **showHeader:** [default: true] set this to false to hide the header (or footer depending on how you use it)
-+ **headerPosition:** [default: 'top'] the header position can be `top` or `bottom`
 + **menuPosition:** [default: 'top'] the menu position can be `top` or `bottom`
 + **menuHeight:** [default: 50] menu height in pixels
 + **menuAlign:** [default: 'center'] menu links alignment, can be `left`, `center` or `right`
@@ -66,6 +64,24 @@ Read about the options in the next section
 - tablet
 - landscape
 - portrait
+
+### Header and footer
+
+- To add a header:
+
+```html
+<div id="header">
+	[ CONTENT ]
+</div>
+```
+
+- To add a footer:
+
+```html
+<div id="footer">
+	[ CONTENT ]
+</div>
+```
 
 ### Create a slide without padding
 
@@ -156,6 +172,12 @@ You can use your own HTML tags to define clickable titles and blocks
 ```html
 <img src="[ IMAGE ]" alt="" />
 <span class="caption">[ CAPTION ]</span>
+```
+
+- Or add `class="caption"` to an image to use its alt property as a caption
+
+```html
+<img src="[ IMAGE ]" alt="[ CAPTION ]" class="caption" />
 ```
 
 ### Create a scrollable area
