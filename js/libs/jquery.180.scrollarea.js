@@ -14,11 +14,11 @@
 	var methods = {
 
 		init : function(options) {
-			var area_width = $(this).data('area-width');
-			var area_height = $(this).data('area-height');
-			$(this)
-				.css({'width': area_width, 'height': area_height})
-				.jScrollPane({showArrows: false});
+			var defaults = {"width":"500","height":"300"};
+					var options = $.extend(true, defaults, $(this).data('options'));
+					$(this)
+						.css({'width': options.width, 'height': options.height})
+						.jScrollPane({showArrows: false});
 		}
 	};
 

@@ -228,12 +228,6 @@
 			// To use iScroll
 			$container.wrap('<div id="scroller" />');
 			
-			// Framework options
-			// TODO, @Karine, check for removing
-			/*if (self.settings.verticalScrolling === true) {
-				$slides.not('.noscroll').wrapInner('<div class="scrollable">').wrapInner('<div class="verticalscroller">');
-			}*/
-			
 			// Actions on load
 			$window.bind('load._180', function() {
 				if (self.browser.isMobile) {
@@ -242,10 +236,7 @@
 					self.sizes();
 				}
 				self.mobileBase();
-				// TODO, @Karine, check for removing
-				/*if (self.settings.verticalScrolling === true) {
-					self.mobileVertScroll();
-				}*/
+
 				if (self.settings.verticalScrolling === true) {
 					//$slides.css('overflow','auto');
 					$slides.not('.noscroll').wrapInner('<div class="scroll">');
