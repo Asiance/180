@@ -7,7 +7,7 @@
  * @license Copyright (c) 2011 Asiance (http://www.asiance.com), Licensed under the MIT License.
  * @updated 2011-12-28
  * @link    https://github.com/Asiance/180/
- * @version 2.0
+ * @version 2.1
  */
 (function($){
 	
@@ -15,26 +15,35 @@
 		
 		init : function(options) {
 			var $slider = $(this);
-			var defaults = {"width":"500","height":"300","loop":true,"paginate":false,"display":"1","prev":"Previous","next":"Next"};
-			var options = $.extend(true, defaults, $slider.data('options'));
+
+			var settings = $.extend({
+				"width":"500",
+				"height":"300",
+				"loop":true,
+				"paginate":false,
+				"display":"1",
+				"prev":"Previous",
+				"next":"Next"
+			}, $slider.data('options'), options);
+
 			var item = $slider.children('ul').children('li');
 
-			var slider_width_value = parseInt(options.width);
+			var slider_width_value = parseInt(settings.width);
 			
 			var slider_width_unit = 'px';
-			if (options.width != slider_width_value) {
-				slider_width_unit = options.width.replace(new RegExp('[0-9]*'), '');
+			if (settings.width != slider_width_value) {
+				slider_width_unit = settings.width.replace(new RegExp('[0-9]*'), '');
 			}
 							
 			var current_slide = 1;
 			
-			if (options.display > 1) {
-				slider_width_value = parseInt(slider_width_value/options.display);
+			if (settings.display > 1) {
+				slider_width_value = parseInt(slider_width_value/settings.display);
 			}
 			var inner_width = slider_width_value * item.length;
 			
 			if (slider_width_unit === '%') {
-				slider_item = slider_width_value / item.length * options.display + slider_width_unit;
+				slider_item = slider_width_value / item.length * settings.display + slider_width_unit;
 				move_left = slider_width_value;
 			} else {
 				slider_item = slider_width_value;
@@ -43,16 +52,16 @@
 			}
 			
 			if(item.length >= 2) {
-				$('<div class="buttons"><a href="#" class="prev"><span>' + options.prev + '</span></a><a href="#" class="next"><span>' +  options.next + '</span></a></div>').insertAfter($slider);
+				$('<div class="buttons"><a href="#" class="prev"><span>' + settings.prev + '</span></a><a href="#" class="next"><span>' +  settings.next + '</span></a></div>').insertAfter($slider);
 			}
 			
 			$slider
-				.css({'width' : options.width, 'height' : options.height})
+				.css({'width' : settings.width, 'height' : settings.height})
 				.children('ul').css({'width' : inner_width + slider_width_unit})
 				.end()
 				.children('ul').children('li').css({'width' : slider_item});
 
-			if(options.loop === false) {
+			if(settings.loop === false) {
 				$slider.next().children('.prev').hide();
 				$slider.next().children('.prev').bind('click._180 touchstart._180', function(e) {
 					var $this = $(this);
@@ -117,7 +126,7 @@
 					return false;
 				});
 			}
-			if(options.paginate === true && options.loop === false) {
+			if(settings.paginate === true && settings.loop === false) {
 				$('<div class="pages"></div>').insertBefore($slider.next().children('.next'));
 				for (var i = 0; i < item.length; i ++) {
 					var $link = $('<a href="#"></a>');
