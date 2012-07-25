@@ -42,7 +42,8 @@ Read about the options in the next section
 + **menuHeight:** [default: 50] menu height in pixels
 + **menuAlign:** [default: 'center'] menu links alignment, can be `left`, `center` or `right`
 + **menuStyle:** [default: 'auto'] the menu style can be `fill` (take 100% of the window width) or `auto`
-+ **menuSpacing:** [default: 10] only if the menu style is set to auto, the spacing between links in pixels+ **slidingpanelHeight:** [default: 400] sliding panel height
++ **menuSpacing:** [default: 10] only if the menu style is set to auto, the spacing between links in pixels
++ **slidingpanelHeight:** [default: 400] sliding panel height
 + **sidePadding:** [default: 30] slides side paddings in pixels
 + **verticalScrolling:** [default: true] set this to false to disable vertical scrolling on all the slides (to disable on a single slide, use `class="noscroll"`)
 + **menuAnimation:** [default: true] set this to false to disable the menu hover animation effect
@@ -51,7 +52,8 @@ Read about the options in the next section
 + **tablets:** use this to add tablet devices, separate them with `|`
 + **tracker:** [default: Google Analytics] function to track page views, can be customized, use variable `activePage` to fetch the active page
 + **before180:** [function] use this to do something before the framework is initialized
-+ **after180:** [function] use this to do something after the framework has loaded+ **beforeslide:** [function] use this to do something before a page slide
++ **after180:** [function] use this to do something after the framework has loaded
++ **beforeslide:** [function] use this to do something before a page slide
 + **afterslide:** [function] use this to do something after a page slide
 + **portrait:** [function] use this to do something in portrait mode
 + **landscape:** [function] use this to do something in landscape mode
@@ -189,11 +191,22 @@ You can use your own HTML tags to define clickable titles and blocks
 	[ CONTENT ]
 </div>
 ```
-### Create a sliding panel- Create a link with `class="slidepanel"` and add the following to your source code```html<div id="slidingpanel">
+### Create a sliding panel
+
+- Create a link with `class="slidepanel"` and add the following to your source code
+
+```html
+<div id="slidingpanel">
 	<div>
 		[ CONTENT ]
 	</div>
-</div>```### Exclude link from menu- Create a link with `class="customlink"` if you want it to be in the menu bar but if it's not a navigation link
+</div>
+```
+
+### Exclude link from menu
+
+- Create a link with `class="customlink"` if you want it to be in the menu bar but if it's not a navigation link
+
 ## Notes
 
 ### Youtube video
@@ -215,3 +228,4 @@ You can use your own HTML tags to define clickable titles and blocks
 
 - **Laurent Le Graverend:** For his support and ideas :D
 - Keumbi
+- Hello
